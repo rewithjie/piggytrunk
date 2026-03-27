@@ -3,21 +3,12 @@ FROM node:18 AS frontend
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --include=optional
 
-COPY resources ./resources
-COPY public ./public
-COPY vite.config.js ./
+COPY . .
 RUN npm run build
 
-# Stage 2 - Install PHP dependencies
-FROM composer:2 AS vendor
-WORKDIR /app
-
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Stage 3 - Runtime image for Render
+# Stage 2 - Runtime image for Render
 FROM php:8.2-cli
 WORKDIR /var/www
 
@@ -30,9 +21,14 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 COPY . .
-COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
+
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN php artisan package:discover --ansi
 
 EXPOSE 10000
 
