@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Currency Format</label>
-                                <input type="text" class="form-control" name="currency_format" value="PHP" readonly>
+                                <input type="text" class="form-control" name="currency_format" value="₱" readonly>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Timezone</label>

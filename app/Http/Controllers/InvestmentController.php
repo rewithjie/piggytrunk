@@ -9,7 +9,7 @@ class InvestmentController extends Controller
     public function index(): View
     {
         $summary = [
-            ['label' => 'Capital Raised', 'value' => 'PHP 1,850,000'],
+            ['label' => 'Capital Raised', 'value' => '₱ 1,850,000'],
             ['label' => 'Active Investors', 'value' => '18'],
             ['label' => 'Projected ROI', 'value' => '18.6%'],
             ['label' => 'Next Payout', 'value' => 'April 18, 2026'],
@@ -19,7 +19,7 @@ class InvestmentController extends Controller
             [
                 'batch' => 'BATCH-01',
                 'raiser' => 'Dela Cruz Farms',
-                'capital' => 'PHP 650,000',
+                'capital' => '₱ 650,000',
                 'hog_count' => 120,
                 'progress' => 78,
                 'stage' => 'Fattening',
@@ -28,7 +28,7 @@ class InvestmentController extends Controller
             [
                 'batch' => 'BATCH-02',
                 'raiser' => 'Santos Piggery',
-                'capital' => 'PHP 520,000',
+                'capital' => '₱ 520,000',
                 'hog_count' => 96,
                 'progress' => 52,
                 'stage' => 'Farrowing',
@@ -37,7 +37,7 @@ class InvestmentController extends Controller
             [
                 'batch' => 'BATCH-03',
                 'raiser' => 'Green Meadows',
-                'capital' => 'PHP 430,000',
+                'capital' => '₱ 430,000',
                 'hog_count' => 88,
                 'progress' => 36,
                 'stage' => 'Piglet',
@@ -46,7 +46,7 @@ class InvestmentController extends Controller
             [
                 'batch' => 'BATCH-04',
                 'raiser' => 'San Pedro Livestock',
-                'capital' => 'PHP 250,000',
+                'capital' => '₱ 250,000',
                 'hog_count' => 54,
                 'progress' => 64,
                 'stage' => 'Farrowing',
@@ -58,7 +58,7 @@ class InvestmentController extends Controller
             [
                 'name' => 'Alicia Ramos',
                 'tier' => 'Gold Partner',
-                'committed' => 'PHP 300,000',
+                'committed' => '₱ 300,000',
                 'batch' => 'BATCH-01',
                 'joined' => 'January 12, 2026',
                 'status' => 'Active',
@@ -66,7 +66,7 @@ class InvestmentController extends Controller
             [
                 'name' => 'Benjamin Cruz',
                 'tier' => 'Silver Partner',
-                'committed' => 'PHP 150,000',
+                'committed' => '₱ 150,000',
                 'batch' => 'BATCH-02',
                 'joined' => 'February 03, 2026',
                 'status' => 'Active',
@@ -74,7 +74,7 @@ class InvestmentController extends Controller
             [
                 'name' => 'Catherine Lim',
                 'tier' => 'Growth Partner',
-                'committed' => 'PHP 220,000',
+                'committed' => '₱ 220,000',
                 'batch' => 'BATCH-01',
                 'joined' => 'February 17, 2026',
                 'status' => 'Pending Release',
@@ -82,7 +82,7 @@ class InvestmentController extends Controller
             [
                 'name' => 'Daniel Soriano',
                 'tier' => 'Gold Partner',
-                'committed' => 'PHP 180,000',
+                'committed' => '₱ 180,000',
                 'batch' => 'BATCH-03',
                 'joined' => 'March 01, 2026',
                 'status' => 'Active',
@@ -93,21 +93,21 @@ class InvestmentController extends Controller
             [
                 'title' => 'Cycle milestone release',
                 'batch' => 'BATCH-01',
-                'amount' => 'PHP 120,000',
+                'amount' => '₱ 120,000',
                 'date' => 'April 18, 2026',
                 'state' => 'Upcoming',
             ],
             [
                 'title' => 'Investor profit distribution',
                 'batch' => 'BATCH-02',
-                'amount' => 'PHP 86,500',
+                'amount' => '₱ 86,500',
                 'date' => 'April 28, 2026',
                 'state' => 'Scheduled',
             ],
             [
                 'title' => 'Capital rollover approval',
                 'batch' => 'BATCH-03',
-                'amount' => 'PHP 54,000',
+                'amount' => '₱ 54,000',
                 'date' => 'May 06, 2026',
                 'state' => 'For Review',
             ],
@@ -122,7 +122,7 @@ class InvestmentController extends Controller
             'capitalChart' => [
                 'labels' => collect($batchAllocations)->pluck('batch'),
                 'values' => collect($batchAllocations)
-                    ->map(fn (array $batch) => (int) str_replace([',', 'PHP '], '', $batch['capital'])),
+                    ->map(fn (array $batch) => (int) preg_replace('/[^\d]/', '', $batch['capital'])),
             ],
             'stageChart' => [
                 'labels' => ['Piglet', 'Farrowing', 'Fattening'],

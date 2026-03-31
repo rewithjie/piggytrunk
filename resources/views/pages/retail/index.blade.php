@@ -2,18 +2,9 @@
 
 @section('content')
     <section class="retail-page">
-        <div class="row g-4 mb-4">
-            @foreach ($summary as $card)
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="card dashboard-bootstrap-card h-100">
-                        <div class="card-body">
-                            <p class="section-label mb-2">{{ $card['label'] }}</p>
-                            <h3 class="section-heading investment-metric mb-0">{{ $card['value'] }}</h3>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+        @if (session('status'))
+            <div class="alert alert-success mb-4">{{ session('status') }}</div>
+        @endif
 
         <div class="row g-4 mb-4">
             <div class="col-12 col-xl-8">
@@ -24,7 +15,10 @@
                                 <p class="section-label mb-1">Catalog</p>
                                 <h3 class="chart-title mb-0">Retail Product Overview</h3>
                             </div>
-                            <span class="chart-badge badge text-bg-light">Feeds, Vitamins, Medicines</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="chart-badge badge text-bg-light">Feeds, Vitamins, Medicines, Growth Additives</span>
+                                <a href="{{ route('retail.products.create') }}" class="btn btn-sm btn-dark">Add Product</a>
+                            </div>
                         </div>
 
                         <div class="table-responsive">
@@ -37,6 +31,7 @@
                                         <th>Stock</th>
                                         <th>Status</th>
                                         <th>Sold This Cycle</th>
+                                        <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,8 +47,27 @@
                                                 </span>
                                             </td>
                                             <td>{{ $item['sales'] }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a href="{{ route('retail.products.edit', $item['id']) }}" class="btn btn-sm table-icon-btn" aria-label="Edit {{ $item['name'] }}">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <form method="POST" action="{{ route('retail.products.destroy', $item['id']) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm table-icon-btn" aria-label="Delete {{ $item['name'] }}" onclick="return confirm('Delete this product?')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
+                                    @if (count($catalog) === 0)
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4 text-muted">No products yet.</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -86,6 +100,9 @@
                                     </div>
                                 </div>
                             @endforeach
+                            @if (count($topSellers) === 0)
+                                <p class="text-muted mb-0">No sales records yet.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -98,10 +115,10 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <p class="section-label mb-1">Orders</p>
-                                <h3 class="chart-title mb-0">Recent Retail Transactions</h3>
+                                <p class="section-label mb-1">Recent Transaction</p>
+                                <h3 class="chart-title mb-0">New Purchases</h3>
                             </div>
-                            <span class="chart-badge badge text-bg-light">March 27, 2026</span>
+                            <a href="{{ route('retail.transactions.create') }}" class="btn btn-sm btn-dark">Add Transaction</a>
                         </div>
 
                         <div class="table-responsive">
@@ -114,6 +131,7 @@
                                         <th>Total</th>
                                         <th>Status</th>
                                         <th>Date</th>
+                                        <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,8 +147,27 @@
                                                 </span>
                                             </td>
                                             <td>{{ $order['date'] }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a href="{{ route('retail.transactions.edit', $order['id']) }}" class="btn btn-sm table-icon-btn" aria-label="Edit transaction">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <form method="POST" action="{{ route('retail.transactions.destroy', $order['id']) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm table-icon-btn" aria-label="Delete transaction" onclick="return confirm('Delete this transaction?')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
+                                    @if (count($orders) === 0)
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4 text-muted">No transactions yet.</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

@@ -20,15 +20,16 @@
 
 <header class="topbar border-bottom">
     <div class="container-fluid px-3 px-lg-4 py-3">
-        <div class="d-flex align-items-center justify-content-between gap-3">
-            <div>
-                <p class="eyebrow mb-1">PiggyTrunk Admin Portal</p>
-                @unless (!empty($hideTopbarTitle))
-                    <h1 class="topbar-title mb-0">{{ $pageTitle ?? 'Dashboard' }}</h1>
-                @endunless
+        <div class="topbar-main">
+            <div class="topbar-copy">
+                <div class="topbar-heading-copy">
+                    @unless (!empty($hideTopbarTitle))
+                        <h1 class="topbar-title mb-0">{{ $pageTitle ?? 'Dashboard' }}</h1>
+                    @endunless
+                </div>
             </div>
 
-            <div class="d-flex align-items-center gap-2">
+            <div class="topbar-actions">
                 <div class="topbar-clock" data-live-clock data-timezone="Asia/Manila">
                     <div class="topbar-clock-value">--:--:--</div>
                 </div>
@@ -63,6 +64,20 @@
                         </div>
                     </div>
                 </div>
+
+                @if ($user)
+                    <a
+                        class="topbar-profile-trigger text-decoration-none"
+                        href="{{ route('settings.index') }}"
+                        aria-label="Open profile and settings"
+                    >
+                        <span class="topbar-profile-avatar">{{ $user['initials'] }}</span>
+                        <span class="topbar-profile-copy d-none d-sm-flex">
+                            <span class="topbar-profile-name">{{ $user['name'] }}</span>
+                            <span class="topbar-profile-role">{{ $user['role'] }}</span>
+                        </span>
+                    </a>
+                @endif
             </div>
         </div>
     </div>

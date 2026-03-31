@@ -3,19 +3,6 @@
 @section('content')
     <section class="investment-page">
         <div class="row g-4 mb-4">
-            @foreach ($summary as $card)
-                <div class="col-12 col-md-6 col-xl-3">
-                    <div class="card dashboard-bootstrap-card h-100">
-                        <div class="card-body">
-                            <p class="section-label mb-2">{{ $card['label'] }}</p>
-                            <h3 class="section-heading investment-metric mb-0">{{ $card['value'] }}</h3>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="row g-4 mb-4">
             <div class="col-12 col-xl-8">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
@@ -72,7 +59,6 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <p class="section-label mb-1">Payout Queue</p>
                                 <h3 class="chart-title mb-0">Upcoming Releases</h3>
                             </div>
                         </div>
@@ -152,7 +138,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h3 class="chart-title mb-0">Capital by Batch</h3>
-                                    <span class="chart-badge badge text-bg-light">PHP</span>
+                                    <span class="chart-badge badge text-bg-light">₱</span>
                                 </div>
                                 <div class="chart-wrap">
                                     <canvas id="investmentCapitalChart"></canvas>

@@ -10,32 +10,32 @@ class DashboardController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = $request->string('q')->toString();
+        $query = trim($request->string('q')->toString());
 
         $stats = [
             [
-                'label' => 'Investment Amount',
-                'value' => 'PHP 0.00',
+                'label' => 'Total Active Investment',
+                'value' => '₱ ' . $this->formatCompactNumber(2450000),
             ],
             [
-                'label' => 'Batch Name',
-                'value' => 'BATCH-01',
+                'label' => 'Number of Hog Batch',
+                'value' => '5',
             ],
             [
-                'label' => 'Hog Cycles',
+                'label' => 'Investment Allocation',
                 'cycles' => [
-                    ['label' => 'Piglet', 'value' => '0'],
-                    ['label' => 'Farrowing', 'value' => '0'],
-                    ['label' => 'Fattening', 'value' => '0'],
+                    ['label' => 'Fattening', 'value' => '₱ ' . $this->formatCompactNumber(1500000)],
+                    ['label' => 'Sow', 'value' => '₱ ' . $this->formatCompactNumber(650000)],
+                    ['label' => 'Boar', 'value' => '₱ ' . $this->formatCompactNumber(300000)],
                 ],
             ],
             [
-                'label' => 'Hog Expenses Amount',
-                'value' => 'PHP 0.00',
+                'label' => 'Total Capital Invested',
+                'value' => '₱ ' . $this->formatCompactNumber(2450000),
             ],
             [
                 'label' => 'Expected Profit Return',
-                'value' => 'PHP 0.00',
+                'value' => '₱ ' . $this->formatCompactNumber(1225000) . ' (50%)',
             ],
         ];
 
@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ['label' => 'Fattening Stage', 'count' => '8 / 40 Hogs', 'width' => 20],
         ];
 
-        $raisers = Raiser::query()
+        $raisersQuery = Raiser::query()
             ->when($query !== '', function ($db) use ($query) {
                 $db->where(function ($inner) use ($query) {
                     $inner->where('name', 'like', "%{$query}%")
@@ -56,10 +56,14 @@ class DashboardController extends Controller
                         ->orWhere('status', 'like', "%{$query}%");
                 });
             })
-            ->orderBy('name')
-            ->get();
+            ->orderBy('name');
 
-        $statusChart = $raisers
+        $raisers = (clone $raisersQuery)
+            ->paginate(8)
+            ->withQueryString();
+
+        $statusChart = (clone $raisersQuery)
+            ->get()
             ->groupBy(fn (Raiser $raiser) => $raiser->status)
             ->map(fn ($group) => $group->count());
 
@@ -76,12 +80,12 @@ class DashboardController extends Controller
             'raisers' => $raisers,
             'liveFeed' => $liveFeed,
             'statusChart' => [
-                'labels' => $statusChart->keys()->values(),
-                'values' => $statusChart->values(),
+                'labels' => $statusChart->keys()->values()->all(),
+                'values' => $statusChart->values()->all(),
             ],
             'stageChart' => [
-                'labels' => $stageChart->pluck('label'),
-                'values' => $stageChart->pluck('value'),
+                'labels' => $stageChart->pluck('label')->all(),
+                'values' => $stageChart->pluck('value')->all(),
             ],
             'query' => $query,
             'user' => [
@@ -90,5 +94,10 @@ class DashboardController extends Controller
                 'initials' => 'DL',
             ],
         ]);
+    }
+
+    private function formatCompactNumber(int $amount): string
+    {
+        return number_format($amount);
     }
 }

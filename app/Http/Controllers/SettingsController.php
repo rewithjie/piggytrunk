@@ -19,7 +19,7 @@ class SettingsController extends Controller
             'systemPreferences' => [
                 ['label' => 'Application Name', 'value' => 'PiggyTrunk Admin Portal'],
                 ['label' => 'Default Theme', 'value' => 'Light / Dark Toggle'],
-                ['label' => 'Currency Format', 'value' => 'PHP'],
+                ['label' => 'Currency Format', 'value' => '₱'],
                 ['label' => 'Timezone', 'value' => 'PST (Philippine Standard Time)'],
             ],
             'referenceData' => [

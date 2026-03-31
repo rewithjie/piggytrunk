@@ -1,21 +1,56 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
-            <div class="row g-3 mb-4">
+            <div class="row g-3 mb-4 align-items-stretch summary-cards-row">
                 @foreach ($stats as $stat)
-                    <div class="{{ isset($stat['cycles']) ? 'col-12 col-md-6 col-xl-3' : 'col-12 col-md-6 col-xl' }}">
+                    <div class="col summary-card-col {{ $stat['label'] === 'Investment Allocation' ? 'summary-card-col-allocation' : '' }}">
                         <div class="card summary-bootstrap-card h-100">
                             <div class="card-body">
-                                <p class="card-label mb-3">{{ $stat['label'] }}</p>
+                                <div class="summary-card-head mb-3">
+                                    <span class="summary-card-icon" aria-hidden="true">
+                                        @if ($stat['label'] === 'Total Active Investment' || $stat['label'] === 'Total Capital Invested')
+                                            <svg viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 4V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                                <path d="M16 7.5C16 6.12 14.21 5 12 5C9.79 5 8 6.12 8 7.5C8 8.88 9.79 10 12 10C14.21 10 16 11.12 16 12.5C16 13.88 14.21 15 12 15C9.79 15 8 13.88 8 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                            </svg>
+                                        @elseif ($stat['label'] === 'Number of Hog Batch')
+                                            <svg viewBox="0 0 24 24" fill="none">
+                                                <rect x="4.5" y="6" width="15" height="12" rx="2.5" stroke="currentColor" stroke-width="1.8" />
+                                                <path d="M8 10H16M8 14H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                            </svg>
+                                        @elseif ($stat['label'] === 'Investment Allocation')
+                                            <svg viewBox="0 0 24 24" fill="none">
+                                                <path d="M4.5 16.5L9.2 11.8L12.2 14.8L19.5 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M14.5 7.5H19.5V12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        @else
+                                            <svg viewBox="0 0 24 24" fill="none">
+                                                <path d="M5 15L10 10L13 13L19 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M14 7H19V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        @endif
+                                    </span>
+                                    <p class="card-label mb-0">{{ $stat['label'] }}</p>
+                                </div>
 
                                 @if (isset($stat['cycles']))
-                                    <div class="row g-3 text-center cycle-row">
+                                    <div class="row g-2 text-center cycle-row">
                                         @foreach ($stat['cycles'] as $cycle)
+                                            @php
+                                                preg_match('/^(₱)\s+(.+)$/u', $cycle['value'], $cycleParts);
+                                            @endphp
                                             <div class="col-4">
                                                 <div class="cycle-caption">{{ $cycle['label'] }}</div>
-                                                <div class="cycle-number">{{ $cycle['value'] }}</div>
+                                                <div class="cycle-number">
+                                                    @if (!empty($cycleParts))
+                                                        <span class="cycle-number-currency">{{ $cycleParts[1] }}</span>
+                                                        <span class="cycle-number-amount">{{ $cycleParts[2] }}</span>
+                                                    @else
+                                                        <span class="cycle-number-amount">{{ $cycle['value'] }}</span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -100,7 +135,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        @if (count($raisers) === 0)
+                                        @if ($raisers->count() === 0)
                                             <tr>
                                                 <td colspan="6" class="text-center py-5 text-muted">No raisers matched your search.</td>
                                             </tr>
@@ -109,9 +144,16 @@
                                 </table>
                             </div>
 
-                            <div class="d-flex justify-content-between align-items-center small text-muted pt-3">
-                                <span>Showing {{ count($raisers) }} raisers</span>
-                                <a href="{{ route('raisers.index') }}" class="text-decoration-none">Page 1</a>
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 small text-muted pt-3">
+                                @if ($raisers->total() > 0)
+                                    <span>Showing {{ $raisers->firstItem() }}-{{ $raisers->lastItem() }} of {{ $raisers->total() }} raisers</span>
+                                @else
+                                    <span>Showing 0 raisers</span>
+                                @endif
+
+                                <div class="dashboard-pagination">
+                                    {{ $raisers->onEachSide(1)->links('pagination::bootstrap-5') }}
+                                </div>
                             </div>
                         </div>
                     </div>

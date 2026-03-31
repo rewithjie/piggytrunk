@@ -42,13 +42,7 @@
                         @forelse ($raisers as $raiser)
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="raiser-avatar avatar-{{ $raiser->accent }}">{{ $raiser->initials }}</div>
-                                        <div>
-                                            <div class="table-name">{{ $raiser->name }}</div>
-                                            <div class="table-meta">ID: {{ $raiser->code }}</div>
-                                        </div>
-                                    </div>
+                                    <div class="table-name">{{ $raiser->name }}</div>
                                 </td>
                                 <td>{{ $raiser->location }}</td>
                                 <td><span class="{{ $raiser->status === 'Active' ? 'text-danger fw-bold' : 'text-danger fw-semibold' }}">{{ $raiser->batch }}</span></td>
