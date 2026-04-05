@@ -2004,6 +2004,16 @@ html.sidebar-collapsed .admin-sidebar {
     width: var(--pt-sidebar-width-collapsed);
 }
 
+html.sidebar-expanded .admin-content {
+    margin-left: var(--pt-sidebar-width-expanded);
+    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+}
+
+html.sidebar-collapsed .admin-content {
+    margin-left: var(--pt-sidebar-width-collapsed);
+    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+}
+
 html.sidebar-collapsed .admin-sidebar .brand-text,
 html.sidebar-collapsed .admin-sidebar .sidebar-label {
     width: 0;
