@@ -14,23 +14,23 @@ class DashboardController extends Controller
 
         $lifecycles = [
             'SOW' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2Wk & 3wk', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '4wk - 8wk', 'status' => 'in-progress'],
+                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2 Weeks & 3 Weeks', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '4 Weeks - 8 Weeks', 'status' => 'in-progress'],
                 ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
                 ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
                 ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
             'PIGLET' => [
-                ['label' => 'Vitamins', 'duration' => '3d after born', 'status' => 'completed'],
-                ['label' => 'Booster', 'duration' => '30d booster', 'status' => 'completed'],
-                ['label' => 'Vitamins & cagun', 'duration' => '14d for vitamins', 'status' => 'in-progress'],
+                ['label' => 'Vitamins', 'duration' => '3 Days after born', 'status' => 'completed'],
+                ['label' => 'Booster', 'duration' => '30 Days booster', 'status' => 'completed'],
+                ['label' => 'Vitamins & cagun', 'duration' => '14 Days for vitamins', 'status' => 'in-progress'],
                 ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
             'FATTENING' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2Wk & 2wk', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '3wk & 2wk', 'status' => 'in-progress'],
+                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2 Weeks & 2 Weeks', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '3 Weeks & 2 Weeks', 'status' => 'in-progress'],
                 ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
         ];
@@ -56,23 +56,23 @@ class DashboardController extends Controller
     {
         $lifecycles = [
             'SOW' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2Wk & 3wk', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '4wk - 8wk', 'status' => 'in-progress'],
+                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2 Weeks & 3 Weeks', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '4 Weeks - 8 Weeks', 'status' => 'in-progress'],
                 ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
                 ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
                 ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
             'PIGLET' => [
-                ['label' => 'Vitamins', 'duration' => '3d after born', 'status' => 'completed'],
-                ['label' => 'Booster', 'duration' => '30d booster', 'status' => 'completed'],
-                ['label' => 'Vitamins & cagun', 'duration' => '14d for vitamins', 'status' => 'in-progress'],
+                ['label' => 'Vitamins', 'duration' => '3 Days after born', 'status' => 'completed'],
+                ['label' => 'Booster', 'duration' => '30 Days booster', 'status' => 'completed'],
+                ['label' => 'Vitamins & cagun', 'duration' => '14 Days for vitamins', 'status' => 'in-progress'],
                 ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
             'FATTENING' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2Wk & 2wk', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '3wk & 2wk', 'status' => 'in-progress'],
+                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2 Weeks & 2 Weeks', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '3 Weeks & 2 Weeks', 'status' => 'in-progress'],
                 ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
         ];
