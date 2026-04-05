@@ -226,6 +226,14 @@ body.admin-body {
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
+html.sidebar-expanded .admin-content {
+    padding-left: 20px;
+}
+
+html.sidebar-collapsed .admin-content {
+    padding-left: 40px;
+}
+
 .content-frame {
     width: 100%;
 }
