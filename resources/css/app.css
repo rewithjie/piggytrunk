@@ -56,6 +56,7 @@ body.admin-body {
     border: none !important;
     border-color: transparent !important;
     border-right: none !important;
+    border-end: none !important;
     padding-top: 10px;
     transition:
         width var(--pt-sidebar-duration) var(--pt-sidebar-ease),
@@ -65,6 +66,11 @@ body.admin-body {
     backface-visibility: hidden;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.admin-sidebar.border-end {
+    border-right: none !important;
+    border-color: transparent !important;
 }
 
 :root[data-theme="dark"] body.admin-body {
