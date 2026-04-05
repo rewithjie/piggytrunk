@@ -220,7 +220,7 @@ body.admin-body {
     min-width: 0;
     position: relative;
     z-index: 1;
-    transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
@@ -233,7 +233,7 @@ body.admin-body {
     max-width: 1800px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 
 .topbar {
