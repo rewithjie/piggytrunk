@@ -53,6 +53,7 @@ body.admin-body {
     height: calc(100vh - 80px);
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
+    border: none !important;
     border-color: transparent !important;
     border-right: none !important;
     padding-top: 10px;
