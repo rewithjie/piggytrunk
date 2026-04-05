@@ -247,13 +247,13 @@ body.admin-body {
     z-index: 1;
     transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease), padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 90px;
-    padding-left: 0px;
+    padding-left: 25px;
     padding-right: 15px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
 html.sidebar-expanded .admin-content {
-    padding-left: 0px;
+    padding-left: 25px;
     padding-right: 15px;
 }
 
@@ -2395,13 +2395,13 @@ html.sidebar-collapsed .admin-sidebar .px-lg-3 {
 /* Large Desktops (1025px+) */
 @media (min-width: 1025px) {
     .admin-content {
-        padding-left: 0px !important;
+        padding-left: 25px !important;
         padding-right: 15px !important;
         margin-left: var(--pt-sidebar-width-expanded);
     }
 
     html.sidebar-expanded .admin-content {
-        padding-left: 0px !important;
+        padding-left: 25px !important;
         padding-right: 15px !important;
     }
 
