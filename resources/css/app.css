@@ -222,13 +222,13 @@ body.admin-body {
     z-index: 1;
     transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease), padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
-    padding-left: 50px;
+    padding-left: 10px;
     padding-right: 30px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
 html.sidebar-expanded .admin-content {
-    padding-left: 50px;
+    padding-left: 10px;
     padding-right: 30px;
 }
 
