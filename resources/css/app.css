@@ -248,6 +248,14 @@ html.sidebar-collapsed .admin-content {
     padding: 0 1rem;
 }
 
+html.sidebar-expanded .content-inner {
+    max-width: 1400px;
+}
+
+html.sidebar-collapsed .content-inner {
+    max-width: 1600px;
+}
+
 .topbar {
     background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(14px);
