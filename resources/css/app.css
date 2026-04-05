@@ -86,9 +86,10 @@ body.admin-body {
     justify-content: center;
     gap: 0.75rem;
     position: fixed;
-    top: 140px;
+    top: 0;
     left: 0;
     width: var(--pt-sidebar-width-collapsed);
+    height: 80px;
     padding: 1rem 0.75rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
@@ -97,7 +98,7 @@ body.admin-body {
     transform: none !important;
     animation: none !important;
     will-change: auto !important;
-    z-index: 21;
+    z-index: 26;
 }
 
 .sidebar-brand-row .sidebar-toggle-button {
@@ -108,7 +109,7 @@ body.admin-body {
 }
 
 .admin-sidebar > nav {
-    padding-top: 90px;
+    padding-top: 80px;
 }
 
 .sidebar-brand-row .brand-mark {
@@ -221,7 +222,7 @@ body.admin-body {
     position: relative;
     z-index: 1;
     transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
-    padding-top: 140px;
+    padding-top: 80px;
 }
 
 .content-frame {
