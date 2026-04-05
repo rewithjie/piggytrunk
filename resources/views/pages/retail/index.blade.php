@@ -6,76 +6,158 @@
             <div class="alert alert-success mb-4">{{ session('status') }}</div>
         @endif
 
-        <div class="row g-4 mb-4">
-            <div class="col-12 col-xl-8">
-                <div class="card dashboard-bootstrap-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <p class="section-label mb-1">Catalog</p>
-                                <h3 class="chart-title mb-0">Retail Product Overview</h3>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="chart-badge badge text-bg-light">Feeds, Vitamins, Medicines, Growth Additives</span>
-                                <a href="{{ route('retail.products.create') }}" class="btn btn-sm btn-dark">Add Product</a>
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h1 class="page-title mb-1">Retail Shop</h1>
+                <p class="text-muted subtitle-text mb-0">Manage your product catalog and inventory</p>
+            </div>
+            <a href="{{ route('retail.products.create') }}" class="btn btn-dark">
+                <i class="bi bi-plus-lg"></i> Add Product
+            </a>
+        </div>
+
+        <!-- Products by Category Section -->
+        <div class="retail-products-section mb-5">
+            @php
+                $categories = [
+                    'Feeds' => 'feeds',
+                    'Vitamins' => 'vitamins',
+                    'Medicines' => 'medicines',
+                    'Growth Additives' => 'growth-additives'
+                ];
+                
+                $productsByCategory = [];
+                foreach ($catalog as $item) {
+                    $cat = $item['category'] ?? 'feeds';
+                    if (!isset($productsByCategory[$cat])) {
+                        $productsByCategory[$cat] = [];
+                    }
+                    $productsByCategory[$cat][] = $item;
+                }
+            @endphp
+
+            @foreach ($categories as $categoryName => $categoryKey)
+                @php
+                    $products = $productsByCategory[$categoryKey] ?? [];
+                @endphp
+
+                <div class="retail-category-section mb-5">
+                    <div class="category-header mb-3">
+                        <h2 class="category-title">{{ $categoryName }}'s</h2>
+                    </div>
+
+                    @if (count($products) > 0)
+                        <div class="row g-3">
+                            @foreach ($products as $product)
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <div class="product-card">
+                                        <div class="product-card-body">
+                                            <div class="product-header">
+                                                <h5 class="product-name">{{ $product['name'] }}</h5>
+                                                <span class="stock-badge {{ $product['status'] === 'In Stock' ? 'badge-active' : 'badge-inactive' }}">
+                                                    {{ $product['stock'] }} units
+                                                </span>
+                                            </div>
+
+                                            <div class="product-details">
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Price:</span>
+                                                    <span class="detail-value">{{ $product['price'] }}</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Sold:</span>
+                                                    <span class="detail-value">{{ $product['sales'] }} units</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="product-actions">
+                                                <a href="{{ route('retail.products.edit', $product['id']) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </a>
+                                                <form method="POST" action="{{ route('retail.products.destroy', $product['id']) }}" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="empty-state">
+                            <p class="text-muted">No {{ strtolower($categoryName) }} available yet.</p>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+
+            @if (count($catalog) === 0)
+                <div class="empty-page">
+                    <div class="empty-icon">
+                        <i class="bi bi-box"></i>
+                    </div>
+                    <h3>No Products Yet</h3>
+                    <p class="text-muted mb-3">Start by adding products to your retail shop</p>
+                    <a href="{{ route('retail.products.create') }}" class="btn btn-dark">Add Your First Product</a>
+                </div>
+            @endif
+        </div>
+
+        <!-- Price & Quantity Control Card -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 col-lg-6">
+                <div class="control-card">
+                    <div class="control-card-header">
+                        <h3 class="control-title">Quick Sale</h3>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-group">
+                            <label class="control-label">Price</label>
+                            <div class="price-input-group">
+                                <button class="price-btn" onclick="decreasePrice()">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="text" id="priceInput" value="0.00" class="price-input" readonly>
+                                <button class="price-btn" onclick="increasePrice()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table align-middle dashboard-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Stock</th>
-                                        <th>Status</th>
-                                        <th>Sold This Cycle</th>
-                                        <th class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($catalog as $item)
-                                        <tr>
-                                            <td class="fw-semibold">{{ $item['name'] }}</td>
-                                            <td>{{ $item['category'] }}</td>
-                                            <td class="fw-semibold">{{ $item['price'] }}</td>
-                                            <td>{{ $item['stock'] }}</td>
-                                            <td>
-                                                <span class="badge rounded-pill status-badge {{ $item['status'] === 'In Stock' ? 'status-badge-active' : 'status-badge-inactive' }}">
-                                                    {{ $item['status'] }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $item['sales'] }}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-end gap-2">
-                                                    <a href="{{ route('retail.products.edit', $item['id']) }}" class="btn btn-sm table-icon-btn" aria-label="Edit {{ $item['name'] }}">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <form method="POST" action="{{ route('retail.products.destroy', $item['id']) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm table-icon-btn" aria-label="Delete {{ $item['name'] }}" onclick="return confirm('Delete this product?')">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    @if (count($catalog) === 0)
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">No products yet.</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
+                        <div class="control-group">
+                            <label class="control-label">Set Quantity</label>
+                            <input type="number" id="quantityInput" value="0" class="form-control quantity-input" min="0">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Kilo</label>
+                            <input type="text" id="kiloInput" value="0" class="form-control quantity-input" placeholder="Enter kilo weight">
+                        </div>
+
+                        <div class="control-group total-group">
+                            <label class="control-label">Total</label>
+                            <div class="total-amount" id="totalAmount">0.00</div>
+                        </div>
+
+                        <div class="control-actions">
+                            <button class="action-btn raiser-btn" onclick="selectRaiser()">
+                                Tag Raiser
+                            </button>
+                            <button class="action-btn customer-btn" onclick="selectCustomer()">
+                                Customer
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-xl-4">
+            <!-- Best Sellers Section -->
+            <div class="col-12 col-lg-6">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -109,8 +191,9 @@
             </div>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-12 col-xl-7">
+        <!-- Recent Transactions Section -->
+        <div class="row g-4">
+            <div class="col-12">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -174,132 +257,487 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-xl-5">
-                <div class="row g-4 h-100">
-                    <div class="col-12">
-                        <div class="card dashboard-bootstrap-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h3 class="chart-title mb-0">Weekly Sales</h3>
-                                </div>
-                                <div class="chart-wrap">
-                                    <canvas id="retailSalesChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="card dashboard-bootstrap-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h3 class="chart-title mb-0">Sales Channel Mix</h3>
-                                    <span class="chart-badge badge text-bg-light">Share</span>
-                                </div>
-                                <div class="chart-wrap chart-wrap-donut">
-                                    <canvas id="retailChannelChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+        }
+
+        .subtitle-text {
+            color: var(--pt-muted);
+        }
+
+        :root[data-theme="dark"] .subtitle-text {
+            color: #b8c9e0 !important;
+        }
+
+        :root[data-theme="light"] .subtitle-text {
+            color: #6f8096;
+        }
+
+        .retail-category-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--pt-text);
+            margin: 0;
+            text-transform: capitalize;
+        }
+
+        .product-card {
+            background: var(--pt-surface);
+            border: 1px solid var(--pt-border);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            box-shadow: var(--pt-shadow);
+            transform: translateY(-2px);
+            border-color: var(--pt-accent);
+        }
+
+        .product-card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--pt-text);
+            margin: 0;
+            flex: 1;
+        }
+
+        .stock-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .badge-active {
+            background: rgba(47, 179, 111, 0.15);
+            color: var(--pt-success);
+        }
+
+        .badge-inactive {
+            background: rgba(239, 91, 108, 0.15);
+            color: var(--pt-accent);
+        }
+
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--pt-border);
+            border-bottom: 1px solid var(--pt-border);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+
+        .detail-label {
+            color: var(--pt-muted);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--pt-text);
+            font-weight: 600;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .product-actions .btn {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--pt-muted);
+        }
+
+        .empty-page {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-page h3 {
+            color: var(--pt-text);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--pt-muted);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Quick Sale Control Card */
+        .control-card {
+            background: var(--pt-surface);
+            border: 1px solid var(--pt-border);
+            border-radius: 0.75rem;
+            box-shadow: var(--pt-shadow);
+            height: 100%;
+        }
+
+        .control-card-header {
+            border-bottom: 1px solid var(--pt-border);
+            padding: 1.5rem;
+        }
+
+        .control-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--pt-text);
+            margin: 0;
+        }
+
+        .control-card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--pt-text);
+            text-transform: capitalize;
+        }
+
+        .price-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--pt-surface-soft);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid var(--pt-border);
+        }
+
+        .price-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: none;
+            background: var(--pt-accent);
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .price-btn:hover {
+            background: var(--pt-primary);
+            transform: scale(1.05);
+        }
+
+        :root[data-theme="dark"] .price-btn {
+            background: var(--pt-accent);
+            color: white;
+        }
+
+        :root[data-theme="dark"] .price-btn:hover {
+            background: #ff8da0;
+            color: white;
+        }
+
+        .price-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--pt-text);
+            text-align: center;
+        }
+
+        .price-input:focus {
+            outline: none;
+        }
+
+        .quantity-input {
+            border: 1px solid var(--pt-border) !important;
+            background: var(--pt-surface-soft);
+            color: var(--pt-text);
+            font-weight: 500;
+        }
+
+        .quantity-input:focus {
+            border-color: var(--pt-accent) !important;
+            box-shadow: 0 0 0 3px rgba(239, 91, 108, 0.1);
+        }
+
+        .total-group {
+            background: linear-gradient(135deg, var(--pt-primary) 0%, var(--pt-primary) 100%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        :root[data-theme="light"] .total-group {
+            background: linear-gradient(135deg, #243b53 0%, #1a2d42 100%);
+        }
+
+        :root[data-theme="dark"] .total-group {
+            background: linear-gradient(135deg, #243b53 0%, #1a2d42 100%);
+        }
+
+        .total-group .control-label {
+            color: white;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .control-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--pt-border);
+            background: transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            color: var(--pt-text);
+        }
+
+        .raiser-btn {
+            color: var(--pt-text);
+        }
+
+        .raiser-btn:hover {
+            background: var(--pt-surface-soft);
+            border-color: var(--pt-primary);
+        }
+
+        .customer-btn {
+            color: var(--pt-text);
+        }
+
+        .customer-btn:hover {
+            background: var(--pt-surface-soft);
+            border-color: var(--pt-accent);
+        }
+
+        /* Dark mode specific fixes */
+        :root[data-theme="dark"] .product-card {
+            background: var(--pt-surface);
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .product-name,
+        :root[data-theme="dark"] .control-title,
+        :root[data-theme="dark"] .category-title,
+        :root[data-theme="dark"] .page-title {
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .action-btn {
+            border-color: var(--pt-border);
+            color: var(--pt-text);
+            background: var(--pt-surface-soft);
+        }
+
+        :root[data-theme="dark"] .action-btn:hover {
+            background: var(--pt-border);
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .control-label {
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .detail-label {
+            color: var(--pt-muted);
+        }
+
+        :root[data-theme="dark"] .detail-value {
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .price-input {
+            color: var(--pt-text);
+        }
+
+        :root[data-theme="dark"] .quantity-input {
+            background: var(--pt-surface-soft) !important;
+            color: var(--pt-text) !important;
+            border-color: var(--pt-border) !important;
+        }
+
+        :root[data-theme="dark"] .quantity-input::placeholder {
+            color: var(--pt-muted);
+        }
+
+        :root[data-theme="dark"] .control-card {
+            background: var(--pt-surface);
+            border-color: var(--pt-border);
+        }
+
+        :root[data-theme="dark"] .inventory-tracker-row .inventory-item-title {
+            color: var(--pt-text);
+        }
+
+        /* Additional dark mode text fixes */
+        :root[data-theme="dark"] .text-muted {
+            color: #b8c9e0 !important;
+        }
+
+        :root[data-theme="light"] .text-muted {
+            color: #6f8096 !important;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .category-title {
+                font-size: 1rem;
+            }
+
+            .product-card-body {
+                padding: 1rem;
+            }
+
+            .control-card-body {
+                gap: 1rem;
+            }
+
+            .control-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+
     <script>
-        (() => {
-            const salesCanvas = document.getElementById('retailSalesChart');
-            const channelCanvas = document.getElementById('retailChannelChart');
-            let salesChart = null;
-            let channelChart = null;
+        // Quick Sale Control Functionality
+        let currentPrice = 0;
 
-            const palette = () => {
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        function increasePrice() {
+            try {
+                currentPrice += 100;
+                updatePrice();
+            } catch (error) {
+                console.error('Error in increasePrice:', error);
+            }
+        }
 
-                return {
-                    text: isDark ? '#ecf2ff' : '#243b53',
-                    muted: isDark ? '#d2ddf0' : '#6f8096',
-                    grid: isDark ? 'rgba(210, 221, 240, 0.22)' : '#edf0f6',
-                    line: isDark ? '#70e7a8' : '#2fb36f',
-                    fill: isDark ? 'rgba(112, 231, 168, 0.12)' : 'rgba(47, 179, 111, 0.16)',
-                    doughnut: isDark ? ['#ff8da0', '#6ea8ff', '#ffc56f'] : ['#ff6078', '#5b8def', '#ffb85c'],
-                };
-            };
+        function decreasePrice() {
+            try {
+                currentPrice = Math.max(0, currentPrice - 100);
+                updatePrice();
+            } catch (error) {
+                console.error('Error in decreasePrice:', error);
+            }
+        }
 
-            const renderCharts = () => {
-                const colors = palette();
+        function updatePrice() {
+            const priceInput = document.getElementById('priceInput');
+            if (priceInput) {
+                priceInput.value = (currentPrice / 100).toFixed(2);
+                calculateTotal();
+            }
+        }
 
-                if (salesChart) {
-                    salesChart.destroy();
-                }
+        function calculateTotal() {
+            const priceInput = document.getElementById('priceInput');
+            const quantityInput = document.getElementById('quantityInput');
+            const totalAmount = document.getElementById('totalAmount');
 
-                if (channelChart) {
-                    channelChart.destroy();
-                }
+            if (!totalAmount) return;
 
-                salesChart = new Chart(salesCanvas, {
-                    type: 'line',
-                    data: {
-                        labels: @json($salesChart['labels']),
-                        datasets: [{
-                            data: @json($salesChart['values']),
-                            borderColor: colors.line,
-                            backgroundColor: colors.fill,
-                            fill: true,
-                            tension: 0.38,
-                            pointRadius: 4,
-                            pointHoverRadius: 5,
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { color: colors.muted },
-                                grid: { color: colors.grid }
-                            },
-                            x: {
-                                ticks: { color: colors.text },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
+            const price = priceInput ? (parseFloat(priceInput.value) || 0) : 0;
+            const quantity = quantityInput ? (parseInt(quantityInput.value) || 0) : 0;
+            const total = price * quantity;
+            totalAmount.textContent = total.toFixed(2);
+        }
 
-                channelChart = new Chart(channelCanvas, {
-                    type: 'doughnut',
-                    data: {
-                        labels: @json($channelChart['labels']),
-                        datasets: [{
-                            data: @json($channelChart['values']),
-                            backgroundColor: colors.doughnut,
-                            borderWidth: 0,
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        cutout: '68%',
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    usePointStyle: true,
-                                    boxWidth: 10,
-                                    color: colors.text
-                                }
-                            }
-                        }
-                    }
-                });
-            };
+        function selectRaiser() {
+            alert('Raiser selection functionality coming soon...');
+        }
 
-            renderCharts();
-            window.addEventListener('themechange', renderCharts);
-        })();
+        function selectCustomer() {
+            alert('Customer selection functionality coming soon...');
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantityInput');
+            const kiloInput = document.getElementById('kiloInput');
+
+            if (quantityInput) {
+                quantityInput.addEventListener('input', calculateTotal);
+            }
+
+            if (kiloInput) {
+                kiloInput.addEventListener('input', calculateTotal);
+            }
+
+            // Initialize price display
+            updatePrice();
+        });
     </script>
 @endsection

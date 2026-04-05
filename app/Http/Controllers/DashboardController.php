@@ -10,84 +10,35 @@ class DashboardController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = trim($request->string('q')->toString());
+        $raisers = Raiser::orderBy('name')->limit(10)->get();
 
-        $stats = [
-            [
-                'label' => 'Total Active Investment',
-                'value' => '₱ ' . $this->formatCompactNumber(2450000),
+        $lifecycles = [
+            'SOW' => [
+                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2Wk & 3wk', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '4wk - 8wk', 'status' => 'in-progress'],
+                ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
+                ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
+                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
-            [
-                'label' => 'Number of Hog Batch',
-                'value' => '5',
+            'PIGLET' => [
+                ['label' => 'Vitamins', 'duration' => '3d after born', 'status' => 'completed'],
+                ['label' => 'Booster', 'duration' => '30d booster', 'status' => 'completed'],
+                ['label' => 'Vitamins & cagun', 'duration' => '14d for vitamins', 'status' => 'in-progress'],
+                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
-            [
-                'label' => 'Investment Allocation',
-                'cycles' => [
-                    ['label' => 'Fattening', 'value' => '₱ ' . $this->formatCompactNumber(1500000)],
-                    ['label' => 'Sow', 'value' => '₱ ' . $this->formatCompactNumber(650000)],
-                    ['label' => 'Boar', 'value' => '₱ ' . $this->formatCompactNumber(300000)],
-                ],
-            ],
-            [
-                'label' => 'Total Capital Invested',
-                'value' => '₱ ' . $this->formatCompactNumber(2450000),
-            ],
-            [
-                'label' => 'Expected Profit Return',
-                'value' => '₱ ' . $this->formatCompactNumber(1225000) . ' (50%)',
+            'FATTENING' => [
+                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2Wk & 2wk', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '3wk & 2wk', 'status' => 'in-progress'],
+                ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
             ],
         ];
-
-        $liveFeed = [
-            ['label' => 'Piglet Stage', 'count' => '20 / 40 Hogs', 'width' => 50],
-            ['label' => 'Farrowing Stage', 'count' => '12 / 40 Hogs', 'width' => 30],
-            ['label' => 'Fattening Stage', 'count' => '8 / 40 Hogs', 'width' => 20],
-        ];
-
-        $raisersQuery = Raiser::query()
-            ->when($query !== '', function ($db) use ($query) {
-                $db->where(function ($inner) use ($query) {
-                    $inner->where('name', 'like', "%{$query}%")
-                        ->orWhere('code', 'like', "%{$query}%")
-                        ->orWhere('location', 'like', "%{$query}%")
-                        ->orWhere('batch', 'like', "%{$query}%")
-                        ->orWhere('pig_type', 'like', "%{$query}%")
-                        ->orWhere('status', 'like', "%{$query}%");
-                });
-            })
-            ->orderBy('name');
-
-        $raisers = (clone $raisersQuery)
-            ->paginate(8)
-            ->withQueryString();
-
-        $statusChart = (clone $raisersQuery)
-            ->get()
-            ->groupBy(fn (Raiser $raiser) => $raiser->status)
-            ->map(fn ($group) => $group->count());
-
-        $stageChart = collect($liveFeed)->map(function (array $item) {
-            return [
-                'label' => str_replace(' Stage', '', $item['label']),
-                'value' => (int) explode('/', $item['count'])[0],
-            ];
-        });
 
         return view('pages.dashboard', [
             'pageTitle' => 'Dashboard',
-            'stats' => $stats,
             'raisers' => $raisers,
-            'liveFeed' => $liveFeed,
-            'statusChart' => [
-                'labels' => $statusChart->keys()->values()->all(),
-                'values' => $statusChart->values()->all(),
-            ],
-            'stageChart' => [
-                'labels' => $stageChart->pluck('label')->all(),
-                'values' => $stageChart->pluck('value')->all(),
-            ],
-            'query' => $query,
+            'lifecycles' => $lifecycles,
             'user' => [
                 'name' => 'De Luna Admin',
                 'role' => 'System Administrator',
@@ -99,5 +50,70 @@ class DashboardController extends Controller
     private function formatCompactNumber(int $amount): string
     {
         return number_format($amount);
+    }
+
+    public function downloadReport(Raiser $raiser)
+    {
+        $lifecycles = [
+            'SOW' => [
+                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2Wk & 3wk', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '4wk - 8wk', 'status' => 'in-progress'],
+                ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
+                ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
+                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
+            ],
+            'PIGLET' => [
+                ['label' => 'Vitamins', 'duration' => '3d after born', 'status' => 'completed'],
+                ['label' => 'Booster', 'duration' => '30d booster', 'status' => 'completed'],
+                ['label' => 'Vitamins & cagun', 'duration' => '14d for vitamins', 'status' => 'in-progress'],
+                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
+            ],
+            'FATTENING' => [
+                ['label' => 'Pre-Starter', 'duration' => 'Up 6 Dys', 'status' => 'completed'],
+                ['label' => 'Starter', 'duration' => '2Wk & 2wk', 'status' => 'completed'],
+                ['label' => 'Grower', 'duration' => '3wk & 2wk', 'status' => 'in-progress'],
+                ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
+            ],
+        ];
+
+        $fileName = 'raiser-report-' . $raiser->code . '-' . now()->format('Y-m-d') . '.csv';
+
+        $callback = function() use ($raiser, $lifecycles) {
+            $file = fopen('php://output', 'w');
+
+            // Header
+            fputcsv($file, ['RAISER LIFECYCLE REPORT']);
+            fputcsv($file, []);
+            fputcsv($file, ['Raiser Name:', $raiser->name]);
+            fputcsv($file, ['Raiser ID:', $raiser->code]);
+            fputcsv($file, ['Location:', $raiser->location]);
+            fputcsv($file, ['Status:', $raiser->status]);
+            fputcsv($file, ['Report Date:', now()->format('Y-m-d H:i:s')]);
+            fputcsv($file, []);
+
+            // Lifecycle data
+            foreach ($lifecycles as $categoryName => $stages) {
+                fputcsv($file, [$categoryName]);
+                fputcsv($file, ['Stage', 'Duration', 'Status']);
+
+                foreach ($stages as $stage) {
+                    fputcsv($file, [
+                        $stage['label'],
+                        $stage['duration'],
+                        ucfirst(str_replace('-', ' ', $stage['status']))
+                    ]);
+                }
+
+                fputcsv($file, []);
+            }
+
+            fclose($file);
+        };
+
+        return response()->streamDownload($callback, $fileName, [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
     }
 }

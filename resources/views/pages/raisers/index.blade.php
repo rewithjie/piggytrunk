@@ -1,76 +1,246 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="card dashboard-bootstrap-card">
-        <div class="card-body">
-            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
-                <a href="{{ route('raisers.create') }}" class="btn btn-dark">Create New Account</a>
-            </div>
-
-            @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
-            @endif
-
-            <form method="GET" action="{{ route('raisers.index') }}" class="row g-3 mb-4">
-                <div class="col-12 col-lg-10">
-                    <div class="input-group search-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input type="text" name="q" value="{{ $query }}" class="form-control border-start-0" placeholder="Search by name, code, location, batch, or type">
+    <section class="bootstrap-dashboard">
+        <div class="dashboard-stage">
+            <div class="card dashboard-bootstrap-card">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                        <a href="{{ route('raisers.create') }}" class="btn btn-dark">
+                            <i class="bi bi-person-plus me-2"></i>Create New Account
+                        </a>
                     </div>
-                </div>
-                <div class="col-12 col-lg-2">
-                    <button type="submit" class="btn btn-dark w-100">Search</button>
-                </div>
-            </form>
 
-            <div class="table-responsive">
-                <table class="table align-middle dashboard-table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Raiser Profile</th>
-                            <th>Brgy</th>
-                            <th>Active Batch</th>
-                            <th>Type of Pig</th>
-                            <th>Status</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($raisers as $raiser)
-                            <tr>
-                                <td>
-                                    <div class="table-name">{{ $raiser->name }}</div>
-                                </td>
-                                <td>{{ $raiser->location }}</td>
-                                <td><span class="{{ $raiser->status === 'Active' ? 'text-danger fw-bold' : 'text-danger fw-semibold' }}">{{ $raiser->batch }}</span></td>
-                                <td>{{ $raiser->pig_type }}</td>
-                                <td>
-                                    <span class="badge rounded-pill status-badge {{ strtolower($raiser->status) === 'active' ? 'status-badge-active' : 'status-badge-inactive' }}">
-                                        {{ $raiser->status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-end gap-2">
-                                        <a href="{{ route('raisers.show', $raiser->id) }}" class="btn btn-sm table-icon-btn" aria-label="View {{ $raiser->name }}">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('raisers.edit', $raiser->id) }}" class="btn btn-sm table-icon-btn" aria-label="Edit {{ $raiser->name }}">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">No raisers matched your search.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                    @if (session('status'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('status') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <x-search-bar
+                        action="{{ route('raisers.index') }}"
+                        method="GET"
+                        input-name="q"
+                        input-value="{{ $query }}"
+                        placeholder="Search raisers..."
+                        button-label="Search"
+                        class="mb-4"
+                    />
+
+                    <div class="table-responsive">
+                        <table class="table align-middle dashboard-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>HOG RAISER</th>
+                                    <th>ADDRESS</th>
+                                    <th>PHONE NUMBER</th>
+                                    <th>EMAIL</th>
+                                    <th>STATUS</th>
+                                    <th class="text-end">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($raisers as $raiser)
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="raiser-avatar avatar-{{ $raiser->accent ?? 'default' }}">
+                                                    {{ $raiser->initials ?? strtoupper(substr($raiser->name, 0, 2)) }}
+                                                </div>
+                                                <div>
+                                                    <div class="table-name">{{ $raiser->name }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="table-copy">{{ $raiser->location }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="table-copy">{{ $raiser->phone ?? 'N/A' }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="table-copy">{{ $raiser->email ?? 'N/A' }}</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge rounded-pill status-badge {{ strtolower($raiser->status) === 'active' ? 'status-badge-active' : 'status-badge-inactive' }}">
+                                                {{ strtoupper($raiser->status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-end gap-3">
+                                                <a href="{{ route('raisers.show', $raiser->id) }}" class="table-icon-btn" aria-label="View {{ $raiser->name }}" title="View">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="{{ route('raisers.edit', $raiser->id) }}" class="table-icon-btn" aria-label="Edit {{ $raiser->name }}" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5 raiser-empty-state">No raiser found</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if ($raisers->count() > 0)
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 small pt-3 border-top raiser-count-text">
+                            <span class="mt-3">Showing {{ $raisers->count() }} raiser(s)</span>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <script>
+        // Client-side raiser search
+        function performRaiserSearch() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const tableRows = document.querySelectorAll('.dashboard-table tbody tr');
+            let visibleCount = 0;
+
+            tableRows.forEach(row => {
+                // Skip empty state row
+                if (row.querySelector('.raiser-empty-state')) {
+                    return;
+                }
+                
+                const text = row.textContent.toLowerCase();
+                const isVisible = text.includes(searchTerm);
+                row.style.display = isVisible ? '' : 'none';
+                if (isVisible) visibleCount++;
+            });
+
+            // Show/hide empty state
+            const emptyStateRow = document.querySelector('.dashboard-table tbody tr .raiser-empty-state')?.closest('tr');
+            if (emptyStateRow) {
+                emptyStateRow.style.display = visibleCount === 0 ? '' : 'none';
+            }
+        }
+
+        // Prevent form submission and use client-side filtering instead
+        document.querySelector('.search-wrapper').addEventListener('submit', function(e) {
+            e.preventDefault();
+            performRaiserSearch();
+        });
+
+        // Reset to main content when search input is cleared
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            if (e.target.value === '') {
+                const tableRows = document.querySelectorAll('.dashboard-table tbody tr');
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .section-heading {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--pt-text);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-dark {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .btn-dark:hover {
+            background: #2d2d2d;
+            border-color: #ffffff;
+        }
+
+        :root[data-theme="dark"] .btn-dark {
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+
+        :root[data-theme="dark"] .btn-dark:hover {
+            background: #f5f5f5;
+            border-color: #1a1a1a;
+        }
+
+        .table-copy {
+            color: var(--pt-muted);
+            font-size: 0.9375rem;
+        }
+
+        .raiser-count-text {
+            color: var(--pt-text);
+        }
+
+        .raiser-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: white;
+            background: #5b8def;
+        }
+
+        .raiser-avatar.avatar-default {
+            background: #5b8def;
+        }
+
+        .raiser-avatar.avatar-primary {
+            background: #5b8def;
+        }
+
+        .raiser-avatar.avatar-accent {
+            background: #ef5b6c;
+        }
+
+        .raiser-avatar.avatar-success {
+            background: #43cb89;
+        }
+
+        .table-icon-btn {
+            color: var(--pt-text);
+            text-decoration: none;
+            padding: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .table-icon-btn:hover {
+            background: var(--pt-surface-soft);
+            color: var(--pt-accent);
+        }
+
+        .raiser-empty-state {
+            color: var(--pt-text);
+            font-weight: 600;
+        }
+
+        :root[data-theme="dark"] .raiser-empty-state {
+            color: #ecf2ff;
+        }
+    </style>
 @endsection

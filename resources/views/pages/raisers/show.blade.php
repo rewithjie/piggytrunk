@@ -22,7 +22,6 @@
                                 {{ $raiser->initials }}
                             </div>
                             <h3 class="table-name h4 mb-1">{{ $raiser->name }}</h3>
-                            <p class="table-meta mb-3">{{ $raiser->code }}</p>
                             <span class="badge rounded-pill status-badge {{ strtolower($raiser->status) === 'active' ? 'status-badge-active' : 'status-badge-inactive' }}">
                                 {{ $raiser->status }}
                             </span>

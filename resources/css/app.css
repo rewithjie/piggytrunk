@@ -8,6 +8,8 @@
     --pt-primary: #243b53;
     --pt-accent: #ef5b6c;
     --pt-success: #2fb36f;
+    --pt-in-progress: #ffa566;
+    --pt-pending-border: #d4dce5;
     --pt-shadow: 0 18px 40px rgba(18, 40, 76, 0.08);
     --pt-sidebar-width-expanded: 280px;
     --pt-sidebar-width-collapsed: 92px;
@@ -25,6 +27,8 @@
     --pt-primary: #f5f8ff;
     --pt-accent: #ff758c;
     --pt-success: #43cb89;
+    --pt-in-progress: #ff9d7d;
+    --pt-pending-border: #3a4860;
     --pt-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
@@ -548,7 +552,6 @@ body.admin-body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 
 .btn-action {
     border-radius: 14px;
@@ -1350,6 +1353,76 @@ body.admin-body {
 :root[data-theme="dark"] .status-badge-inactive {
     background: rgba(156, 176, 201, 0.12);
     color: #b6c7dc;
+}
+
+.pt-search {
+    --pt-search-button-bg: var(--pt-text);
+    --pt-search-button-color: var(--pt-surface);
+    --pt-search-button-border: var(--pt-text);
+    --pt-search-input-bg: var(--pt-surface-soft);
+    --pt-search-input-color: var(--pt-text);
+    --pt-search-placeholder-color: var(--pt-muted);
+    --pt-search-icon-color: var(--pt-muted);
+}
+
+:root[data-theme="dark"] .pt-search {
+    --pt-search-button-bg: var(--pt-surface);
+    --pt-search-button-color: var(--pt-text);
+    --pt-search-button-border: var(--pt-border);
+}
+
+.pt-search__group {
+    border: 1px solid var(--pt-border);
+    border-radius: 0.55rem;
+    overflow: hidden;
+    background: var(--pt-search-input-bg);
+    box-shadow: none;
+}
+
+.pt-search__icon {
+    background: transparent;
+    border: none;
+    color: var(--pt-search-icon-color);
+}
+
+.pt-search__input {
+    background: transparent;
+    border: none;
+    color: var(--pt-search-input-color);
+    box-shadow: none;
+}
+
+.pt-search__input:focus {
+    background: transparent;
+    color: var(--pt-search-input-color);
+    box-shadow: none;
+}
+
+.pt-search__input::placeholder {
+    color: var(--pt-search-placeholder-color);
+}
+
+.pt-search__button {
+    background: var(--pt-search-button-bg);
+    border: 1px solid var(--pt-search-button-border);
+    color: var(--pt-search-button-color);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.pt-search__button:hover {
+    background: var(--pt-search-button-bg);
+    color: var(--pt-search-button-color);
+    opacity: 0.9;
+}
+
+.pt-search__button--icon-only {
+    width: 42px;
+    min-width: 42px;
+    padding-inline: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .table-icon-btn {

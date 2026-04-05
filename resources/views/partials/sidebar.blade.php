@@ -2,7 +2,7 @@
     $navItems = [
         ['label' => 'Dashboard', 'icon' => 'bi-grid', 'route' => 'dashboard'],
         ['label' => 'Hog Raiser Directory', 'icon' => 'bi-person', 'route' => 'raisers.index'],
-        ['label' => 'Investment', 'icon' => 'bi-journal-text', 'route' => 'investment.index'],
+        ['label' => 'Investment', 'icon' => 'bi-journal-text', 'route' => 'investments.index'],
         ['label' => 'Retail Shop', 'icon' => 'bi-clipboard-check', 'route' => 'retail.index'],
         ['label' => 'Inventory', 'icon' => 'bi-bag', 'route' => 'inventory.index'],
     ];

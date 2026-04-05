@@ -1,25 +1,29 @@
 <?php
 
-use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InvestmentController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\RaiserController;
 use App\Http\Controllers\RetailController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\Api\StockEntryController;
 use App\Support\AdminAsset;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/assets/admin.css', fn () => AdminAsset::css())->name('assets.admin.css');
 Route::get('/assets/admin.js', fn () => AdminAsset::js())->name('assets.admin.js');
 
-Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login.form');
-Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+Route::middleware('guest')->group(function () {
+    Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login.form');
+    Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+});
 
 Route::middleware('admin.auth')->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/raisers/{raiser}/download-report', [DashboardController::class, 'downloadReport'])->name('raisers.download-report');
 
     Route::get('/raisers', [RaiserController::class, 'index'])->name('raisers.index');
     Route::get('/raisers/create', [RaiserController::class, 'create'])->name('raisers.create');
@@ -28,7 +32,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/raisers/{raiser}/edit', [RaiserController::class, 'edit'])->name('raisers.edit');
     Route::put('/raisers/{raiser}', [RaiserController::class, 'update'])->name('raisers.update');
 
-    Route::get('/investment', [InvestmentController::class, 'index'])->name('investment.index');
+    Route::get('/investment', [InvestmentController::class, 'index'])->name('investments.index');
+    Route::get('/investment/create', [InvestmentController::class, 'create'])->name('investments.create');
+    Route::post('/investment', [InvestmentController::class, 'store'])->name('investments.store');
 
     Route::get('/retail-shop', [RetailController::class, 'index'])->name('retail.index');
     Route::get('/retail-shop/products/create', [RetailController::class, 'createProduct'])->name('retail.products.create');
@@ -43,6 +49,11 @@ Route::middleware('admin.auth')->group(function () {
     Route::delete('/retail-shop/transactions/{transaction}', [RetailController::class, 'destroyTransaction'])->name('retail.transactions.destroy');
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
+
+    // API Routes for Stock Management
+    Route::post('/api/stock-entry', [StockEntryController::class, 'store'])->name('api.stock-entry.store');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 });

@@ -2,164 +2,145 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class InventoryController extends Controller
 {
     public function index(): View
     {
-        $items = [
-            [
-                'name' => 'Premium Hog Feed',
-                'category' => 'Feeds',
-                'price' => '₱ 1,250.00',
-                'stock' => 42,
-                'unit' => 'bags',
-                'raiser' => 'Dela Cruz Farms',
-                'image' => $this->productImage('Feed', '#ffe3e8', '#ff6b81'),
-            ],
-            [
-                'name' => 'Growth Booster Vitamins',
-                'category' => 'Vitamins',
-                'price' => '₱ 380.00',
-                'stock' => 58,
-                'unit' => 'bottles',
-                'raiser' => 'Santos Piggery',
-                'image' => $this->productImage('Vit', '#e5f1ff', '#4a8ef0'),
-            ],
-            [
-                'name' => 'Deworming Medicine',
-                'category' => 'Medicines',
-                'price' => '₱ 540.00',
-                'stock' => 21,
-                'unit' => 'boxes',
-                'raiser' => 'Green Meadows',
-                'image' => $this->productImage('Med', '#e6f8ef', '#30b36d'),
-            ],
-            [
-                'name' => 'Piglet Starter Mix',
-                'category' => 'Feeds',
-                'price' => '₱ 930.00',
-                'stock' => 35,
-                'unit' => 'packs',
-                'raiser' => 'Dela Cruz Farms',
-                'image' => $this->productImage('Mix', '#fff2db', '#ff9a3d'),
-            ],
-        ];
-
-        $purchases = [
-            [
-                'customer' => 'Maria Santos',
-                'item' => 'Premium Hog Feed',
-                'quantity' => '3 bags',
-                'price' => '₱ 3,750.00',
-                'source' => 'Dela Cruz Farms',
-                'date' => 'March 26, 2026',
-            ],
-            [
-                'customer' => 'Jose Ramirez',
-                'item' => 'Growth Booster Vitamins',
-                'quantity' => '2 bottles',
-                'price' => '₱ 760.00',
-                'source' => 'Santos Piggery',
-                'date' => 'March 25, 2026',
-            ],
-            [
-                'customer' => 'Ana Villanueva',
-                'item' => 'Deworming Medicine',
-                'quantity' => '1 box',
-                'price' => '₱ 540.00',
-                'source' => 'Green Meadows',
-                'date' => 'March 25, 2026',
-            ],
-            [
-                'customer' => 'Paolo Cruz',
-                'item' => 'Piglet Starter Mix',
-                'quantity' => '4 packs',
-                'price' => '₱ 3,720.00',
-                'source' => 'Dela Cruz Farms',
-                'date' => 'March 24, 2026',
-            ],
-        ];
-
-        $raiserInventory = [
-            [
-                'raiser' => 'Dela Cruz Farms',
-                'item' => 'Premium Hog Feed',
-                'category' => 'Feeds',
-                'opening' => 50,
-                'sold' => 8,
-                'remaining' => 42,
-            ],
-            [
-                'raiser' => 'Santos Piggery',
-                'item' => 'Growth Booster Vitamins',
-                'category' => 'Vitamins',
-                'opening' => 60,
-                'sold' => 2,
-                'remaining' => 58,
-            ],
-            [
-                'raiser' => 'Green Meadows',
-                'item' => 'Deworming Medicine',
-                'category' => 'Medicines',
-                'opening' => 22,
-                'sold' => 1,
-                'remaining' => 21,
-            ],
-            [
-                'raiser' => 'Dela Cruz Farms',
-                'item' => 'Piglet Starter Mix',
-                'category' => 'Feeds',
-                'opening' => 39,
-                'sold' => 4,
-                'remaining' => 35,
-            ],
-        ];
-
-        $soldFromStock = [
-            [
-                'customer' => 'Maria Santos',
-                'raiser' => 'Dela Cruz Farms',
-                'item' => 'Premium Hog Feed',
-                'category' => 'Feeds',
-                'quantity' => '3 bags',
-                'sold_at' => 'March 26, 2026',
-            ],
-            [
-                'customer' => 'Jose Ramirez',
-                'raiser' => 'Santos Piggery',
-                'item' => 'Growth Booster Vitamins',
-                'category' => 'Vitamins',
-                'quantity' => '2 bottles',
-                'sold_at' => 'March 25, 2026',
-            ],
-            [
-                'customer' => 'Ana Villanueva',
-                'raiser' => 'Green Meadows',
-                'item' => 'Deworming Medicine',
-                'category' => 'Medicines',
-                'quantity' => '1 box',
-                'sold_at' => 'March 25, 2026',
-            ],
-            [
-                'customer' => 'Paolo Cruz',
-                'raiser' => 'Dela Cruz Farms',
-                'item' => 'Piglet Starter Mix',
-                'category' => 'Feeds',
-                'quantity' => '4 packs',
-                'sold_at' => 'March 24, 2026',
-            ],
-        ];
-
         return view('pages.inventory.index', [
             'pageTitle' => 'Inventory',
-            'items' => $items,
-            'purchases' => $purchases,
-            'raiserInventory' => $raiserInventory,
-            'soldFromStock' => $soldFromStock,
+            'items' => $this->items(),
             'user' => $this->user(),
         ]);
+    }
+
+    public function create(): View
+    {
+        return view('pages.inventory.create', [
+            'pageTitle' => 'Add Inventory Item',
+            'user' => $this->user(),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:120'],
+            'category' => ['required', 'string', 'max:50'],
+            'cost' => ['required', 'numeric', 'min:0'],
+            'supplier' => ['required', 'string', 'max:120'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'status' => ['required', 'in:instock,low_stock,critical'],
+        ]);
+
+        $items = $this->items();
+        $nextId = empty($items) ? 1 : (max(array_column($items, 'id')) + 1);
+
+        $items[] = [
+            'id' => $nextId,
+            'name' => trim($validated['name']),
+            'category' => strtoupper(trim($validated['category'])),
+            'cost' => (float) $validated['cost'],
+            'supplier' => trim($validated['supplier']),
+            'stock' => (int) $validated['stock'],
+            'status' => $validated['status'],
+        ];
+
+        $request->session()->put('inventory_items', $items);
+
+        return redirect()
+            ->route('inventory.index')
+            ->with('status', 'Inventory item added successfully.');
+    }
+
+    private function items(): array
+    {
+        $baseItems = [
+            [
+                'id' => 1,
+                'name' => 'Booster Feed',
+                'category' => 'FEEDS',
+                'cost' => 1950.00,
+                'supplier' => 'Agri-Bio Logistics',
+                'stock' => 120,
+                'status' => 'instock',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Pre-starter',
+                'category' => 'FEEDS',
+                'cost' => 1850.00,
+                'supplier' => 'Agri-Bio Logistics',
+                'stock' => 85,
+                'status' => 'instock',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Starter',
+                'category' => 'FEEDS',
+                'cost' => 1750.00,
+                'supplier' => 'Agri-Bio Logistics',
+                'stock' => 140,
+                'status' => 'instock',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Grower',
+                'category' => 'FEEDS',
+                'cost' => 1650.00,
+                'supplier' => 'Prime Agri Supply',
+                'stock' => 210,
+                'status' => 'instock',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Finisher',
+                'category' => 'FEEDS',
+                'cost' => 1600.00,
+                'supplier' => 'Prime Agri Supply',
+                'stock' => 180,
+                'status' => 'instock',
+            ],
+            [
+                'id' => 6,
+                'name' => 'Milk Maker',
+                'category' => 'FEEDS',
+                'cost' => 2100.00,
+                'supplier' => 'Agri-Bio Logistics',
+                'stock' => 45,
+                'status' => 'low_stock',
+                'expiry' => 'Oct 02, 2023',
+            ],
+            [
+                'id' => 7,
+                'name' => 'VETRACIN GOLD',
+                'category' => 'VITAMINS',
+                'cost' => 450.00,
+                'supplier' => 'VetCare Solutions',
+                'stock' => 45,
+                'status' => 'critical',
+            ],
+            [
+                'id' => 8,
+                'name' => 'LATIOO-1000',
+                'category' => 'MEDICINE',
+                'cost' => 720.00,
+                'supplier' => 'VetCare Solutions',
+                'stock' => 68,
+                'status' => 'critical',
+            ],
+        ];
+
+        $sessionItems = session('inventory_items', []);
+
+        if (!is_array($sessionItems)) {
+            return $baseItems;
+        }
+
+        return $sessionItems !== [] ? $sessionItems : $baseItems;
     }
 
     private function user(): array

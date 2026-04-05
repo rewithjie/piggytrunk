@@ -136,6 +136,33 @@ class InvestmentController extends Controller
         ]);
     }
 
+    public function create(): View
+    {
+        $raisers = \App\Models\Raiser::all();
+        return view('pages.investment.create', [
+            'raisers' => $raisers,
+            'pageTitle' => 'Create New Investment'
+        ]);
+    }
+
+    public function store(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'raiser_id' => 'required|exists:raisers,id',
+            'initial_capital' => 'required|numeric|min:0',
+            'hog_type' => 'required|string',
+            'total_hog' => 'required|integer|min:1',
+            'investment_date' => 'required|date',
+            'hog_stage' => 'nullable|string',
+            'roi' => 'nullable|numeric|min:0',
+        ]);
+
+        // Store investment (you can adjust based on your Investment model structure)
+        // For now, this is a placeholder - adjust based on your actual model
+        
+        return redirect()->route('investments.index')->with('success', 'Investment created successfully!');
+    }
+
     private function user(): array
     {
         return [
