@@ -46,14 +46,15 @@ body.admin-body {
 
 .admin-sidebar {
     position: fixed;
-    top: 80px;
+    top: 90px;
     left: 0;
     z-index: 1040;
     width: var(--pt-sidebar-width-expanded);
-    height: calc(100vh - 80px);
+    height: calc(100vh - 90px);
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
     border-color: rgba(230, 235, 242, 0.9) !important;
+    margin-top: 10px;
     transition:
         width var(--pt-sidebar-duration) var(--pt-sidebar-ease),
         transform var(--pt-sidebar-duration) var(--pt-sidebar-ease);
@@ -220,7 +221,7 @@ body.admin-body {
     position: relative;
     z-index: 1;
     transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
-    padding-top: 80px;
+    padding-top: 90px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
