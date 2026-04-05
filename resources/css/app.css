@@ -83,17 +83,17 @@ body.admin-body {
 .sidebar-brand-row {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.75rem;
     position: fixed;
     top: 0;
     left: 0;
-    width: var(--pt-sidebar-width-expanded);
+    width: var(--pt-sidebar-width-collapsed);
     height: 80px;
     padding: 1rem 0.75rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(230, 235, 242, 0.9);
+    border-right: 1px solid rgba(230, 235, 242, 0.9);
     transition: none !important;
     transform: none !important;
     animation: none !important;
@@ -223,7 +223,6 @@ body.admin-body {
     z-index: 1;
     transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
-    margin-left: var(--pt-sidebar-width-expanded);
 }
 
 .content-frame {
@@ -241,9 +240,9 @@ body.admin-body {
     border-color: rgba(230, 235, 242, 0.9) !important;
     position: fixed;
     top: 0;
-    left: var(--pt-sidebar-width-expanded);
+    left: 0;
     right: 0;
-    width: calc(100% - var(--pt-sidebar-width-expanded));
+    width: 100%;
     z-index: 25;
 }
 
