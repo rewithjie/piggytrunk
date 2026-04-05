@@ -1,13 +1,14 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <div class="card dashboard-bootstrap-card">
         <div class="card-body">
+            <h1 class="page-title mb-4">Edit Transaction</h1>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <p class="section-label mb-1">Retail Shop</p>
-                    <h2 class="section-heading mb-0">Edit Transaction</h2>
-                </div>
                 <a href="{{ route('retail.index') }}" class="btn btn-outline-secondary">Back to Retail</a>
             </div>
 
@@ -81,6 +82,13 @@
 
         :root[data-theme="dark"] .form-select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
         }
     </style>
 @endsection

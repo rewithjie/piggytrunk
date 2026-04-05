@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
@@ -7,11 +11,7 @@
                 <div class="col-12 col-lg-8">
                     <div class="card dashboard-bootstrap-card">
                         <div class="card-body p-5">
-                            <div class="mb-4">
-                                <h1 class="section-heading mb-1">Add Inventory Item</h1>
-                                <p class="section-subheading mb-0">Create an item that will appear in the inventory table.</p>
-                            </div>
-
+                            <h1 class="page-title mb-4">Add Inventory Item</h1>
                             <form method="POST" action="{{ route('inventory.store') }}" class="inventory-create-form">
                                 @csrf
 
@@ -227,6 +227,13 @@
 
             .section-heading {
                 font-size: 1.35rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--pt-text);
+                margin-bottom: 1.5rem;
             }
         }
     </style>

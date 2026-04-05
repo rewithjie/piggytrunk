@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="retail-page">
         @if (session('status'))
@@ -9,8 +13,7 @@
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h1 class="page-title mb-1">Retail Shop</h1>
-                <p class="text-muted subtitle-text mb-0">Manage your product catalog and inventory</p>
+                <h1 class="page-title mb-0">Retail Shop</h1>
             </div>
             <a href="{{ route('retail.products.create') }}" class="btn btn-dark">
                 <i class="bi bi-plus-lg"></i> Add Product

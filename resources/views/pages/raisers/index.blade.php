@@ -1,8 +1,13 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
+            <h1 class="page-title mb-5">Hog Raiser</h1>
             <div class="card dashboard-bootstrap-card">
                 <div class="card-body">
                     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
@@ -44,14 +49,7 @@
                                 @forelse ($raisers as $raiser)
                                     <tr>
                                         <td>
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="raiser-avatar avatar-{{ $raiser->accent ?? 'default' }}">
-                                                    {{ $raiser->initials ?? strtoupper(substr($raiser->name, 0, 2)) }}
-                                                </div>
-                                                <div>
-                                                    <div class="table-name">{{ $raiser->name }}</div>
-                                                </div>
-                                            </div>
+                                            <div class="table-name">{{ $raiser->name }}</div>
                                         </td>
                                         <td>
                                             <div class="table-copy">{{ $raiser->location }}</div>
@@ -87,11 +85,7 @@
                         </table>
                     </div>
 
-                    @if ($raisers->count() > 0)
-                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 small pt-3 border-top raiser-count-text">
-                            <span class="mt-3">Showing {{ $raisers->count() }} raiser(s)</span>
-                        </div>
-                    @endif
+
                 </div>
             </div>
         </div>
@@ -241,6 +235,13 @@
 
         :root[data-theme="dark"] .raiser-empty-state {
             color: #ecf2ff;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
         }
     </style>
 @endsection

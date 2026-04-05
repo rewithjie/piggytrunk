@@ -1,8 +1,13 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
+            <h1 class="page-title mb-5">Investment</h1>
             <div class="row g-4 align-items-stretch">
                 <!-- Main Investment Table -->
                 <div class="col-12 col-xl-8">
@@ -30,18 +35,11 @@
                                     <tbody>
                                         @forelse ($batchAllocations as $batch)
                                             @php
-                                                $raiserWords = preg_split('/\s+/', trim($batch['raiser']));
-                                                $raiserInitials = count($raiserWords) > 1
-                                                    ? strtoupper(substr($raiserWords[0], 0, 1) . substr($raiserWords[1], 0, 1))
-                                                    : strtoupper(substr($raiserWords[0] ?? '', 0, 2));
                                                 $capitalDisplay = preg_replace('/\s+/', ' ', trim((string) $batch['capital']));
                                             @endphp
                                             <tr>
                                                 <td>
-                                                    <div class="investment-raiser-cell">
-                                                        <div class="investment-raiser-avatar">{{ $raiserInitials }}</div>
-                                                        <div class="investment-raiser-name">{{ $batch['raiser'] }}</div>
-                                                    </div>
+                                                    <div class="investment-raiser-name">{{ $batch['raiser'] }}</div>
                                                 </td>
                                                 <td>
                                                     <span class="investment-capital">{{ $capitalDisplay }}</span>
@@ -381,6 +379,13 @@
             .investment-table tbody td {
                 padding: 0.75rem;
             }
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
         }
     </style>
 

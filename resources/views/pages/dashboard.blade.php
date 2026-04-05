@@ -1,8 +1,13 @@
 ﻿@extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
+            <h1 class="dashboard-page-title mb-5">Dashboard</h1>
             @foreach ($raisers as $raiser)
                 <div class="lifecycle-raiser-card mb-5">
                     <!-- Raiser Header -->
@@ -201,6 +206,13 @@
             .stage-node {
                 margin-bottom: 0.5rem;
             }
+        }
+
+        .dashboard-page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
         }
     </style>
 @endsection

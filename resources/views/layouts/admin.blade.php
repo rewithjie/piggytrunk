@@ -37,9 +37,9 @@
 
             <div class="sidebar-overlay" data-sidebar-close></div>
 
-            <div class="admin-content">
-                @include('partials.topbar', ['user' => $user ?? null])
+            @include('partials.topbar', ['user' => $user ?? null])
 
+            <div class="admin-content">
                 <div class="content-frame">
                     <main class="content-inner px-3 px-lg-4 py-4 py-lg-5">
                         @yield('content')

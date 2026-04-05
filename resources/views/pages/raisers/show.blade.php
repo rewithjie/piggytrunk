@@ -18,9 +18,6 @@
                 <div class="col-12 col-lg-4">
                         <div class="card h-100">
                             <div class="card-body text-center">
-                            <div class="raiser-avatar avatar-{{ $raiser['accent'] }} mx-auto mb-3" style="width:72px;height:72px;font-size:1.2rem;">
-                                {{ $raiser->initials }}
-                            </div>
                             <h3 class="table-name h4 mb-1">{{ $raiser->name }}</h3>
                             <span class="badge rounded-pill status-badge {{ strtolower($raiser->status) === 'active' ? 'status-badge-active' : 'status-badge-inactive' }}">
                                 {{ $raiser->status }}

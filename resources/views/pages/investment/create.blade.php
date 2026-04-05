@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
@@ -7,6 +11,7 @@
                 <div class="col-12 col-lg-8">
                     <div class="card dashboard-bootstrap-card">
                         <div class="card-body p-5">
+                            <h1 class="page-title mb-5"><i class="bi bi-plus-circle me-2"></i>Create Investment</h1>
                             <form action="{{ route('investments.store') }}" method="POST" class="investment-form">
                                 @csrf
 
@@ -527,6 +532,13 @@
 
         .raiser-option.selected {
             background-color: rgba(91, 141, 239, 0.14);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
         }
     </style>
 

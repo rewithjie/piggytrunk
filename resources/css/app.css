@@ -83,13 +83,28 @@ body.admin-body {
 .sidebar-brand-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 0.75rem;
-    position: relative;
-    transition:
-        gap var(--pt-sidebar-duration) var(--pt-sidebar-ease),
-        justify-content var(--pt-sidebar-duration) var(--pt-sidebar-ease),
-        padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+    position: fixed;
+    top: 140px;
+    left: 0;
+    width: var(--pt-sidebar-width-collapsed);
+    padding: 1rem 0.75rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(230, 235, 242, 0.9);
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+    will-change: auto !important;
+    z-index: 21;
+}
+
+.sidebar-brand-row .sidebar-toggle-button {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+    width: 100%;
 }
 
 .sidebar-brand-row .brand-mark {
@@ -202,6 +217,7 @@ body.admin-body {
     position: relative;
     z-index: 1;
     transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+    padding-top: 140px;
 }
 
 .content-frame {
@@ -217,13 +233,22 @@ body.admin-body {
     background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(14px);
     border-color: rgba(230, 235, 242, 0.9) !important;
-    position: relative;
-    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 25;
 }
 
 :root[data-theme="dark"] .admin-sidebar,
 :root[data-theme="dark"] .topbar {
     background: rgba(21, 31, 46, 0.92);
+}
+
+:root[data-theme="dark"] .sidebar-brand-row {
+    background: rgba(21, 31, 46, 0.95);
+    border-bottom-color: rgba(58, 74, 97, 0.5);
 }
 
 :root[data-theme="dark"] .sidebar-toggle-button,
@@ -305,6 +330,86 @@ body.admin-body {
     min-width: 0;
 }
 
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+}
+
+.topbar-burger-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0.5rem;
+    border: 1px solid var(--pt-border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--pt-text);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+    flex-shrink: 0;
+}
+
+.topbar-burger-button:hover,
+.topbar-burger-button:focus,
+.topbar-burger-button:active {
+    background: var(--pt-surface-soft);
+    color: var(--pt-primary);
+    border-color: var(--pt-primary);
+    transition: none !important;
+    animation: none !important;
+}
+
+:root[data-theme="dark"] .topbar-burger-button {
+    background: var(--pt-surface-soft);
+    color: var(--pt-text);
+    border-color: var(--pt-border);
+}
+
+:root[data-theme="dark"] .topbar-burger-button:hover,
+:root[data-theme="dark"] .topbar-burger-button:focus,
+:root[data-theme="dark"] .topbar-burger-button:active {
+    background: #202d42;
+    color: var(--pt-primary);
+    border-color: var(--pt-primary);
+    transition: none !important;
+    animation: none !important;
+}
+
+.topbar-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--pt-text);
+}
+
+.topbar-brand .brand-logo-shell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.topbar-brand .brand-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.topbar-brand .brand-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--pt-text);
+}
+
 .topbar-main {
     display: flex;
     align-items: center;
@@ -315,6 +420,10 @@ body.admin-body {
 .topbar-copy,
 .topbar-actions {
     min-width: 0;
+}
+
+.topbar-copy {
+    flex: 1;
 }
 
 .topbar-actions {
@@ -591,6 +700,10 @@ body.admin-body {
     transform: translateY(-1px);
 }
 
+.sidebar-brand-row .sidebar-toggle-button {
+    transition: none !important;
+}
+
 .sidebar-toggle-button i {
     font-size: 1.2rem;
     min-width: 1.1rem;
@@ -625,6 +738,9 @@ body.admin-body {
     padding: 0.75rem;
     justify-content: center;
     flex-shrink: 0;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
 }
 
 .sidebar-footer {
@@ -1926,6 +2042,7 @@ html.sidebar-collapsed .admin-sidebar .sidebar-brand-logo-shell {
 html.sidebar-collapsed .admin-sidebar .sidebar-brand-row {
     gap: 0;
     justify-content: center;
+    transition: none !important;
 }
 
 html.sidebar-collapsed .admin-sidebar .sidebar-toggle-button {
@@ -1937,6 +2054,7 @@ html.sidebar-collapsed .admin-sidebar .sidebar-toggle-button {
 
 html.sidebar-collapsed .admin-sidebar .sidebar-brand-row {
     justify-content: center;
+    transition: none !important;
 }
 
 html.sidebar-collapsed .sidebar-user {

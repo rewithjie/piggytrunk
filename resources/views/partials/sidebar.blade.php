@@ -1,7 +1,7 @@
 @php
     $navItems = [
         ['label' => 'Dashboard', 'icon' => 'bi-grid', 'route' => 'dashboard'],
-        ['label' => 'Hog Raiser Directory', 'icon' => 'bi-person', 'route' => 'raisers.index'],
+        ['label' => 'Hog Raiser', 'icon' => 'bi-person', 'route' => 'raisers.index'],
         ['label' => 'Investment', 'icon' => 'bi-journal-text', 'route' => 'investments.index'],
         ['label' => 'Retail Shop', 'icon' => 'bi-clipboard-check', 'route' => 'retail.index'],
         ['label' => 'Inventory', 'icon' => 'bi-bag', 'route' => 'inventory.index'],
@@ -11,13 +11,6 @@
 <aside class="admin-sidebar border-end" id="adminSidebar">
     <div class="admin-sidebar-inner d-flex flex-column h-100">
         <div class="sidebar-brand-row px-3 px-lg-4 py-3 py-lg-4">
-            <a href="{{ route('dashboard') }}" class="brand-mark text-decoration-none">
-                <span class="brand-logo-shell sidebar-brand-logo-shell">
-                    <img src="{{ asset('piggytrunkremovebg.png') }}" alt="PiggyTrunk logo" class="brand-logo sidebar-brand-logo">
-                </span>
-                <span class="brand-text">PiggyTrunk</span>
-            </a>
-
             <button class="sidebar-toggle-button sidebar-brand-toggle" type="button" data-sidebar-toggle aria-label="Toggle navigation">
                 <i class="bi bi-list"></i>
             </button>

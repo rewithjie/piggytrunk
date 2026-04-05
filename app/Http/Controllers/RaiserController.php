@@ -14,7 +14,7 @@ class RaiserController extends Controller
         $query = $request->string('q')->toString();
 
         return view('pages.raisers.index', [
-            'pageTitle' => 'Hog Raiser Directory',
+            'pageTitle' => 'Hog Raiser',
             'raisers' => $this->directoryQuery($query)->get(),
             'query' => $query,
             'user' => $this->user(),
@@ -35,7 +35,7 @@ class RaiserController extends Controller
 
         return redirect()
             ->route('raisers.index')
-            ->with('status', "{$raiser->name} was added to the hog raiser directory.");
+            ->with('status', "{$raiser->name} was added to the hog raisers.");
     }
 
     public function show(int $raiser): View

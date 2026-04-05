@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <style>
         .inventory-page {
@@ -354,6 +358,7 @@
         }
     </style>
 
+    <h1 class="page-title mb-5">Inventory</h1>
     <section class="inventory-page">
         <!-- Controls -->
         <div class="inventory-controls">
@@ -680,6 +685,13 @@
                 background-color: #064e3b;
                 border-color: #10b981;
                 color: #d1fae5;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--pt-text);
+                margin-bottom: 1.5rem;
             }
         </style>
 
