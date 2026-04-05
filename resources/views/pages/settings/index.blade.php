@@ -1,7 +1,12 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="settings-page">
+        <h1 class="page-title mb-5">Settings</h1>
         <div class="row g-4 mb-4">
             <div class="col-12 col-xl-4">
                 <div class="card dashboard-bootstrap-card h-100">
