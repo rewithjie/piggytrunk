@@ -222,19 +222,19 @@ body.admin-body {
     z-index: 1;
     transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease), padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 60px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
 html.sidebar-expanded .admin-content {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 60px;
 }
 
 html.sidebar-collapsed .admin-content {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .content-frame {
