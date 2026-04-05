@@ -222,6 +222,7 @@ body.admin-body {
     z-index: 1;
     transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
+    padding-left: 40px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
