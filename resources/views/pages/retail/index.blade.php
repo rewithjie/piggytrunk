@@ -120,19 +120,6 @@
                     </div>
                     <div class="control-card-body">
                         <div class="control-group">
-                            <label class="control-label">Price</label>
-                            <div class="price-input-group">
-                                <button class="price-btn" onclick="decreasePrice()">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <input type="text" id="priceInput" value="0.00" class="price-input" readonly>
-                                <button class="price-btn" onclick="increasePrice()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label class="control-label">Set Quantity</label>
                             <input type="number" id="quantityInput" value="0" class="form-control quantity-input" min="0">
                         </div>
