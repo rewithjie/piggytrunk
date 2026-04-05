@@ -46,11 +46,11 @@ body.admin-body {
 
 .admin-sidebar {
     position: fixed;
-    top: 80px;
+    top: 100px;
     left: 0;
     z-index: 1040;
     width: var(--pt-sidebar-width-expanded);
-    height: calc(100vh - 80px);
+    height: calc(100vh - 100px);
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
     border-color: rgba(230, 235, 242, 0.9) !important;
@@ -220,7 +220,7 @@ body.admin-body {
     position: relative;
     z-index: 1;
     transition: padding-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
-    padding-top: 80px;
+    padding-top: 100px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
@@ -374,21 +374,21 @@ body.admin-body {
 .topbar-burger-button:hover,
 .topbar-burger-button:focus,
 .topbar-burger-button:active {
-    background: var(--pt-surface-soft);
-    color: var(--pt-primary);
+    background: transparent;
+    color: var(--pt-text);
     transition: none !important;
     animation: none !important;
 }
 
 :root[data-theme="dark"] .topbar-burger-button {
-    background: var(--pt-surface-soft);
+    background: transparent;
     color: var(--pt-text);
 }
 
 :root[data-theme="dark"] .topbar-burger-button:hover,
 :root[data-theme="dark"] .topbar-burger-button:focus,
 :root[data-theme="dark"] .topbar-burger-button:active {
-    background: #202d42;
+    background: transparent;
     color: var(--pt-primary);
     transition: none !important;
     animation: none !important;
