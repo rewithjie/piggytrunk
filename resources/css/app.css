@@ -73,6 +73,23 @@ body.admin-body {
     border-color: transparent !important;
 }
 
+.admin-sidebar nav {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.admin-sidebar .nav {
+    gap: 0.5rem !important;
+}
+
+.admin-sidebar .sidebar-brand-row {
+    padding: 0.5rem !important;
+}
+
+.admin-sidebar .sidebar-footer {
+    padding: 0.5rem !important;
+}
+
 :root[data-theme="dark"] body.admin-body {
     background: linear-gradient(180deg, #0d1522 0%, var(--pt-bg) 100%);
 }
@@ -193,7 +210,7 @@ body.admin-body {
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    padding: 0.95rem 1rem;
+    padding: 0.65rem 0.75rem;
     border-radius: 18px;
     color: var(--pt-muted);
     text-decoration: none;
