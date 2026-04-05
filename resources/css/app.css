@@ -220,18 +220,21 @@ body.admin-body {
     min-width: 0;
     position: relative;
     z-index: 1;
-    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease), padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 80px;
     padding-left: 40px;
+    padding-right: 40px;
     margin-left: var(--pt-sidebar-width-expanded);
 }
 
 html.sidebar-expanded .admin-content {
     padding-left: 20px;
+    padding-right: 20px;
 }
 
 html.sidebar-collapsed .admin-content {
     padding-left: 40px;
+    padding-right: 40px;
 }
 
 .content-frame {
