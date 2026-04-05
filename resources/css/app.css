@@ -335,8 +335,8 @@ body.admin-body {
     display: flex;
     align-items: center;
     height: 100%;
-    padding-left: 0.5rem;
-    padding-right: 0.75rem;
+    padding-left: 0;
+    padding-right: 1rem;
 }
 
 .topbar-heading-copy {
@@ -360,7 +360,7 @@ body.admin-body {
     height: 48px;
     padding: 0.5rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     background: transparent;
     color: var(--pt-text);
     cursor: pointer;
@@ -405,8 +405,8 @@ body.admin-body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
 }
 
@@ -417,7 +417,7 @@ body.admin-body {
 }
 
 .topbar-brand .brand-text {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--pt-text);
 }
