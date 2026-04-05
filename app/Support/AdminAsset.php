@@ -13,7 +13,9 @@ class AdminAsset
             200,
             [
                 'Content-Type' => 'text/css; charset=UTF-8',
-                'Cache-Control' => 'public, max-age=3600',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ]
         );
     }
@@ -25,7 +27,9 @@ class AdminAsset
             200,
             [
                 'Content-Type' => 'application/javascript; charset=UTF-8',
-                'Cache-Control' => 'public, max-age=3600',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ]
         );
     }
