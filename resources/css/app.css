@@ -250,6 +250,8 @@ html.sidebar-collapsed .admin-content {
 
 html.sidebar-expanded .content-inner {
     max-width: 1400px;
+    padding-left: 0;
+    padding-right: 1rem;
 }
 
 html.sidebar-collapsed .content-inner {
