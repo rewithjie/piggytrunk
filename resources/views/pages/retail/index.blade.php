@@ -111,9 +111,56 @@
             @endif
         </div>
 
-        <!-- Best Sellers Section -->
+        <!-- Price & Quantity Control Card -->
         <div class="row g-4 mb-5">
-            <div class="col-12">
+            <div class="col-12 col-lg-6">
+                <div class="control-card">
+                    <div class="control-card-header">
+                        <h3 class="control-title">Quick Sale</h3>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-group">
+                            <label class="control-label">Price</label>
+                            <div class="price-input-group">
+                                <button class="price-btn" onclick="decreasePrice()">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="text" id="priceInput" value="0.00" class="price-input" readonly>
+                                <button class="price-btn" onclick="increasePrice()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Set Quantity</label>
+                            <input type="number" id="quantityInput" value="0" class="form-control quantity-input" min="0">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Kilo</label>
+                            <input type="text" id="kiloInput" value="0" class="form-control quantity-input" placeholder="Enter kilo weight">
+                        </div>
+
+                        <div class="control-group total-group">
+                            <label class="control-label">Total</label>
+                            <div class="total-amount" id="totalAmount">0.00</div>
+                        </div>
+
+                        <div class="control-actions">
+                            <button class="action-btn raiser-btn" onclick="selectRaiser()">
+                                Tag Raiser
+                            </button>
+                            <button class="action-btn customer-btn" onclick="selectCustomer()">
+                                Customer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Sellers Section -->
+            <div class="col-12 col-lg-6">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
