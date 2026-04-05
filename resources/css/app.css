@@ -241,11 +241,11 @@ body.admin-body {
     top: 0;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 100vw;
     height: 80px;
     display: flex;
     align-items: center;
-    z-index: 25;
+    z-index: 1041;
 }
 
 :root[data-theme="dark"] .admin-sidebar,
@@ -330,7 +330,7 @@ body.admin-body {
 }
 
 .topbar .container-fluid {
-    max-width: 1360px;
+    max-width: 100%;
     width: 100%;
     display: flex;
     align-items: center;
