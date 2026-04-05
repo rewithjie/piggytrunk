@@ -53,7 +53,8 @@ body.admin-body {
     height: calc(100vh - 80px);
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
-    border-color: rgba(230, 235, 242, 0.9) !important;
+    border-color: transparent !important;
+    border-right: none !important;
     padding-top: 10px;
     transition:
         width var(--pt-sidebar-duration) var(--pt-sidebar-ease),
