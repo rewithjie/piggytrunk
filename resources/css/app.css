@@ -14,7 +14,7 @@
     --pt-sidebar-width-expanded: 280px;
     --pt-sidebar-width-collapsed: 92px;
     --pt-sidebar-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --pt-sidebar-duration: 0.5s;
+    --pt-sidebar-duration: 0.2s;
 }
 
 :root[data-theme="dark"] {
@@ -228,7 +228,7 @@ body.admin-body {
 }
 
 html.sidebar-expanded .admin-content {
-    padding-left: 20px;
+    padding-left: 40px;
     padding-right: 20px;
 }
 
