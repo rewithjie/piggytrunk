@@ -107,6 +107,10 @@ body.admin-body {
     width: 100%;
 }
 
+.admin-sidebar > nav {
+    padding-top: 90px;
+}
+
 .sidebar-brand-row .brand-mark {
     flex: 1 1 auto;
 }

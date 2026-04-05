@@ -22,9 +22,6 @@
     <div class="container-fluid px-3 px-lg-4 py-3">
         <div class="topbar-main">
             <div class="topbar-brand">
-                <button class="topbar-burger-button" type="button" data-sidebar-toggle aria-label="Toggle navigation">
-                    <i class="bi bi-list"></i>
-                </button>
                 <a href="{{ route('dashboard') }}" class="brand-mark text-decoration-none">
                     <span class="brand-logo-shell">
                         <img src="{{ asset('piggytrunkremovebg.png') }}" alt="PiggyTrunk logo" class="brand-logo">
