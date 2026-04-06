@@ -11,7 +11,7 @@
                 <div class="col-12 col-lg-8">
                     <div class="card dashboard-bootstrap-card">
                         <div class="card-body p-5">
-                            <h1 class="page-title mb-5"><i class="bi bi-plus-circle me-2"></i>Create Investment</h1>
+                            <h1 class="page-title mb-5">Create Investment</h1>
                             <form action="{{ route('investments.store') }}" method="POST" class="investment-form">
                                 @csrf
 
