@@ -9,11 +9,6 @@
         <div class="dashboard-stage">
             <h1 class="page-title mb-5">Create New Raiser</h1>
             <div class="create-raiser-container">
-                <div class="create-raiser-header mb-5">
-                    <div class="section-label">CREATE ACCOUNT</div>
-                    <h1 class="section-heading">New Hog Raiser</h1>
-                </div>
-
                 <form method="POST" action="{{ route('raisers.store') }}" class="create-raiser-form">
                     @csrf
 
