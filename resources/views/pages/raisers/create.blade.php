@@ -1,8 +1,13 @@
 @extends('layouts.admin')
 
+@php
+    $hideTopbarTitle = true;
+@endphp
+
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
+            <h1 class="page-title mb-5">Create New Raiser</h1>
             <div class="create-raiser-container">
                 <div class="create-raiser-header mb-5">
                     <div class="section-label">CREATE ACCOUNT</div>
