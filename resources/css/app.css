@@ -2299,7 +2299,7 @@ html.sidebar-collapsed .admin-sidebar .px-lg-3 {
     }
 
     html.sidebar-expanded .admin-content {
-        padding-left: 0 !important;
+        padding-left: 15px !important;
         padding-right: 10px !important;
     }
 
