@@ -7,7 +7,7 @@
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
-            <h1 class="page-title mb-5">Create New Raiser</h1>
+            <h1 class="page-title mb-5"><i class="bi bi-plus-circle me-2"></i>Create New Raiser</h1>
             <div class="create-raiser-container">
                 <form method="POST" action="{{ route('raisers.store') }}" class="create-raiser-form">
                     @csrf
