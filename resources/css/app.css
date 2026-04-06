@@ -134,7 +134,7 @@ body.admin-body {
 .admin-sidebar > nav {
     padding-top: 0;
     margin-top: 0;
-}}}
+}
 
 .sidebar-brand-row .brand-mark {
     flex: 1 1 auto;
@@ -245,7 +245,9 @@ body.admin-body {
     min-width: 0;
     position: relative;
     z-index: 1;
-    transition: margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease), padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
+    transition:
+        margin-left var(--pt-sidebar-duration) var(--pt-sidebar-ease),
+        padding var(--pt-sidebar-duration) var(--pt-sidebar-ease);
     padding-top: 90px;
     padding-left: 25px;
     padding-right: 15px;
