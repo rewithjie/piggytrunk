@@ -8,6 +8,7 @@ use App\Models\RetailTransaction;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class RetailController extends Controller
@@ -55,6 +56,9 @@ class RetailController extends Controller
                 'stock' => $product->stock,
                 'status' => $product->stock_status,
                 'sales' => ($monthlySalesByProduct[$product->id] ?? 0) . ' units',
+                'description' => $product->description,
+                'image' => $product->image,
+                'rawPrice' => (float) $product->price,
             ];
         });
 
@@ -148,7 +152,14 @@ class RetailController extends Controller
 
     public function storeProduct(Request $request): RedirectResponse
     {
-        $product = RetailProduct::create($this->validateProduct($request));
+        $data = $this->validateProduct($request);
+        
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('retail-products', 'public');
+        }
+
+        $product = RetailProduct::create($data);
 
         return redirect()
             ->route('retail.index')
@@ -170,7 +181,18 @@ class RetailController extends Controller
     public function updateProduct(Request $request, int $product): RedirectResponse
     {
         $record = RetailProduct::findOrFail($product);
-        $record->update($this->validateProduct($request));
+        $data = $this->validateProduct($request);
+        
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($record->image && Storage::disk('public')->exists($record->image)) {
+                Storage::disk('public')->delete($record->image);
+            }
+            $data['image'] = $request->file('image')->store('retail-products', 'public');
+        }
+
+        $record->update($data);
 
         return redirect()
             ->route('retail.index')
@@ -181,6 +203,12 @@ class RetailController extends Controller
     {
         $record = RetailProduct::findOrFail($product);
         $name = $record->name;
+        
+        // Delete image if exists
+        if ($record->image && Storage::disk('public')->exists($record->image)) {
+            Storage::disk('public')->delete($record->image);
+        }
+        
         $record->delete();
 
         return redirect()
@@ -258,6 +286,8 @@ class RetailController extends Controller
             'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
     }
 

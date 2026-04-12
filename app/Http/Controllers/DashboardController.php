@@ -12,33 +12,23 @@ class DashboardController extends Controller
     {
         $raisers = Raiser::orderBy('name')->limit(10)->get();
 
-        $lifecycles = [
-            'SOW' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2 Weeks & 3 Weeks', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '4 Weeks - 8 Weeks', 'status' => 'in-progress'],
-                ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
-                ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
-                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
+        // Investment Summary Data
+        $investmentSummary = [
+            'totalActive' => 1850000,
+            'batchCount' => 4,
+            'allocation' => [
+                'fattening' => 650000,
+                'sow' => 770000,
+                'boar' => 430000,
             ],
-            'PIGLET' => [
-                ['label' => 'Vitamins', 'duration' => '3 Days after born', 'status' => 'completed'],
-                ['label' => 'Booster', 'duration' => '30 Days booster', 'status' => 'completed'],
-                ['label' => 'Vitamins & cagun', 'duration' => '14 Days for vitamins', 'status' => 'in-progress'],
-                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
-            ],
-            'FATTENING' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2 Weeks & 2 Weeks', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '3 Weeks & 2 Weeks', 'status' => 'in-progress'],
-                ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
-            ],
+            'totalCapital' => 1850000,
+            'expectedProfit' => 340000,
         ];
 
         return view('pages.dashboard', [
             'pageTitle' => 'Dashboard',
             'raisers' => $raisers,
-            'lifecycles' => $lifecycles,
+            'investmentSummary' => $investmentSummary,
             'user' => [
                 'name' => 'De Luna Admin',
                 'role' => 'System Administrator',
@@ -54,32 +44,9 @@ class DashboardController extends Controller
 
     public function downloadReport(Raiser $raiser)
     {
-        $lifecycles = [
-            'SOW' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2 Weeks & 3 Weeks', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '4 Weeks - 8 Weeks', 'status' => 'in-progress'],
-                ['label' => 'Breeder', 'duration' => '100 Days', 'status' => 'pending'],
-                ['label' => 'Milk Maker', 'duration' => 'Nursing', 'status' => 'pending'],
-                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
-            ],
-            'PIGLET' => [
-                ['label' => 'Vitamins', 'duration' => '3 Days after born', 'status' => 'completed'],
-                ['label' => 'Booster', 'duration' => '30 Days booster', 'status' => 'completed'],
-                ['label' => 'Vitamins & cagun', 'duration' => '14 Days for vitamins', 'status' => 'in-progress'],
-                ['label' => 'Separation', 'duration' => 'Final Stage', 'status' => 'pending'],
-            ],
-            'FATTENING' => [
-                ['label' => 'Pre-Starter', 'duration' => 'Up to 6 Days', 'status' => 'completed'],
-                ['label' => 'Starter', 'duration' => '2 Weeks & 2 Weeks', 'status' => 'completed'],
-                ['label' => 'Grower', 'duration' => '3 Weeks & 2 Weeks', 'status' => 'in-progress'],
-                ['label' => 'Selling', 'duration' => 'Final Stage', 'status' => 'pending'],
-            ],
-        ];
-
         $fileName = 'raiser-report-' . $raiser->code . '-' . now()->format('Y-m-d') . '.csv';
 
-        $callback = function() use ($raiser, $lifecycles) {
+        $callback = function() use ($raiser) {
             $file = fopen('php://output', 'w');
 
             // Header

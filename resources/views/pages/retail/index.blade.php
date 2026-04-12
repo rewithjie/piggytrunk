@@ -51,10 +51,21 @@
                     </div>
 
                     @if (count($products) > 0)
-                        <div class="row g-3">
+                        <div class="row g-4">
                             @foreach ($products as $product)
                                 <div class="col-12 col-sm-6 col-lg-4">
                                     <div class="product-card">
+                                        <!-- Product Image -->
+                                        @if ($product['image'])
+                                            <div class="product-image-wrapper">
+                                                <img src="{{ Storage::url($product['image']) }}" alt="{{ $product['name'] }}" class="product-image">
+                                            </div>
+                                        @else
+                                            <div class="product-image-wrapper product-image-placeholder">
+                                                <i class="bi bi-box"></i>
+                                            </div>
+                                        @endif
+
                                         <div class="product-card-body">
                                             <div class="product-header">
                                                 <h5 class="product-name">{{ $product['name'] }}</h5>
@@ -63,6 +74,11 @@
                                                 </span>
                                             </div>
 
+                                            <!-- Product Description -->
+                                            @if ($product['description'])
+                                                <p class="product-description">{{ Str::limit($product['description'], 80) }}</p>
+                                            @endif
+
                                             <div class="product-details">
                                                 <div class="detail-row">
                                                     <span class="detail-label">Price:</span>
@@ -70,7 +86,7 @@
                                                 </div>
                                                 <div class="detail-row">
                                                     <span class="detail-label">Sold:</span>
-                                                    <span class="detail-value">{{ $product['sales'] }} units</span>
+                                                    <span class="detail-value">{{ $product['sales'] }}</span>
                                                 </div>
                                             </div>
 
@@ -78,10 +94,10 @@
                                                 <a href="{{ route('retail.products.edit', $product['id']) }}" class="btn btn-sm btn-outline-primary">
                                                     <i class="bi bi-pencil"></i> Edit
                                                 </a>
-                                                <form method="POST" action="{{ route('retail.products.destroy', $product['id']) }}" style="display: inline-block;">
+                                                <form method="POST" action="{{ route('retail.products.destroy', $product['id']) }}" style="display: inline-block; flex: 1;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100" onclick="return confirm('Delete this product?')">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </form>
@@ -181,73 +197,7 @@
             </div>
         </div>
 
-        <!-- Recent Transactions Section -->
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="card dashboard-bootstrap-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <p class="section-label mb-1">Recent Transaction</p>
-                                <h3 class="chart-title mb-0">New Purchases</h3>
-                            </div>
-                            <a href="{{ route('retail.transactions.create') }}" class="btn btn-sm btn-dark">Add Transaction</a>
-                        </div>
 
-                        <div class="table-responsive">
-                            <table class="table align-middle dashboard-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Customer</th>
-                                        <th>Items</th>
-                                        <th>Channel</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($orders as $order)
-                                        <tr>
-                                            <td class="fw-semibold">{{ $order['customer'] }}</td>
-                                            <td>{{ $order['items'] }}</td>
-                                            <td>{{ $order['channel'] }}</td>
-                                            <td class="fw-semibold">{{ $order['total'] }}</td>
-                                            <td>
-                                                <span class="badge rounded-pill status-badge {{ $order['status'] === 'Completed' ? 'status-badge-active' : 'status-badge-inactive' }}">
-                                                    {{ $order['status'] }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $order['date'] }}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-end gap-2">
-                                                    <a href="{{ route('retail.transactions.edit', $order['id']) }}" class="btn btn-sm table-icon-btn" aria-label="Edit transaction">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <form method="POST" action="{{ route('retail.transactions.destroy', $order['id']) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm table-icon-btn" aria-label="Delete transaction" onclick="return confirm('Delete this transaction?')">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    @if (count($orders) === 0)
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">No transactions yet.</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <style>
@@ -294,12 +244,55 @@
             border-radius: 0.75rem;
             transition: all 0.3s ease;
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .product-card:hover {
             box-shadow: var(--pt-shadow);
             transform: translateY(-2px);
             border-color: var(--pt-accent);
+        }
+
+        /* Product Image Styles */
+        .product-image-wrapper {
+            width: 100%;
+            height: 220px;
+            background: var(--pt-surface-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--pt-border);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-image-placeholder {
+            color: var(--pt-muted);
+            font-size: 3rem;
+            opacity: 0.4;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
+            color: var(--pt-muted);
+            margin: 0;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .product-card-body {
@@ -637,6 +630,71 @@
 
         :root[data-theme="light"] .text-muted {
             color: #6f8096 !important;
+        }
+
+        /* Button Styling */
+        .btn-dark {
+            background: var(--pt-primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-dark:hover {
+            background: color-mix(in srgb, var(--pt-primary) 85%, black);
+            color: white;
+        }
+
+        :root[data-theme="dark"] .btn-dark {
+            background: white;
+            color: var(--pt-primary);
+            border: none;
+        }
+
+        :root[data-theme="dark"] .btn-dark:hover {
+            background: #f0f0f0;
+            color: var(--pt-primary);
+        }
+
+        .btn-outline-primary {
+            border: 1px solid var(--pt-primary);
+            color: var(--pt-primary);
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--pt-primary);
+            color: white;
+        }
+
+        :root[data-theme="dark"] .btn-outline-primary {
+            border: 1px solid var(--pt-primary);
+            color: var(--pt-primary);
+        }
+
+        :root[data-theme="dark"] .btn-outline-primary:hover {
+            background: var(--pt-primary);
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            background: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        :root[data-theme="dark"] .btn-outline-danger {
+            border: 1px solid #ff6b7a;
+            color: #ff6b7a;
+        }
+
+        :root[data-theme="dark"] .btn-outline-danger:hover {
+            background: #ff6b7a;
+            color: white;
         }
 
         @media (max-width: 768px) {

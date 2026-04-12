@@ -8,211 +8,189 @@
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
             <h1 class="dashboard-page-title mb-5">Dashboard</h1>
-            @foreach ($raisers as $raiser)
-                <div class="lifecycle-raiser-card mb-5">
-                    <!-- Raiser Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                        <h2 class="lifecycle-raiser-name mb-0">{{ $raiser->name }}</h2>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('raisers.download-report', $raiser->id) }}" class="btn btn-sm btn-outline-secondary" download>
-                                <i class="bi bi-download me-1"></i>Download Report
-                            </a>
-                            <a href="{{ route('raisers.show', $raiser->id) }}" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-person me-1"></i>View Profile
-                            </a>
-                        </div>
+
+            <!-- Investment Summary Cards -->
+            <div class="investment-cards-container mb-5">
+                <div class="investment-card">
+                    <div class="investment-card-label">Total Active Investment</div>
+                    <div class="investment-card-value">₱ {{ number_format($investmentSummary['totalActive']) }}</div>
+                </div>
+
+                <div class="investment-card">
+                    <div class="investment-card-label">Number of Hog Batch</div>
+                    <div class="investment-card-value">{{ $investmentSummary['batchCount'] }}</div>
+                </div>
+
+                <div class="investment-card">
+                    <div class="investment-card-label">Total Capital Invested</div>
+                    <div class="investment-card-value">₱ {{ number_format($investmentSummary['totalCapital']) }}</div>
+                </div>
+
+                <div class="investment-card">
+                    <div class="investment-card-label">Hog Expenses Amount</div>
+                    <div class="investment-card-value">₱ 0.00</div>
+                </div>
+
+                <div class="investment-card">
+                    <div class="investment-card-label">Expected Profit Return</div>
+                    <div class="investment-card-value">₱ {{ number_format($investmentSummary['expectedProfit']) }}</div>
+                </div>
+            </div>
+
+            <!-- Investment Allocation Section -->
+            <div class="investment-allocation-section mb-5">
+                <h3 class="allocation-section-title mb-4">Investment Allocation</h3>
+                <div class="allocation-cards-container">
+                    <div class="allocation-card">
+                        <div class="allocation-card-label">Fattening</div>
+                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['fattening'] / $investmentSummary['totalCapital']) * 100) }}%</div>
+                        <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['fattening']) }}</div>
                     </div>
 
-                    <!-- Lifecycle Categories -->
-                    @foreach ($lifecycles as $categoryName => $stages)
-                        <div class="lifecycle-category mb-5">
-                            <h4 class="lifecycle-category-title text-uppercase mb-4">{{ $categoryName }}</h4>
-                            
-                            <div class="lifecycle-timeline">
-                                <!-- Timeline Line -->
-                                <div class="timeline-line"></div>
-                                
-                                <!-- Stages -->
-                                <div class="timeline-stages">
-                                    @foreach ($stages as $index => $stage)
-                                        @php
-                                            $isCompleted = $stage['status'] === 'completed';
-                                            $isInProgress = $stage['status'] === 'in-progress';
-                                            $stageClass = $isCompleted ? 'completed' : ($isInProgress ? 'in-progress' : 'pending');
-                                        @endphp
-                                        
-                                        <div class="timeline-stage stage-{{ $stageClass }}">
-                                            <div class="stage-node">
-                                                @if ($isCompleted)
-                                                    <i class="bi bi-check-lg"></i>
-                                                @elseif ($isInProgress)
-                                                    <span class="progress-dot"></span>
-                                                @endif
-                                            </div>
-                                            <div class="stage-label">
-                                                <div class="stage-title">{{ $stage['label'] }}</div>
-                                                <div class="stage-duration">{{ $stage['duration'] }}</div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    <div class="allocation-card">
+                        <div class="allocation-card-label">Sow</div>
+                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['sow'] / $investmentSummary['totalCapital']) * 100) }}%</div>
+                        <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['sow']) }}</div>
+                    </div>
+
+                    <div class="allocation-card">
+                        <div class="allocation-card-label">Boar</div>
+                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['boar'] / $investmentSummary['totalCapital']) * 100) }}%</div>
+                        <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['boar']) }}</div>
+                    </div>
                 </div>
-            @endforeach
+            </div>
+
+
         </div>
     </section>
 
     <style>
-        .lifecycle-raiser-card {
+        .dashboard-page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Investment Cards Container */
+        .investment-cards-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .investment-card {
+            background: var(--pt-surface);
+            border: 1px solid var(--pt-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .investment-card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--pt-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .investment-card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--pt-text);
+        }
+
+        /* Investment Allocation Section */
+        .investment-allocation-section {
             background: var(--pt-surface);
             border: 1px solid var(--pt-border);
             border-radius: 12px;
             padding: 2rem;
         }
 
-        .lifecycle-raiser-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--pt-text);
-        }
-
-        .lifecycle-category {
-            margin-left: 0;
-        }
-
-        .lifecycle-category-title {
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            font-weight: 700;
-            color: var(--pt-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        .lifecycle-timeline {
-            position: relative;
-            padding: 1rem 0;
-        }
-
-        .timeline-line {
-            position: absolute;
-            top: 1.5rem;
-            left: 2rem;
-            right: 0;
-            height: 2px;
-            background: var(--pt-border);
-            z-index: 0;
-        }
-
-        .timeline-stages {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            z-index: 1;
-        }
-
-        .timeline-stage {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            position: relative;
-        }
-
-        .stage-node {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            font-size: 1.25rem;
-            background: var(--pt-surface);
-            border: 2px solid var(--pt-border);
-            position: relative;
-            z-index: 2;
-        }
-
-        .timeline-stage.stage-completed .stage-node {
-            background: var(--pt-success);
-            border-color: var(--pt-success);
-            color: white;
-        }
-
-        .timeline-stage.stage-in-progress .stage-node {
-            background: var(--pt-in-progress);
-            border-color: var(--pt-in-progress);
-            color: white;
-            animation: pulse-stage 2s infinite;
-        }
-
-        .timeline-stage.stage-pending .stage-node {
-            background: var(--pt-surface-soft);
-            border-color: var(--pt-pending-border);
-        }
-
-        .progress-dot {
-            display: inline-block;
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .stage-label {
-            text-align: center;
-            flex: 1;
-            max-width: 100px;
-        }
-
-        .stage-title {
+        .allocation-section-title {
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 700;
             color: var(--pt-text);
-            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .stage-duration {
+        .allocation-cards-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .allocation-card {
+            background: var(--pt-surface-soft);
+            border: 1px solid var(--pt-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 180px;
+            border-top: 4px solid var(--pt-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        :root[data-theme="dark"] .allocation-card {
+            border-top-color: #7c9ed2;
+        }
+
+        .allocation-card-label {
             font-size: 0.75rem;
+            font-weight: 600;
             color: var(--pt-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
         }
 
-        @keyframes pulse-stage {
-            0%, 100% {
-                box-shadow: 0 0 0 0 color-mix(in srgb, var(--pt-in-progress) 70%, transparent);
-            }
-            50% {
-                box-shadow: 0 0 0 6px color-mix(in srgb, var(--pt-in-progress) 0%, transparent);
-            }
+        .allocation-card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .allocation-card-amount {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--pt-text);
         }
 
         @media (max-width: 768px) {
-            .timeline-stages {
-                flex-wrap: wrap;
+            .investment-cards-container,
+            .allocation-cards-container {
                 gap: 1rem;
             }
 
-            .timeline-stage {
-                flex: 0 0 calc(50% - 0.5rem);
+            .investment-card,
+            .allocation-card {
+                padding: 1.25rem;
+                min-width: 150px;
             }
 
-            .timeline-line {
-                display: none;
+            .investment-card-value {
+                font-size: 1.5rem;
             }
 
-            .stage-node {
-                margin-bottom: 0.5rem;
+            .allocation-card-value {
+                font-size: 1.5rem;
             }
-        }
 
-        .dashboard-page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--pt-text);
-            margin-bottom: 1.5rem;
+            .investment-allocation-section {
+                padding: 1.5rem;
+            }
         }
     </style>
 @endsection

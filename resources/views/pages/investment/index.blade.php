@@ -442,10 +442,10 @@
             border: 1px solid var(--pt-border);
             border-radius: 0.75rem;
             padding: 2rem;
-            max-width: 600px;
-            width: 90%;
+            max-width: 700px;
+            width: 95%;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
         }
@@ -457,21 +457,22 @@
 
         .calendar-close-btn {
             position: absolute;
-            top: 0.35rem;
-            right: 0.35rem;
+            top: 1rem;
+            right: 1rem;
             background: transparent;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             cursor: pointer;
             color: var(--pt-muted);
             transition: color 0.2s ease;
-            width: 2rem;
-            height: 2rem;
+            width: 2.5rem;
+            height: 2.5rem;
             padding: 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             line-height: 1;
+            z-index: 10;
         }
 
         .calendar-close-btn:hover {
@@ -490,17 +491,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            gap: 1rem;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
         }
 
         .calendar-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.35rem;
+            font-weight: 700;
             color: var(--pt-text);
             margin: 0;
             flex: 1;
             text-align: center;
+            letter-spacing: 0.02em;
         }
 
         :root[data-theme="dark"] .calendar-title {
@@ -511,20 +513,22 @@
             background: transparent;
             border: 1px solid var(--pt-border);
             color: var(--pt-text);
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.375rem;
+            width: 2.7rem;
+            height: 2.7rem;
+            border-radius: 0.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
         .calendar-nav-btn:hover {
             background-color: var(--pt-surface-soft);
             border-color: #5b8def;
+            color: #5b8def;
         }
 
         :root[data-theme="dark"] .calendar-nav-btn {
@@ -540,22 +544,24 @@
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .calendar-weekday {
             text-align: center;
             font-weight: 600;
             color: var(--pt-muted);
-            font-size: 0.85rem;
-            padding: 0.5rem 0;
+            font-size: 0.8rem;
+            padding: 0.75rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .calendar-dates {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
+            gap: 0.75rem;
             margin-bottom: 2rem;
         }
 
@@ -565,13 +571,15 @@
             align-items: center;
             justify-content: center;
             border: 1px solid var(--pt-border);
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.9rem;
             background-color: var(--pt-surface);
             color: var(--pt-text);
             position: relative;
+            min-height: 48px;
+            padding: 0.5rem;
         }
 
         .calendar-date:hover:not(.disabled):not(.other-month) {
@@ -603,7 +611,7 @@
         .calendar-date.has-event::after {
             content: '';
             position: absolute;
-            bottom: 2px;
+            bottom: 4px;
             width: 4px;
             height: 4px;
             border-radius: 50%;
@@ -645,15 +653,18 @@
         }
 
         .calendar-events-list {
-            border-top: 1px solid var(--pt-border);
-            padding-top: 1.5rem;
+            border-top: 2px solid var(--pt-border);
+            padding-top: 2rem;
+            margin-top: 2rem;
         }
 
         .calendar-events-list h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--pt-text);
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         :root[data-theme="dark"] .calendar-events-list h4 {
@@ -662,12 +673,12 @@
 
         .event-item {
             display: flex;
-            gap: 1rem;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
+            gap: 1.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
             background-color: var(--pt-surface-soft);
-            border-left: 3px solid #5b8def;
-            border-radius: 0.375rem;
+            border-left: 4px solid #5b8def;
+            border-radius: 0.5rem;
         }
 
         :root[data-theme="dark"] .event-item {
@@ -676,16 +687,17 @@
 
         .event-marker {
             flex-shrink: 0;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #5b8def;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
+            margin-top: 2px;
         }
 
         .event-details {
@@ -693,19 +705,21 @@
         }
 
         .event-date {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             color: var(--pt-muted);
-            font-weight: 600;
-            margin-bottom: 0.25rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
         }
 
         .event-title {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--pt-text);
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
 
         :root[data-theme="dark"] .event-title {
@@ -713,7 +727,7 @@
         }
 
         .event-batch {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--pt-muted);
         }
     </style>

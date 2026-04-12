@@ -12,6 +12,8 @@ class RetailProduct extends Model
         'category',
         'price',
         'stock',
+        'description',
+        'image',
     ];
 
     protected $casts = [
