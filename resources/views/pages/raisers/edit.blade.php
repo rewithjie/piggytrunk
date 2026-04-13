@@ -3,14 +3,7 @@
 @section('content')
     <div class="card dashboard-bootstrap-card">
         <div class="card-body">
-            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-                <div>
-                    <p class="section-label mb-2">Edit Raiser</p>
-                    <h2 class="section-heading mb-0">{{ $raiser->name }}</h2>
-                </div>
-                <a href="{{ route('raisers.show', $raiser->id) }}" class="btn btn-outline-secondary">View Profile</a>
-            </div>
-
+            <h1 class="page-title mb-4">Edit Raiser</h1>
             @if (session('status'))
                 <div class="alert alert-info">{{ session('status') }}</div>
             @endif
@@ -19,17 +12,9 @@
                 @csrf
                 @method('PUT')
 
-                <div class="col-md-4">
-                    <label class="form-label">Raiser Code</label>
-                    <input type="text" name="code" class="form-control" value="{{ old('code', $raiser->code) }}">
-                </div>
-                <div class="col-md-8">
+            <div class="col-12">
                     <label class="form-label">Raiser Name</label>
                     <input type="text" name="name" class="form-control" value="{{ old('name', $raiser->name) }}">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Contact Person</label>
-                    <input type="text" name="contact_person" class="form-control" value="{{ old('contact_person', $raiser->contact_person) }}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Phone</label>
@@ -42,10 +27,6 @@
                 <div class="col-md-4">
                     <label class="form-label">Location</label>
                     <input type="text" name="location" class="form-control" value="{{ old('location', $raiser->location) }}">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Active Batch</label>
-                    <input type="text" name="batch" class="form-control" value="{{ old('batch', $raiser->batch) }}">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Type of Pig</label>
@@ -73,6 +54,16 @@
     </div>
 
     <style>
+        .page-title {
+            color: var(--pt-text);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        :root[data-theme="dark"] .page-title {
+            color: #ffffff;
+        }
+
         .section-label {
             font-size: 0.75rem;
             letter-spacing: 0.15em;

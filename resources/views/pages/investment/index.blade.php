@@ -8,9 +8,9 @@
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
             <h1 class="page-title mb-5">Investment</h1>
-            <div class="row g-4 align-items-stretch">
+            <div class="row g-4 align-items-stretch justify-content-center">
                 <!-- Main Investment Table -->
-                <div class="col-12 col-xl-8">
+                <div class="col-12 col-xl-10">
                     <div class="card dashboard-bootstrap-card h-100">
                         <div class="card-body">
                             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
@@ -70,38 +70,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Releases Sidebar -->
-                <div class="col-12 col-xl-4">
-                    <div class="card dashboard-bootstrap-card upcoming-card h-100">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h3 class="section-heading mb-0">Upcoming Releases</h3>
-                                <i class="bi bi-calendar-event section-icon"></i>
-                            </div>
-
-                            <div class="timeline-list mt-auto">
-                                @foreach ($payoutTimeline as $item)
-                                    <div class="timeline-item {{ !$loop->last ? 'mb-4 pb-4 border-bottom' : '' }}">
-                                        <div class="timeline-marker">
-                                            <div class="timeline-dot"></div>
-                                        </div>
-                                        <div class="timeline-content">
-                                            @php
-                                                $timelineDateKey = \Illuminate\Support\Carbon::parse($item['date'])->format('Y-m-d');
-                                            @endphp
-                                            <div class="timeline-date" data-date-key="{{ $timelineDateKey }}">{{ $item['date'] }}</div>
-                                            <div class="timeline-title">{{ strtoupper($item['title']) }}</div>
-                                            <div class="timeline-raiser">{{ $item['batch'] }}</div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <a href="#" class="btn btn-link view-calendar mt-auto">View Full Calendar</a>
                         </div>
                     </div>
                 </div>

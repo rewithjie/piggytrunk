@@ -5,8 +5,7 @@
         <div class="card-body">
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                 <div>
-                    <p class="section-label mb-2">Raiser Profile</p>
-                    <h2 class="section-heading mb-0">{{ $raiser->name }}</h2>
+                    <p class="section-label mb-2" style="font-size: 1.5rem; font-weight: 600;">Raiser Profile</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('raisers.edit', $raiser->id) }}" class="btn btn-dark">Edit Raiser</a>
@@ -36,12 +35,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card h-100"><div class="card-body"><div class="table-meta">Email</div><div class="table-name">{{ $raiser->email }}</div></div></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card h-100"><div class="card-body"><div class="table-meta">Location</div><div class="table-name">{{ $raiser->location }}</div></div></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card h-100"><div class="card-body"><div class="table-meta">Active Batch</div><div class="table-name">{{ $raiser->batch }}</div></div></div>
                         </div>
                         <div class="col-md-6">
                             <div class="card h-100"><div class="card-body"><div class="table-meta">Type of Pig</div><div class="table-name">{{ $raiser->pig_type }}</div></div></div>

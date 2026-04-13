@@ -162,34 +162,36 @@
                 </div>
             </div>
 
-            <!-- Best Sellers Section -->
+            <!-- Recent Transactions Section -->
             <div class="col-12 col-lg-6">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <p class="section-label mb-1">Top Movers</p>
-                                <h3 class="chart-title mb-0">Best Sellers</h3>
+                                <p class="section-label mb-1">Recent Activity</p>
+                                <h3 class="chart-title mb-0">Transactions</h3>
                             </div>
                         </div>
 
                         <div class="inventory-tracker-list">
-                            @foreach ($topSellers as $item)
+                            @foreach ($orders->take(5) as $order)
+                                @php
+                                    list($product, $quantity) = explode(' x', $order['items']);
+                                @endphp
                                 <div class="inventory-tracker-row">
                                     <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                                        <div>
-                                            <div class="inventory-item-title inventory-item-title-sm">{{ $item['name'] }}</div>
-                                            <div class="table-meta">{{ $item['category'] }}</div>
+                                        <div style="flex: 1;">
+                                            <div class="inventory-item-title inventory-item-title-sm">{{ trim($product) }}</div>
+                                            <div class="table-meta">Qty: {{ trim($quantity) }} to {{ $order['customer'] }}</div>
                                         </div>
-                                        <span class="inventory-stock-pill">{{ $item['sold'] }} sold</span>
                                     </div>
-                                    <div class="progress dashboard-progress">
-                                        <div class="progress-bar dashboard-progress-bar" style="width: {{ $item['share'] }}%"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">{{ $order['date'] }}</small>
                                     </div>
                                 </div>
                             @endforeach
-                            @if (count($topSellers) === 0)
-                                <p class="text-muted mb-0">No sales records yet.</p>
+                            @if (count($orders) === 0)
+                                <p class="text-muted mb-0">No transactions yet.</p>
                             @endif
                         </div>
                     </div>

@@ -43,7 +43,7 @@ class RaiserController extends Controller
         $record = Raiser::findOrFail($raiser);
 
         return view('pages.raisers.show', [
-            'pageTitle' => $record->name,
+            'hideTopbarTitle' => true,
             'raiser' => $record,
             'user' => $this->user(),
         ]);
@@ -54,7 +54,7 @@ class RaiserController extends Controller
         $record = Raiser::findOrFail($raiser);
 
         return view('pages.raisers.edit', [
-            'pageTitle' => 'Edit Raiser',
+            'hideTopbarTitle' => true,
             'raiser' => $record,
             'user' => $this->user(),
         ]);

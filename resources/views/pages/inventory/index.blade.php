@@ -170,13 +170,14 @@
         }
 
         :root[data-theme="dark"] .add-item-btn {
-            background-color: #1e293b;
-            color: #f1f5f9;
-            border-color: #334155;
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
         }
 
         :root[data-theme="dark"] .add-item-btn:hover {
-            background-color: #334155;
+            background-color: #e5e7eb;
+            color: #000000;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
         }
 
@@ -368,7 +369,7 @@
                     </svg>                    <input type="text" id="inventorySearch" placeholder="Search" class="form-control">
                     <button type="button" class="inventory-search-btn">Search</button>
                 </div>
-                <a href="#" class="add-item-btn">
+                <a href="{{ route('inventory.create') }}" class="add-item-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 5v14M5 12h14"></path>
                     </svg>
@@ -692,6 +693,10 @@
                 font-weight: 700;
                 color: var(--pt-text);
                 margin-bottom: 1.5rem;
+            }
+
+            :root[data-theme="dark"] .page-title {
+                color: #ffffff;
             }
         </style>
 

@@ -102,6 +102,10 @@
             color: var(--pt-text);
         }
 
+        :root[data-theme="dark"] .section-heading {
+            color: #ffffff;
+        }
+
         .section-subheading {
             color: var(--pt-muted);
             font-size: 0.95rem;
@@ -114,6 +118,10 @@
             text-transform: uppercase;
             color: var(--pt-muted);
             margin-bottom: 0.65rem;
+        }
+
+        :root[data-theme="dark"] .inventory-create-form .form-label {
+            color: #cbd5e0;
         }
 
         .inventory-create-form .form-control,
@@ -220,6 +228,17 @@
             color: var(--pt-text);
         }
 
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin-bottom: 1.5rem;
+        }
+
+        :root[data-theme="dark"] .page-title {
+            color: #ffffff;
+        }
+
         @media (max-width: 768px) {
             .card-body {
                 padding: 1.3rem !important;
@@ -227,13 +246,6 @@
 
             .section-heading {
                 font-size: 1.35rem;
-            }
-
-            .page-title {
-                font-size: 2rem;
-                font-weight: 700;
-                color: var(--pt-text);
-                margin-bottom: 1.5rem;
             }
         }
     </style>

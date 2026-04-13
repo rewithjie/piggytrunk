@@ -32,7 +32,7 @@
                                     <label for="name" class="form-label">
                                         <i class="bi bi-person-fill me-2"></i>HOG RAISER NAME
                                     </label>
-                                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Enter legal entity name" required>
+                                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Enter name" required>
                                     @error('name')
                                         <div class="text-danger small mt-2">{{ $message }}</div>
                                     @enderror
@@ -65,11 +65,11 @@
 
                                 <!-- ADDRESS -->
                                 <div class="mb-4">
-                                    <label for="location" class="form-label">
+                                    <label for="address" class="form-label">
                                         <i class="bi bi-geo-alt-fill me-2"></i>ADDRESS
                                     </label>
-                                    <input type="text" id="location" name="location" class="form-control @error('location') is-invalid @enderror" value="{{ old('location') }}" placeholder="Complete facility or residential address">
-                                    @error('location')
+                                    <input type="text" id="address" name="address" class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}" placeholder="e.g., Malasiqui, San Carlos">
+                                    @error('address')
                                         <div class="text-danger small mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -25,9 +25,20 @@ class DashboardController extends Controller
             'expectedProfit' => 340000,
         ];
 
+        // Raiser Lifecycle Data
+        $raiserLifecycles = [];
+        foreach ($raisers as $raiser) {
+            $raiserLifecycles[$raiser->id] = [
+                'name' => $raiser->name,
+                'status' => $raiser->status,
+                'categories' => $this->getLifecycleCategories($raiser->pig_type),
+            ];
+        }
+
         return view('pages.dashboard', [
             'pageTitle' => 'Dashboard',
             'raisers' => $raisers,
+            'raiserLifecycles' => $raiserLifecycles,
             'investmentSummary' => $investmentSummary,
             'user' => [
                 'name' => 'De Luna Admin',
@@ -35,6 +46,90 @@ class DashboardController extends Controller
                 'initials' => 'DL',
             ],
         ]);
+    }
+
+    private function getLifecycleCategories(string $pigType): array
+    {
+        $lifecycles = [
+            'Sow' => [
+                [
+                    'label' => 'Pre-Starter',
+                    'duration' => '1 month & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Starter',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Grower',
+                    'duration' => '4 months - 8 months',
+                    'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Breeder',
+                    'duration' => '100 days',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Milk Maker',
+                    'duration' => 'Nursing',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Separation',
+                    'duration' => 'Final Stage',
+                    'status' => 'pending',
+                ],
+            ],
+            'Piglet' => [
+                [
+                    'label' => 'Vitamins',
+                    'duration' => '3 days after born',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Booster',
+                    'duration' => '10 days booster',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Vitamins & capon',
+                    'duration' => '14 days for vitamins',
+                    'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Separation',
+                    'duration' => 'Final Stage',
+                    'status' => 'pending',
+                ],
+            ],
+            'Fattening' => [
+                [
+                    'label' => 'Pre-Starter',
+                    'duration' => '1 month & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Starter',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Grower',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Selling',
+                    'duration' => 'Final Stage',
+                    'status' => 'pending',
+                ],
+            ],
+        ];
+
+        return $lifecycles[$pigType] ?? $lifecycles['Fattening'];
     }
 
     private function formatCompactNumber(int $amount): string
