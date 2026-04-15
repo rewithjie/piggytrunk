@@ -1,21 +1,5 @@
 @php
-    $topbarNotifications = [
-        [
-            'title' => 'Low stock alert',
-            'message' => 'Piglet Starter Mix is down to 12 packs.',
-            'time' => '5 mins ago',
-        ],
-        [
-            'title' => 'Retail order received',
-            'message' => 'A new Facebook Shop order is waiting for packing.',
-            'time' => '18 mins ago',
-        ],
-        [
-            'title' => 'Payout reminder',
-            'message' => 'Batch-01 investor payout is coming up this week.',
-            'time' => '1 hour ago',
-        ],
-    ];
+    $topbarNotifications = [];
 @endphp
 
 <header class="topbar border-bottom">
@@ -41,10 +25,6 @@
             </div>
 
             <div class="topbar-actions">
-                <div class="topbar-clock" data-live-clock data-timezone="Asia/Manila">
-                    <div class="topbar-clock-value">--:--:--</div>
-                </div>
-
                 <div class="dropdown">
                     <button
                         class="topbar-bell"
@@ -59,19 +39,18 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-end topbar-notification-menu border-0 p-0">
-                        <div class="topbar-notification-head">
-                            <div class="topbar-notification-title">Notifications</div>
-                            <div class="topbar-notification-subtitle">Dummy data for now, ready for real-time later</div>
-                        </div>
-
                         <div class="topbar-notification-list">
-                            @foreach ($topbarNotifications as $notification)
+                            @forelse ($topbarNotifications as $notification)
                                 <div class="topbar-notification-item">
                                     <div class="topbar-notification-item-title">{{ $notification['title'] }}</div>
                                     <div class="topbar-notification-item-copy">{{ $notification['message'] }}</div>
                                     <div class="topbar-notification-item-time">{{ $notification['time'] }}</div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <div class="topbar-notification-item text-center py-4">
+                                    <div class="topbar-notification-item-title">No notifications as of now</div>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -82,7 +61,12 @@
                         href="{{ route('settings.index') }}"
                         aria-label="Open profile and settings"
                     >
-                        <span class="topbar-profile-avatar">{{ $user['initials'] }}</span>
+                        <span class="topbar-profile-avatar" data-topbar-profile-avatar style="background-color: transparent !important;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="profile-icon" data-theme-icon>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
                         <span class="topbar-profile-copy d-none d-sm-flex">
                             <span class="topbar-profile-name">{{ $user['name'] }}</span>
                             <span class="topbar-profile-role">{{ $user['role'] }}</span>
@@ -93,3 +77,95 @@
         </div>
     </div>
 </header>
+
+<script>
+    (() => {
+        const profilePictureStorageKey = 'piggytrunk-settings-profile-picture';
+        const profileStorageKey = 'piggytrunk-settings-profile';
+        const topbarProfileAvatar = document.querySelector('[data-topbar-profile-avatar]');
+        const topbarProfileName = document.querySelector('.topbar-profile-name');
+        const topbarProfileRole = document.querySelector('.topbar-profile-role');
+        const profileIcon = topbarProfileAvatar?.querySelector('.profile-icon');
+
+        const getThemeColor = () => {
+            const theme = document.documentElement.getAttribute('data-theme') || 'light';
+            return theme === 'dark' ? '#FFFFFF' : '#1F2937';
+        };
+
+        const applyThemeColor = () => {
+            if (!topbarProfileAvatar || !profileIcon) return;
+            const storedProfilePicture = window.localStorage.getItem(profilePictureStorageKey);
+            if (!storedProfilePicture) {
+                topbarProfileAvatar.style.color = getThemeColor();
+                topbarProfileAvatar.style.backgroundColor = 'transparent';
+            }
+        };
+
+        const updateProfilePicture = () => {
+            if (!topbarProfileAvatar) return;
+            
+            const storedProfilePicture = window.localStorage.getItem(profilePictureStorageKey);
+            
+            if (storedProfilePicture) {
+                topbarProfileAvatar.style.backgroundImage = `url('${storedProfilePicture}')`;
+                topbarProfileAvatar.style.backgroundSize = 'cover';
+                topbarProfileAvatar.style.backgroundPosition = 'center';
+                if (profileIcon) profileIcon.style.display = 'none';
+            } else {
+                topbarProfileAvatar.style.backgroundImage = '';
+                applyThemeColor();
+                if (profileIcon) profileIcon.style.display = '';
+            }
+        };
+
+        const updateProfile = () => {
+            const storedProfile = window.localStorage.getItem(profileStorageKey);
+            if (storedProfile) {
+                try {
+                    const profile = JSON.parse(storedProfile);
+                    if (profile.name && topbarProfileName) {
+                        topbarProfileName.textContent = profile.name;
+                    }
+                    if (profile.role && topbarProfileRole) {
+                        topbarProfileRole.textContent = profile.role;
+                    }
+                } catch (e) {
+                    console.error('Error parsing profile data:', e);
+                }
+            } else {
+                // Use default values from the page when localStorage is empty (reset)
+                if (topbarProfileName) {
+                    topbarProfileName.textContent = '{{ $user["name"] }}';
+                }
+                if (topbarProfileRole) {
+                    topbarProfileRole.textContent = '{{ $user["role"] }}';
+                }
+            }
+        };
+
+        // Initial load
+        updateProfilePicture();
+        updateProfile();
+        
+        // Listen for custom event from settings page
+        window.addEventListener('profileupdated', (event) => {
+            updateProfilePicture();
+            updateProfile();
+        });
+
+        // Listen for theme changes
+        window.addEventListener('themechange', (event) => {
+            applyThemeColor();
+        });
+        
+        // Also listen for storage changes (from other tabs)
+        window.addEventListener('storage', (event) => {
+            if (event.key === profilePictureStorageKey) {
+                updateProfilePicture();
+            }
+            if (event.key === profileStorageKey) {
+                updateProfile();
+            }
+        });
+    })();
+</script>

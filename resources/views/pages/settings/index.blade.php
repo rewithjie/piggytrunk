@@ -15,9 +15,18 @@
                         <h3 class="section-heading mb-4">Account Center</h3>
 
                         <div class="d-flex align-items-center gap-3 mb-4">
-                            <span class="sidebar-user-avatar settings-admin-avatar" style="width: 60px; height: 60px;" data-settings-avatar>
-                                {{ $user['initials'] }}
-                            </span>
+                            <div style="position: relative;">
+                                <span class="sidebar-user-avatar settings-admin-avatar" style="width: 60px; height: 60px; cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: transparent;" data-settings-avatar data-profile-picture-trigger>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="settings-profile-icon" data-theme-icon>
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </span>
+                                <span style="position: absolute; bottom: 0; right: 0; background: #6c757d; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer;" data-profile-picture-trigger title="Click to upload profile picture">
+                                    ✎
+                                </span>
+                                <input type="file" class="d-none" id="profile-picture-input" accept="image/*" data-profile-picture-input>
+                            </div>
                             <div>
                                 <div class="table-name" data-settings-profile-name>{{ $profile['name'] }}</div>
                                 <div class="table-meta" data-settings-profile-role>{{ $profile['role'] }}</div>
@@ -101,27 +110,7 @@
         </div>
 
         <div class="row g-4 mb-4">
-            <div class="col-12 col-xl-7">
-                <div class="card dashboard-bootstrap-card h-100">
-                    <div class="card-body">
-                        <p class="section-label mb-1">Reference Data</p>
-                        <h3 class="chart-title mb-4">Admin-Controlled Defaults</h3>
-
-                        <div class="settings-stack">
-                            @foreach ($referenceData as $group)
-                                <div class="settings-panel">
-                                    <div class="table-name mb-2">{{ $group['title'] }}</div>
-                                    @foreach ($group['items'] as $item)
-                                        <div class="settings-bullet">{{ $item }}</div>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-xl-5">
+            <div class="col-12 col-xl-12">
                 <div class="card dashboard-bootstrap-card h-100">
                     <div class="card-body">
                         <p class="section-label mb-1">Notifications</p>
@@ -149,27 +138,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="card dashboard-bootstrap-card">
-            <div class="card-body">
-                <p class="section-label mb-1">Module Rules</p>
-                <h3 class="chart-title mb-4">Retail and Investment Controls</h3>
-
-                <div class="row g-4">
-                    @foreach ($moduleRules as $rule)
-                        <div class="col-12 col-lg-6">
-                            <div class="settings-panel h-100">
-                                <div class="table-name mb-2">{{ $rule['title'] }}</div>
-                                <div class="table-meta mb-3">{{ $rule['description'] }}</div>
-                                @foreach ($rule['highlights'] as $highlight)
-                                    <div class="settings-bullet">{{ $highlight }}</div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
     </section>
 
     <script>
@@ -177,12 +145,15 @@
             const storagePrefix = 'piggytrunk-setting-notification-';
             const profileStorageKey = 'piggytrunk-settings-profile';
             const preferencesStorageKey = 'piggytrunk-settings-preferences';
+            const profilePictureStorageKey = 'piggytrunk-settings-profile-picture';
 
             const profileForm = document.querySelector('[data-settings-profile-form]');
             const profileName = document.querySelector('[data-settings-profile-name]');
             const profileRole = document.querySelector('[data-settings-profile-role]');
             const profileAvatar = document.querySelector('[data-settings-avatar]');
             const profileReset = document.querySelector('[data-settings-profile-reset]');
+            const profilePictureInput = document.querySelector('[data-profile-picture-input]');
+            const profilePictureTriggers = document.querySelectorAll('[data-profile-picture-trigger]');
 
             const preferencesForm = document.querySelector('[data-settings-preferences-form]');
             const preferencesReset = document.querySelector('[data-settings-preferences-reset]');
@@ -197,6 +168,37 @@
                     .slice(0, 2)
                     .map((part) => part.charAt(0).toUpperCase())
                     .join('') || 'DL';
+            };
+
+            const getThemeColor = () => {
+                const theme = document.documentElement.getAttribute('data-theme') || 'light';
+                return theme === 'dark' ? '#FFFFFF' : '#1F2937';
+            };
+
+            const applyThemeColor = () => {
+                if (!profileAvatar) return;
+                const profileIcon = profileAvatar.querySelector('.settings-profile-icon');
+                const storedProfilePicture = window.localStorage.getItem(profilePictureStorageKey);
+                if (!storedProfilePicture && profileIcon) {
+                    profileAvatar.style.color = getThemeColor();
+                }
+            };
+
+            const applyProfilePicture = (imageData) => {
+                if (!profileAvatar) return;
+                
+                const profileIcon = profileAvatar.querySelector('.settings-profile-icon');
+
+                if (imageData) {
+                    profileAvatar.style.backgroundImage = `url('${imageData}')`;
+                    profileAvatar.style.backgroundSize = 'cover';
+                    profileAvatar.style.backgroundPosition = 'center';
+                    if (profileIcon) profileIcon.style.display = 'none';
+                } else {
+                    profileAvatar.style.backgroundImage = '';
+                    applyThemeColor();
+                    if (profileIcon) profileIcon.style.display = '';
+                }
             };
 
             const applyProfile = (values) => {
@@ -218,10 +220,6 @@
                 if (profileRole) {
                     profileRole.textContent = values.role || '';
                 }
-
-                if (profileAvatar) {
-                    profileAvatar.textContent = initialsFromName(values.name);
-                }
             };
 
             const applyPreferences = (values) => {
@@ -239,24 +237,87 @@
                 if (values.default_theme === 'light' || values.default_theme === 'dark') {
                     document.documentElement.setAttribute('data-theme', values.default_theme);
                     window.localStorage.setItem('piggytrunk-theme', values.default_theme);
+                    // Update avatar color for theme change
+                    applyThemeColor();
                     window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: values.default_theme } }));
                 }
             };
+
+            // Profile picture handling
+            let pendingProfilePicture = null;
+
+            if (profilePictureInput) {
+                profilePictureTriggers.forEach((trigger) => {
+                    trigger.addEventListener('click', () => {
+                        profilePictureInput.click();
+                    });
+                });
+
+                profilePictureInput.addEventListener('change', (event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imageData = e.target?.result;
+                        if (imageData) {
+                            // Store temporarily for preview, but don't save until form submits
+                            pendingProfilePicture = imageData;
+                            applyProfilePicture(imageData);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
 
             if (profileForm && defaultProfile) {
                 const storedProfile = window.localStorage.getItem(profileStorageKey);
                 applyProfile(storedProfile ? JSON.parse(storedProfile) : defaultProfile);
 
+                // Load stored profile picture
+                const storedProfilePicture = window.localStorage.getItem(profilePictureStorageKey);
+                if (storedProfilePicture) {
+                    applyProfilePicture(storedProfilePicture);
+                }
+
                 profileForm.addEventListener('submit', (event) => {
                     event.preventDefault();
                     const values = Object.fromEntries(new FormData(profileForm).entries());
                     window.localStorage.setItem(profileStorageKey, JSON.stringify(values));
+                    
+                    // Save profile picture if one was selected
+                    if (pendingProfilePicture) {
+                        window.localStorage.setItem(profilePictureStorageKey, pendingProfilePicture);
+                    }
+                    
                     applyProfile(values);
+                    
+                    // Dispatch custom event to update topbar and other components
+                    window.dispatchEvent(new CustomEvent('profileupdated', {
+                        detail: {
+                            picture: window.localStorage.getItem(profilePictureStorageKey),
+                            name: values.name
+                        }
+                    }));
                 });
 
                 profileReset?.addEventListener('click', () => {
                     window.localStorage.removeItem(profileStorageKey);
+                    window.localStorage.removeItem(profilePictureStorageKey);
+                    pendingProfilePicture = null;
                     applyProfile(defaultProfile);
+                    applyProfilePicture(null);
+                    if (profilePictureInput) {
+                        profilePictureInput.value = '';
+                    }
+                    
+                    // Dispatch custom event to update topbar and other components
+                    window.dispatchEvent(new CustomEvent('profileupdated', {
+                        detail: {
+                            picture: null,
+                            name: defaultProfile?.name
+                        }
+                    }));
                 });
             }
 
@@ -302,6 +363,11 @@
                     window.localStorage.setItem(storagePrefix + key, nextEnabled ? 'true' : 'false');
                     applyState(nextEnabled);
                 });
+            });
+
+            // Listen for theme changes
+            window.addEventListener('themechange', (event) => {
+                applyThemeColor();
             });
         })();
     </script>

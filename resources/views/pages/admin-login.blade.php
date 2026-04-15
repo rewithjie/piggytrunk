@@ -76,6 +76,7 @@
             font-size: clamp(2rem, 3.5vw, 3rem);
             letter-spacing: -0.04em;
             line-height: 1.06;
+            text-align: center;
         }
 
         .login-subtitle {
@@ -380,7 +381,6 @@
                 </div>
 
                 <h1>Admin Login</h1>
-                <p class="login-subtitle">Secure access to the PiggyTrunk admin dashboard.</p>
 
                 @if (session('status'))
                     <div class="login-alert success">{{ session('status') }}</div>
@@ -466,9 +466,6 @@
 
                 <h2 class="brand-title">Piggy Trunk</h2>
                 <div class="brand-divider"></div>
-                <p class="brand-copy">
-                    Manage operations with secure access, real-time tracking, and clear insights for smarter decisions.
-                </p>
             </div>
         </aside>
     </main>

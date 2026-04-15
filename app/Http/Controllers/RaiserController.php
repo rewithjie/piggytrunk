@@ -12,10 +12,27 @@ class RaiserController extends Controller
     public function index(Request $request): View
     {
         $query = $request->string('q')->toString();
+        
+        // Fetch 3 Fattening and 2 Sow raisers for consistency with Dashboard
+        $fatteningRaisers = Raiser::where('pig_type', 'Fattening')->orderBy('name')->limit(3)->get();
+        $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
+        $raisers = $fatteningRaisers->concat($sowRaisers);
+        
+        // Apply search filter if needed
+        if ($query !== '') {
+            $raisers = $raisers->filter(function ($raiser) use ($query) {
+                return stripos($raiser->name, $query) !== false ||
+                       stripos($raiser->code, $query) !== false ||
+                       stripos($raiser->location, $query) !== false ||
+                       stripos($raiser->batch, $query) !== false ||
+                       stripos($raiser->pig_type, $query) !== false ||
+                       stripos($raiser->status, $query) !== false;
+            });
+        }
 
         return view('pages.raisers.index', [
             'pageTitle' => 'Hog Raiser',
-            'raisers' => $this->directoryQuery($query)->get(),
+            'raisers' => $raisers,
             'query' => $query,
             'user' => $this->user(),
         ]);

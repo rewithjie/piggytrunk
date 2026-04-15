@@ -10,12 +10,15 @@ class DashboardController extends Controller
 {
     public function index(Request $request): View
     {
-        $raisers = Raiser::orderBy('name')->limit(10)->get();
+        // Fetch 3 Fattening and 2 Sow raisers for dashboard lifecycle
+        $fatteningRaisers = Raiser::where('pig_type', 'Fattening')->orderBy('name')->limit(3)->get();
+        $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
+        $raisers = $fatteningRaisers->concat($sowRaisers);
 
         // Investment Summary Data
         $investmentSummary = [
-            'totalActive' => 1850000,
-            'batchCount' => 4,
+            'totalActive' => 11700,
+            'batchCount' => 5,
             'allocation' => [
                 'fattening' => 650000,
                 'sow' => 770000,
@@ -41,7 +44,7 @@ class DashboardController extends Controller
             'raiserLifecycles' => $raiserLifecycles,
             'investmentSummary' => $investmentSummary,
             'user' => [
-                'name' => 'De Luna Admin',
+                'name' => 'Admin',
                 'role' => 'System Administrator',
                 'initials' => 'DL',
             ],
@@ -52,6 +55,11 @@ class DashboardController extends Controller
     {
         $lifecycles = [
             'Sow' => [
+                [
+                    'label' => 'Booster',
+                    'duration' => 'Initial boost',
+                    'status' => 'completed',
+                ],
                 [
                     'label' => 'Pre-Starter',
                     'duration' => '1 month & 2 weeks',
@@ -68,13 +76,18 @@ class DashboardController extends Controller
                     'status' => 'in-progress',
                 ],
                 [
-                    'label' => 'Breeder',
-                    'duration' => '100 days',
+                    'label' => 'Gilt Developer',
+                    'duration' => 'Development stage',
                     'status' => 'pending',
                 ],
                 [
-                    'label' => 'Milk Maker',
-                    'duration' => 'Nursing',
+                    'label' => 'Gestation Feed',
+                    'duration' => 'Pregnancy period',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Lactation Feed',
+                    'duration' => 'Nursing stage',
                     'status' => 'pending',
                 ],
                 [
@@ -107,6 +120,11 @@ class DashboardController extends Controller
             ],
             'Fattening' => [
                 [
+                    'label' => 'Booster',
+                    'duration' => 'Initial boost',
+                    'status' => 'completed',
+                ],
+                [
                     'label' => 'Pre-Starter',
                     'duration' => '1 month & 2 weeks',
                     'status' => 'completed',
@@ -120,6 +138,11 @@ class DashboardController extends Controller
                     'label' => 'Grower',
                     'duration' => '2 months & 2 weeks',
                     'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Finisher',
+                    'duration' => 'Final growth stage',
+                    'status' => 'pending',
                 ],
                 [
                     'label' => 'Selling',

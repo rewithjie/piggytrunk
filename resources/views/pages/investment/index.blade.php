@@ -28,8 +28,7 @@
                                             <th>HOG TYPE</th>
                                             <th>TOTAL HOG</th>
                                             <th>INVESTMENT DATE</th>
-                                            <th>ROI</th>
-                                            <th>STAGE</th>
+                                            <th class="text-center">STAGE</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -45,7 +44,7 @@
                                                     <span class="investment-capital">{{ $capitalDisplay }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="investment-type">Piglet</span>
+                                                    <span class="investment-type">{{ $batch['hog_type'] ?? 'Piglet' }}</span>
                                                 </td>
                                                 <td>
                                                     <span class="investment-count">{{ $batch['hog_count'] }}</span>
@@ -53,10 +52,7 @@
                                                 <td>
                                                     <span class="investment-date">05/13/2026</span>
                                                 </td>
-                                                <td>
-                                                    <span class="investment-roi">{{ $batch['roi'] }}</span>
-                                                </td>
-                                                <td>
+                                                <td class="text-center">
                                                     <span class="badge badge-stage stage-{{ strtolower($batch['stage']) }}">
                                                         {{ strtoupper($batch['stage']) }}
                                                     </span>
@@ -64,7 +60,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center py-5 text-muted">No investments found.</td>
+                                                <td colspan="6" class="text-center py-5 text-muted">No investments found.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -180,8 +176,7 @@
         :root[data-theme="dark"] .investment-capital,
         :root[data-theme="dark"] .investment-type,
         :root[data-theme="dark"] .investment-count,
-        :root[data-theme="dark"] .investment-date,
-        :root[data-theme="dark"] .investment-roi {
+        :root[data-theme="dark"] .investment-date {
             color: #ecf2ff !important;
         }
 
@@ -218,8 +213,7 @@
         .investment-capital,
         .investment-type,
         .investment-count,
-        .investment-date,
-        .investment-roi {
+        .investment-date {
             color: var(--pt-text);
             font-size: 0.9375rem;
         }
@@ -240,6 +234,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-align: center;
         }
 
         .stage-fattening {

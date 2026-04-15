@@ -11,7 +11,7 @@ class SettingsController extends Controller
         return view('pages.settings.index', [
             'pageTitle' => 'Settings',
             'profile' => [
-                'name' => 'De Luna Admin',
+                'name' => 'Admin',
                 'email' => 'admin@piggytrunk.local',
                 'role' => 'System Administrator',
                 'phone' => '+63 917 555 0101',
@@ -22,32 +22,8 @@ class SettingsController extends Controller
                 ['label' => 'Currency Format', 'value' => '₱'],
                 ['label' => 'Timezone', 'value' => 'PST (Philippine Standard Time)'],
             ],
-            'referenceData' => [
-                [
-                    'title' => 'Hog Raiser Defaults',
-                    'items' => ['Active, Inactive statuses', 'Male Pig, Female Pig types', 'RSR batch/code format'],
-                ],
-                [
-                    'title' => 'Retail Reference Data',
-                    'items' => ['Feeds, Vitamins, Medicines', 'Walk-in, Facebook Shop, Messenger', 'Completed, Packed, For Delivery'],
-                ],
-                [
-                    'title' => 'Investment Reference Data',
-                    'items' => ['Gold, Silver, Growth partner tiers', 'Upcoming, Scheduled, For Review payout states', 'Piglet, Farrowing, Fattening stages'],
-                ],
-            ],
-            'moduleRules' => [
-                [
-                    'title' => 'Retail Shop Rules',
-                    'description' => 'Low-stock threshold, sales channel labels, and order status flow.',
-                    'highlights' => ['Low stock alert at 10 units', 'Weekly sales tracking enabled', 'Three active sales channels'],
-                ],
-                [
-                    'title' => 'Investment Rules',
-                    'description' => 'ROI presets, payout cycle labels, and batch capital monitoring.',
-                    'highlights' => ['Projected ROI range: 16.8% to 19.2%', 'Next payout release tracked per batch', 'Capital allocation monitored by cycle progress'],
-                ],
-            ],
+            'referenceData' => [],
+            'moduleRules' => [],
             'notifications' => [
                 ['label' => 'Low stock alerts', 'status' => 'Enabled'],
                 ['label' => 'Payout schedule reminders', 'status' => 'Enabled'],
@@ -61,7 +37,7 @@ class SettingsController extends Controller
     private function user(): array
     {
         return [
-            'name' => 'De Luna Admin',
+            'name' => 'Admin',
             'role' => 'System Administrator',
             'initials' => 'DL',
         ];

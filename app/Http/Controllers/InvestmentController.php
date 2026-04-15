@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Raiser;
 use Illuminate\View\View;
 
 class InvestmentController extends Controller
@@ -15,44 +16,34 @@ class InvestmentController extends Controller
             ['label' => 'Next Payout', 'value' => 'April 18, 2026'],
         ];
 
-        $batchAllocations = [
-            [
-                'batch' => 'BATCH-01',
-                'raiser' => 'Dela Cruz Farms',
-                'capital' => '₱ 650,000',
-                'hog_count' => 120,
-                'progress' => 78,
-                'stage' => 'Fattening',
-                'roi' => '19.2%',
-            ],
-            [
-                'batch' => 'BATCH-02',
-                'raiser' => 'Santos Piggery',
-                'capital' => '₱ 520,000',
-                'hog_count' => 96,
-                'progress' => 52,
-                'stage' => 'Farrowing',
-                'roi' => '17.5%',
-            ],
-            [
-                'batch' => 'BATCH-03',
-                'raiser' => 'Green Meadows',
-                'capital' => '₱ 430,000',
-                'hog_count' => 88,
-                'progress' => 36,
-                'stage' => 'Piglet',
-                'roi' => '16.8%',
-            ],
-            [
-                'batch' => 'BATCH-04',
-                'raiser' => 'San Pedro Livestock',
-                'capital' => '₱ 250,000',
-                'hog_count' => 54,
-                'progress' => 64,
-                'stage' => 'Farrowing',
-                'roi' => '18.1%',
-            ],
-        ];
+        // Fetch 3 Fattening and 2 Sow raisers for consistency with Dashboard
+        $fatteningRaisers = Raiser::where('pig_type', 'Fattening')->orderBy('name')->limit(3)->get();
+        $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
+        $raisers = $fatteningRaisers->concat($sowRaisers);
+        
+        // Build batch allocations from database raisers
+        $batchAllocations = [];
+        $hogCounts = [120, 96, 88, 54, 70];
+        $capitals = ['₱ 650,000', '₱ 520,000', '₱ 430,000', '₱ 250,000', '₱ 350,000'];
+        $progressValues = [78, 52, 36, 64, 45];
+        
+        foreach ($raisers as $index => $raiser) {
+            // Get the in-progress lifecycle stage for display (like Dashboard)
+            $lifecycleStages = $this->getLifecycleCategories($raiser->pig_type);
+            $inProgressStage = collect($lifecycleStages)
+                ->firstWhere('status', 'in-progress');
+            $stageLabel = $inProgressStage['label'] ?? 'Grower';
+            
+            $batchAllocations[] = [
+                'batch' => 'BATCH-' . str_pad(($index + 1), 2, '0', STR_PAD_LEFT),
+                'raiser' => $raiser->name,
+                'capital' => $capitals[$index] ?? '₱ 0',
+                'hog_count' => $hogCounts[$index] ?? 0,
+                'progress' => $progressValues[$index] ?? 0,
+                'stage' => $stageLabel,
+                'hog_type' => $raiser->pig_type ?? 'Piglet',
+            ];
+        }
 
         $investors = [
             [
@@ -170,5 +161,87 @@ class InvestmentController extends Controller
             'role' => 'System Administrator',
             'initials' => 'DL',
         ];
+    }
+
+    private function getLifecycleCategories(string $pigType): array
+    {
+        $lifecycles = [
+            'Sow' => [
+                [
+                    'label' => 'Booster',
+                    'duration' => 'Initial boost',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Pre-Starter',
+                    'duration' => '1 month & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Starter',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Grower',
+                    'duration' => '4 months - 8 months',
+                    'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Gilt Developer',
+                    'duration' => 'Development stage',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Gestation Feed',
+                    'duration' => 'Pregnancy period',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Lactation Feed',
+                    'duration' => 'Nursing stage',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Separation',
+                    'duration' => 'Final Stage',
+                    'status' => 'pending',
+                ],
+            ],
+            'Fattening' => [
+                [
+                    'label' => 'Booster',
+                    'duration' => 'Initial boost',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Pre-Starter',
+                    'duration' => '1 month & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Starter',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'completed',
+                ],
+                [
+                    'label' => 'Grower',
+                    'duration' => '2 months & 2 weeks',
+                    'status' => 'in-progress',
+                ],
+                [
+                    'label' => 'Finisher',
+                    'duration' => 'Final growth stage',
+                    'status' => 'pending',
+                ],
+                [
+                    'label' => 'Selling',
+                    'duration' => 'Final Stage',
+                    'status' => 'pending',
+                ],
+            ],
+        ];
+
+        return $lifecycles[$pigType] ?? $lifecycles['Fattening'];
     }
 }

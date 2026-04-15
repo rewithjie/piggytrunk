@@ -690,8 +690,8 @@ html.sidebar-collapsed .content-inner {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #ff637c, #ea5264);
-    color: #fff;
+    background: transparent;
+    color: #1F2937;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.04em;

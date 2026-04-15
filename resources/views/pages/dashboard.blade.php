@@ -7,12 +7,12 @@
 @section('content')
     <section class="bootstrap-dashboard">
         <div class="dashboard-stage">
-            <h1 class="dashboard-page-title mb-5">Dashboard</h1>
+            <h1 class="page-title mb-5">Dashboard</h1>
 
             <!-- Investment Summary Cards -->
             <div class="investment-cards-container mb-5">
                 <div class="investment-card">
-                    <div class="investment-card-label">Total Active Investment</div>
+                    <div class="investment-card-label">Start of Investment</div>
                     <div class="investment-card-value">₱ {{ number_format($investmentSummary['totalActive']) }}</div>
                 </div>
 
@@ -22,13 +22,13 @@
                 </div>
 
                 <div class="investment-card">
-                    <div class="investment-card-label">Total Capital Invested</div>
+                    <div class="investment-card-label">Total Current Investment</div>
                     <div class="investment-card-value">₱ {{ number_format($investmentSummary['totalCapital']) }}</div>
                 </div>
 
                 <div class="investment-card">
-                    <div class="investment-card-label">Hog Expenses Amount</div>
-                    <div class="investment-card-value">₱ 0.00</div>
+                    <div class="investment-card-label">Number of Mortality</div>
+                    <div class="investment-card-value">0</div>
                 </div>
 
                 <div class="investment-card">
@@ -51,12 +51,6 @@
                         <div class="allocation-card-label">Sow</div>
                         <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['sow'] / $investmentSummary['totalCapital']) * 100) }}%</div>
                         <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['sow']) }}</div>
-                    </div>
-
-                    <div class="allocation-card">
-                        <div class="allocation-card-label">Boar</div>
-                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['boar'] / $investmentSummary['totalCapital']) * 100) }}%</div>
-                        <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['boar']) }}</div>
                     </div>
                 </div>
             </div>
@@ -123,13 +117,6 @@
     </section>
 
     <style>
-        .dashboard-page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--pt-text);
-            margin-bottom: 1.5rem;
-        }
-
         /* Investment Cards Container */
         .investment-cards-container {
             display: flex;

@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('raisers', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
             $table->string('name');
             $table->string('location');
             $table->string('batch');
@@ -26,7 +25,6 @@ return new class extends Migration
 
         DB::table('raisers')->insert([
             [
-                'code' => 'RSR-0012',
                 'name' => 'Norma Deuda',
                 'location' => 'San Carlos',
                 'batch' => 'BATCH-01',
@@ -40,7 +38,6 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
-                'code' => 'RSR-0045',
                 'name' => 'Josephine De Vera',
                 'location' => 'San Carlos',
                 'batch' => 'BATCH-02',
@@ -54,7 +51,6 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
-                'code' => 'RSR-0082',
                 'name' => 'Bella Mamaril',
                 'location' => 'San Carlos',
                 'batch' => 'BATCH-03',
@@ -68,11 +64,10 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
-                'code' => 'RSR-0113',
                 'name' => 'Maria Gloria Benitez',
                 'location' => 'San Carlos',
                 'batch' => 'BATCH-04',
-                'pig_type' => 'Fattening',
+                'pig_type' => 'Sow',
                 'status' => 'Active',
                 'contact_person' => 'Maria Gloria Benitez',
                 'phone' => '0917-555-0104',
@@ -82,11 +77,10 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
-                'code' => 'RSR-0156',
                 'name' => 'Elisa De Vera',
                 'location' => 'Malasiqui',
                 'batch' => 'BATCH-05',
-                'pig_type' => 'Fattening',
+                'pig_type' => 'Sow',
                 'status' => 'Active',
                 'contact_person' => 'Elisa De Vera',
                 'phone' => '0917-555-0105',
