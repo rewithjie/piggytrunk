@@ -84,9 +84,7 @@
                                         <select id="pig_type" name="pig_type" class="form-select @error('pig_type') is-invalid @enderror" required>
                                             <option value="">Select breed type</option>
                                             <option value="Sow" @selected(old('pig_type') === 'Sow')>Sow</option>
-                                            <option value="Piglet" @selected(old('pig_type') === 'Piglet')>Piglet</option>
                                             <option value="Fattening" @selected(old('pig_type') === 'Fattening')>Fattening</option>
-                                            <option value="Boar" @selected(old('pig_type') === 'Boar')>Boar</option>
                                         </select>
                                         @error('pig_type')
                                             <div class="text-danger small mt-2">{{ $message }}</div>

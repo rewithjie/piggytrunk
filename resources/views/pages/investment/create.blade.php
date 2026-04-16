@@ -57,9 +57,8 @@
                                         </label>
                                         <select id="hog_type" name="hog_type" class="form-select" required>
                                             <option value="">Select hog type</option>
-                                            <option value="piglet">Piglet</option>
                                             <option value="fattening">Fattening</option>
-                                            <option value="breeding">Breeding</option>
+                                            <option value="sow">Sow</option>
                                         </select>
                                         @error('hog_type')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
@@ -91,36 +90,6 @@
                                             <input type="date" id="hiddenDatePicker" style="display: none;">
                                         </div>
                                         @error('investment_date')
-                                            <div class="text-danger small mt-2">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Two Column Layout -->
-                                <div class="row">
-                                    <!-- HOG STAGE -->
-                                    <div class="col-12 col-md-6 mb-4">
-                                        <label for="hog_stage" class="form-label">
-                                            <i class="bi bi-diagram-3 me-2"></i>HOG STAGE
-                                        </label>
-                                        <input type="text" id="hog_stage" name="hog_stage" class="form-control" 
-                                               placeholder="Heads">
-                                        @error('hog_stage')
-                                            <div class="text-danger small mt-2">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- ROI -->
-                                    <div class="col-12 col-md-6 mb-4">
-                                        <label for="roi" class="form-label">
-                                            <i class="bi bi-graph-up me-2"></i>ROI (RETURN OF INVESTMENT)
-                                        </label>
-                                        <div class="roi-input-wrapper">
-                                            <input type="number" id="roi" name="roi" class="form-control no-spinner roi-input" 
-                                                   placeholder="0" step="0.01" min="0">
-                                            <span class="roi-percent">%</span>
-                                        </div>
-                                        @error('roi')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -543,26 +512,6 @@
     </style>
 
     <script>
-        // Initialize ROI Percent Display
-        document.addEventListener('DOMContentLoaded', function() {
-            const roiInput = document.getElementById('roi');
-            const roiPercent = document.querySelector('.roi-percent');
-            
-            if (roiInput && roiPercent) {
-                function updateRoiDisplay() {
-                    if (roiInput.value) {
-                        roiPercent.style.opacity = '1';
-                    } else {
-                        roiPercent.style.opacity = '0.5';
-                    }
-                }
-
-                roiInput.addEventListener('input', updateRoiDisplay);
-                roiInput.addEventListener('change', updateRoiDisplay);
-                updateRoiDisplay();
-            }
-        });
-
         // Initialize Raiser Select with Avatars
         document.addEventListener('DOMContentLoaded', function() {
             const raiserSelect = document.getElementById('raiser_id');

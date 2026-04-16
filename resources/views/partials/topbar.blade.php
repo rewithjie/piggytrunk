@@ -134,11 +134,13 @@
                 }
             } else {
                 // Use default values from the page when localStorage is empty (reset)
+                const defaultName = '{{ $user["name"] ?? "Admin" }}';
+                const defaultRole = '{{ $user["role"] ?? "System Administrator" }}';
                 if (topbarProfileName) {
-                    topbarProfileName.textContent = '{{ $user["name"] }}';
+                    topbarProfileName.textContent = defaultName;
                 }
                 if (topbarProfileRole) {
-                    topbarProfileRole.textContent = '{{ $user["role"] }}';
+                    topbarProfileRole.textContent = defaultRole;
                 }
             }
         };

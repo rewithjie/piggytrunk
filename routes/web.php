@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\RaiserController;
 use App\Http\Controllers\RetailController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\DatabaseReportController;
 use App\Http\Controllers\Api\StockEntryController;
 use App\Support\AdminAsset;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,8 @@ Route::middleware('admin.auth')->group(function () {
 
     // API Routes for Stock Management
     Route::post('/api/stock-entry', [StockEntryController::class, 'store'])->name('api.stock-entry.store');
+
+    Route::get('/database-report', [DatabaseReportController::class, 'show'])->name('database.report');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 });

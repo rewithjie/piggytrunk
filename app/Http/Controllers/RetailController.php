@@ -18,13 +18,13 @@ class RetailController extends Controller
         $products = RetailProduct::query()->orderBy('name')->get();
         $transactions = RetailTransaction::query()
             ->with(['product', 'raiser'])
-            ->orderByDesc('transaction_date')
+            ->orderByDesc('created_at')
             ->orderByDesc('id')
             ->get();
 
         $today = Carbon::today();
         $todayTransactions = $transactions->filter(
-            fn (RetailTransaction $row) => Carbon::parse($row->transaction_date)->isSameDay($today)
+            fn (RetailTransaction $row) => Carbon::parse($row->created_at)->isSameDay($today)
         );
         $monthStart = Carbon::today()->startOfMonth();
 
@@ -33,7 +33,7 @@ class RetailController extends Controller
             ->map(fn ($group) => (int) $group->sum('quantity'));
 
         $monthlySalesByProduct = $transactions
-            ->filter(fn (RetailTransaction $row) => Carbon::parse($row->transaction_date)->between($monthStart, $today))
+            ->filter(fn (RetailTransaction $row) => Carbon::parse($row->created_at)->between($monthStart, $today))
             ->groupBy('retail_product_id')
             ->map(fn ($group) => (int) $group->sum('quantity'));
 
@@ -72,7 +72,7 @@ class RetailController extends Controller
                 'channel' => $order->channel,
                 'total' => $this->formatCurrency((float) $order->total_amount),
                 'status' => $order->status,
-                'date' => Carbon::parse($order->transaction_date)->format('F d, Y'),
+                'date' => Carbon::parse($order->created_at)->format('F d, Y'),
             ];
         });
 

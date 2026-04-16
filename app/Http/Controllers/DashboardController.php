@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Raiser;
+use App\Models\Batch;
+use App\Models\Investment;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,17 +17,19 @@ class DashboardController extends Controller
         $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
         $raisers = $fatteningRaisers->concat($sowRaisers);
 
-        // Investment Summary Data
+        // Investment Summary Data - Fetch from database (or default to 0 if no data)
+        $batchCount = Batch::count();
+        
+        // Since database was cleaned, all values are 0
         $investmentSummary = [
-            'totalActive' => 11700,
-            'batchCount' => 5,
+            'totalActive' => 0,
+            'batchCount' => $batchCount,
             'allocation' => [
-                'fattening' => 650000,
-                'sow' => 770000,
-                'boar' => 430000,
+                'fattening' => 0,
+                'sow' => 0,
             ],
-            'totalCapital' => 1850000,
-            'expectedProfit' => 340000,
+            'totalCapital' => 0,
+            'expectedProfit' => 0,
         ];
 
         // Raiser Lifecycle Data

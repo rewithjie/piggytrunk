@@ -132,7 +132,8 @@ class InvestmentController extends Controller
         $raisers = \App\Models\Raiser::all();
         return view('pages.investment.create', [
             'raisers' => $raisers,
-            'pageTitle' => 'Create New Investment'
+            'pageTitle' => 'Create New Investment',
+            'user' => $this->user(),
         ]);
     }
 
@@ -144,8 +145,6 @@ class InvestmentController extends Controller
             'hog_type' => 'required|string',
             'total_hog' => 'required|integer|min:1',
             'investment_date' => 'required|date',
-            'hog_stage' => 'nullable|string',
-            'roi' => 'nullable|numeric|min:0',
         ]);
 
         // Store investment (you can adjust based on your Investment model structure)

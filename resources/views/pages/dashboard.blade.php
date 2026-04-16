@@ -43,13 +43,13 @@
                 <div class="allocation-cards-container">
                     <div class="allocation-card">
                         <div class="allocation-card-label">Fattening</div>
-                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['fattening'] / $investmentSummary['totalCapital']) * 100) }}%</div>
+                        <div class="allocation-card-value">{{ $investmentSummary['totalCapital'] > 0 ? round(($investmentSummary['allocation']['fattening'] / $investmentSummary['totalCapital']) * 100) : 0 }}%</div>
                         <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['fattening']) }}</div>
                     </div>
 
                     <div class="allocation-card">
                         <div class="allocation-card-label">Sow</div>
-                        <div class="allocation-card-value">{{ round(($investmentSummary['allocation']['sow'] / $investmentSummary['totalCapital']) * 100) }}%</div>
+                        <div class="allocation-card-value">{{ $investmentSummary['totalCapital'] > 0 ? round(($investmentSummary['allocation']['sow'] / $investmentSummary['totalCapital']) * 100) : 0 }}%</div>
                         <div class="allocation-card-amount">₱ {{ number_format($investmentSummary['allocation']['sow']) }}</div>
                     </div>
                 </div>

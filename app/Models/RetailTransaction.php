@@ -8,20 +8,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class RetailTransaction extends Model
 {
     protected $fillable = [
+        'code',
         'retail_product_id',
         'raiser_id',
-        'customer_name',
         'quantity',
+        'transaction_type',
         'channel',
         'status',
         'total_amount',
-        'transaction_date',
+        'discount_amount',
+        'net_amount',
+        'payment_method',
+        'customer_name',
+        'remarks',
+        'created_by',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'total_amount' => 'decimal:2',
-        'transaction_date' => 'date',
+        'discount_amount' => 'decimal:2',
+        'net_amount' => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function product(): BelongsTo

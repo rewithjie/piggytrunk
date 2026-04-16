@@ -82,10 +82,10 @@
                                 </div>
 
                                 <div class="d-flex gap-3 mt-4">
-                                    <button type="submit" class="btn btn-primary grow">
+                                    <button type="submit" class="btn btn-dark grow">
                                         <i class="bi bi-plus me-2"></i>Add Item
                                     </button>
-                                    <a href="{{ route('inventory.index') }}" class="btn btn-secondary grow">Cancel</a>
+                                    <a href="{{ route('inventory.index') }}" class="btn btn-outline-secondary grow">Cancel</a>
                                 </div>
                             </form>
                         </div>

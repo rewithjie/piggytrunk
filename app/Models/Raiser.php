@@ -3,21 +3,50 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Raiser extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
-        'code',
+        'user_id',
         'name',
+        'code',
+        'phone',
+        'address',
+        'pig_type_id',
+        'capacity',
+        'status',
+        'remarks',
+        'total_investment',
         'location',
         'batch',
-        'pig_type',
-        'status',
         'contact_person',
-        'phone',
         'email',
-        'address',
     ];
+
+    protected $casts = [
+        'total_investment' => 'decimal:2',
+        'deleted_at' => 'datetime',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function pigType(): BelongsTo
+    {
+        return $this->belongsTo(PigType::class);
+    }
+
+    public function batches(): HasMany
+    {
+        return $this->hasMany(Batch::class);
+    }
 
     public function getInitialsAttribute(): string
     {
@@ -32,7 +61,12 @@ class Raiser extends Model
     public function getAccentAttribute(): string
     {
         return match ($this->status) {
-            'Active' => match ($this->location) {
+            'active' => match ($this->location ?? 'default') {
+                'Bulacan' => 'rose',
+                'Pampanga' => 'sky',
+                default => 'sky',
+            },
+            'Active' => match ($this->location ?? 'default') {
                 'Bulacan' => 'rose',
                 'Pampanga' => 'sky',
                 default => 'sky',
