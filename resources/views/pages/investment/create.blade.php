@@ -23,7 +23,9 @@
                                     <select id="raiser_id" name="raiser_id" class="form-select raiser-select" required>
                                         <option value="">Select an authorized raiser</option>
                                         @foreach ($raisers as $raiser)
-                                            <option value="{{ $raiser->id }}" data-initials="{{ strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', $raiser->name)))) }}">
+                                            <option value="{{ $raiser->id }}" 
+                                                    data-pig-type="{{ $raiser->pigType?->name ?? 'Fattening' }}"
+                                                    data-initials="{{ strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', $raiser->name)))) }}">
                                                 {{ $raiser->name }}
                                             </option>
                                         @endforeach
@@ -55,11 +57,8 @@
                                         <label for="hog_type" class="form-label">
                                             <i class="bi bi-diagram-2 me-2"></i>HOG TYPE
                                         </label>
-                                        <select id="hog_type" name="hog_type" class="form-select" required>
-                                            <option value="">Select hog type</option>
-                                            <option value="fattening">Fattening</option>
-                                            <option value="sow">Sow</option>
-                                        </select>
+                                        <input type="text" id="hog_type_display" class="form-control" placeholder="Auto-populated" readonly style="background-color: var(--pt-surface); cursor: not-allowed;">
+                                        <input type="hidden" id="hog_type" name="hog_type" value="">
                                         @error('hog_type')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
@@ -427,6 +426,7 @@
 
         /* Raiser Select Avatar Styles */
         .raiser-select-display {
+            position: relative;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -551,12 +551,13 @@
                 }
 
                 function toggleDropdown() {
-                    let dropdown = document.querySelector('.raiser-dropdown');
+                    const display = document.querySelector('.raiser-select-display');
+                    let dropdown = display.querySelector('.raiser-dropdown');
                     
                     if (!dropdown) {
                         dropdown = document.createElement('div');
                         dropdown.className = 'raiser-dropdown';
-                        raiserSelect.parentNode.appendChild(dropdown);
+                        display.appendChild(dropdown);
                         
                         populateDropdown(dropdown);
                     }
@@ -570,7 +571,7 @@
                     dropdown.innerHTML = options.map(option => {
                         const initials = option.dataset.initials || getInitials(option.text);
                         return `
-                            <div class="raiser-option" data-value="${option.value}">
+                            <div class="raiser-option" data-value="${option.value}" data-pig-type="${option.dataset.pigType}">
                                 <div class="raiser-avatar">${initials}</div>
                                 <span>${option.text}</span>
                             </div>
@@ -580,6 +581,17 @@
                     dropdown.querySelectorAll('.raiser-option').forEach(item => {
                         item.addEventListener('click', function() {
                             raiserSelect.value = this.dataset.value;
+                            
+                            // Auto-populate hog type
+                            const pigType = this.dataset.pigType;
+                            const hogTypeDisplay = document.getElementById('hog_type_display');
+                            const hogTypeInput = document.getElementById('hog_type');
+                            if (pigType && hogTypeDisplay && hogTypeInput) {
+                                const displayValue = pigType.charAt(0).toUpperCase() + pigType.slice(1);
+                                hogTypeDisplay.value = displayValue;
+                                hogTypeInput.value = pigType.toLowerCase();
+                            }
+                            
                             updateRaiserDisplay();
                             dropdown.classList.remove('show');
                         });
@@ -597,6 +609,21 @@
                 });
 
                 raiserSelect.addEventListener('change', updateRaiserDisplay);
+                
+                // Auto-populate hog type when raiser is selected
+                raiserSelect.addEventListener('change', function() {
+                    const selectedOption = raiserSelect.options[raiserSelect.selectedIndex];
+                    const pigType = selectedOption.dataset.pigType;
+                    const hogTypeDisplay = document.getElementById('hog_type_display');
+                    const hogTypeInput = document.getElementById('hog_type');
+                    
+                    if (pigType && hogTypeDisplay && hogTypeInput) {
+                        const displayValue = pigType.charAt(0).toUpperCase() + pigType.slice(1);
+                        hogTypeDisplay.value = displayValue;
+                        hogTypeInput.value = pigType.toLowerCase();
+                    }
+                });
+                
                 updateRaiserDisplay();
             }
         });

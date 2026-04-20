@@ -60,22 +60,10 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-12 col-md-6 mb-4">
+                                    <div class="col-12 mb-4">
                                         <label for="stock" class="form-label">Current Stock</label>
                                         <input type="number" id="stock" name="stock" class="form-control @error('stock') is-invalid @enderror" value="{{ old('stock') }}" placeholder="0" min="0" required>
                                         @error('stock')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-12 col-md-6 mb-4">
-                                        <label for="status" class="form-label">Stock Status</label>
-                                        <select id="status" name="status" class="form-select @error('status') is-invalid @enderror" required>
-                                            <option value="instock" @selected(old('status', 'instock') === 'instock')>In Stock</option>
-                                            <option value="low_stock" @selected(old('status') === 'low_stock')>Low Stock</option>
-                                            <option value="critical" @selected(old('status') === 'critical')>Critical</option>
-                                        </select>
-                                        @error('status')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>

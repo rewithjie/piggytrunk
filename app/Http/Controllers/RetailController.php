@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Raiser;
 use App\Models\RetailProduct;
 use App\Models\RetailTransaction;
@@ -15,7 +16,7 @@ class RetailController extends Controller
 {
     public function index(): View
     {
-        $products = RetailProduct::query()->orderBy('name')->get();
+        $products = RetailProduct::query()->whereNull('deleted_at')->orderBy('name')->get();
         $transactions = RetailTransaction::query()
             ->with(['product', 'raiser'])
             ->orderByDesc('created_at')
@@ -59,6 +60,10 @@ class RetailController extends Controller
                 'description' => $product->description,
                 'image' => $product->image,
                 'rawPrice' => (float) $product->price,
+                'price_per_kilo' => (float) $product->price_per_kilo,
+                'price_per_half_kilo' => (float) $product->price_per_half_kilo,
+                'price_per_quarter_kilo' => (float) $product->price_per_quarter_kilo,
+                'price_per_sack' => (float) $product->price_per_sack,
             ];
         });
 
@@ -75,6 +80,26 @@ class RetailController extends Controller
                 'date' => Carbon::parse($order->created_at)->format('F d, Y'),
             ];
         });
+
+        // Fetch recent activities (product add/delete)
+        $activities = ActivityLog::where('log_name', 'retail')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get()
+            ->map(function (ActivityLog $activity) {
+                return [
+                    'type' => 'activity',
+                    'description' => $activity->description,
+                    'date' => Carbon::parse($activity->created_at)->format('F d, Y'),
+                    'time' => Carbon::parse($activity->created_at)->format('g:i A'),
+                ];
+            });
+
+        // Merge activities and orders, sorted by date
+        $recentItems = collect([
+            ...$orders->map(fn ($order) => [...$order, 'type' => 'transaction']),
+            ...$activities,
+        ])->sortByDesc(fn ($item) => $item['date'] ?? '')->take(10);
 
         $channelStats = $transactions
             ->groupBy('channel')
@@ -119,10 +144,12 @@ class RetailController extends Controller
         }
 
         return view('pages.retail.index', [
-            'pageTitle' => 'Retail Shop',
+            'pageTitle' => 'POS',
             'summary' => $summary,
             'catalog' => $catalog,
             'orders' => $orders,
+            'activities' => $activities,
+            'recentItems' => $recentItems,
             'channels' => $channels,
             'topSellers' => $topSellers,
             'categories' => $this->categories(),
@@ -141,6 +168,31 @@ class RetailController extends Controller
         ]);
     }
 
+    public function archiveIndex(): View
+    {
+        $products = RetailProduct::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+
+        $archivedProducts = $products->map(function (RetailProduct $product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'category' => $product->category,
+                'price' => $this->formatCurrency((float) $product->price),
+                'stock' => $product->stock,
+                'description' => $product->description,
+                'image' => $product->image,
+                'archivedAt' => $product->deleted_at->format('F d, Y'),
+            ];
+        });
+
+        return view('pages.retail.archives', [
+            'pageTitle' => 'Archived Products',
+            'archivedProducts' => $archivedProducts,
+            'categories' => $this->categories(),
+            'user' => $this->user(),
+        ]);
+    }
+
     public function createProduct(): View
     {
         return view('pages.retail.products.create', [
@@ -153,13 +205,28 @@ class RetailController extends Controller
     public function storeProduct(Request $request): RedirectResponse
     {
         $data = $this->validateProduct($request);
-        
+
         // Handle image upload
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('retail-products', 'public');
+            $data['image_path'] = $request->file('image')->store('retail-products', 'public');
         }
 
+        // Generate code
+        $data['code'] = 'RP-' . strtoupper(uniqid());
+        $data['status'] = 'active';
+
         $product = RetailProduct::create($data);
+
+        // Log the activity
+        ActivityLog::create([
+            'log_name' => 'retail',
+            'description' => "Added product: {$product->name}",
+            'subject_type' => RetailProduct::class,
+            'subject_id' => $product->id,
+            'causer_type' => 'admin',
+            'causer_id' => auth()->id(),
+            'created_at' => Carbon::now(),
+        ]);
 
         return redirect()
             ->route('retail.index')
@@ -186,10 +253,10 @@ class RetailController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($record->image && Storage::disk('public')->exists($record->image)) {
-                Storage::disk('public')->delete($record->image);
+            if ($record->image_path && Storage::disk('public')->exists($record->image_path)) {
+                Storage::disk('public')->delete($record->image_path);
             }
-            $data['image'] = $request->file('image')->store('retail-products', 'public');
+            $data['image_path'] = $request->file('image')->store('retail-products', 'public');
         }
 
         $record->update($data);
@@ -204,16 +271,47 @@ class RetailController extends Controller
         $record = RetailProduct::findOrFail($product);
         $name = $record->name;
         
-        // Delete image if exists
-        if ($record->image && Storage::disk('public')->exists($record->image)) {
-            Storage::disk('public')->delete($record->image);
-        }
-        
+        // Archive product using soft delete
         $record->delete();
+
+        // Log the activity
+        ActivityLog::create([
+            'log_name' => 'retail',
+            'description' => "Archived product: {$name}",
+            'subject_type' => RetailProduct::class,
+            'subject_id' => $product,
+            'causer_type' => 'admin',
+            'causer_id' => auth()->id(),
+            'created_at' => Carbon::now(),
+        ]);
 
         return redirect()
             ->route('retail.index')
-            ->with('status', "Product {$name} deleted.");
+            ->with('status', "Product {$name} archived.");
+    }
+
+    public function restoreProduct(int $product): RedirectResponse
+    {
+        $record = RetailProduct::withTrashed()->findOrFail($product);
+        $name = $record->name;
+        
+        // Restore product (undo soft delete)
+        $record->restore();
+
+        // Log the activity
+        ActivityLog::create([
+            'log_name' => 'retail',
+            'description' => "Restored product: {$name}",
+            'subject_type' => RetailProduct::class,
+            'subject_id' => $product,
+            'causer_type' => 'admin',
+            'causer_id' => auth()->id(),
+            'created_at' => Carbon::now(),
+        ]);
+
+        return redirect()
+            ->route('retail.archives')
+            ->with('status', "Product {$name} restored.");
     }
 
     public function createTransaction(): View
@@ -281,14 +379,89 @@ class RetailController extends Controller
 
     private function validateProduct(Request $request): array
     {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
-            'price' => ['required', 'numeric', 'min:0'],
-            'stock' => ['required', 'integer', 'min:0'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
-        ]);
+        $category = $request->input('category');
+        
+        // Dynamic validation based on category
+        if ($category === 'Feeds') {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
+                'price_per_kilo' => ['required', 'numeric', 'min:0'],
+                'price_per_sack' => ['nullable', 'numeric', 'min:0'],
+                'price_per_half_kilo' => ['nullable', 'numeric', 'min:0'],
+                'price_per_quarter_kilo' => ['nullable', 'numeric', 'min:0'],
+                'stock' => ['required', 'integer', 'min:0'],
+                'description' => ['nullable', 'string', 'max:1000'],
+                'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        } elseif ($category === 'Vitamins') {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
+                'price_per_bottle' => ['required', 'numeric', 'min:0'],
+                'price_per_tablet' => ['nullable', 'numeric', 'min:0'],
+                'price_per_vial' => ['nullable', 'numeric', 'min:0'],
+                'stock' => ['required', 'integer', 'min:0'],
+                'description' => ['nullable', 'string', 'max:1000'],
+                'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        } elseif ($category === 'Medicines') {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
+                'price_per_bottle' => ['required', 'numeric', 'min:0'],
+                'price_per_tablet' => ['nullable', 'numeric', 'min:0'],
+                'price_per_injection' => ['nullable', 'numeric', 'min:0'],
+                'stock' => ['required', 'integer', 'min:0'],
+                'description' => ['nullable', 'string', 'max:1000'],
+                'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        } elseif ($category === 'Growth Additives') {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'category' => ['required', 'string', 'in:' . implode(',', $this->categories())],
+                'price_per_liter' => ['required', 'numeric', 'min:0'],
+                'price_per_bottle' => ['nullable', 'numeric', 'min:0'],
+                'price_per_sachet' => ['nullable', 'numeric', 'min:0'],
+                'stock' => ['required', 'integer', 'min:0'],
+                'description' => ['nullable', 'string', 'max:1000'],
+                'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        }
+
+        // Build data array based on category
+        $data = [
+            'name' => $request->input('name'),
+            'category' => $category,
+            'quantity_in_stock' => $request->input('stock'),
+            'description' => $request->input('description'),
+        ];
+
+        // Add category-specific pricing
+        if ($category === 'Feeds') {
+            $data['price_per_kilo'] = $request->input('price_per_kilo');
+            $data['price_per_sack'] = $request->input('price_per_sack');
+            $data['price_per_half_kilo'] = $request->input('price_per_half_kilo');
+            $data['price_per_quarter_kilo'] = $request->input('price_per_quarter_kilo');
+            $data['selling_price'] = $request->input('price_per_kilo');
+        } elseif ($category === 'Vitamins') {
+            $data['price_per_kilo'] = $request->input('price_per_bottle');
+            $data['price_per_sack'] = $request->input('price_per_tablet');
+            $data['price_per_half_kilo'] = $request->input('price_per_vial');
+            $data['selling_price'] = $request->input('price_per_bottle');
+        } elseif ($category === 'Medicines') {
+            $data['price_per_kilo'] = $request->input('price_per_bottle');
+            $data['price_per_sack'] = $request->input('price_per_tablet');
+            $data['price_per_half_kilo'] = $request->input('price_per_injection');
+            $data['selling_price'] = $request->input('price_per_bottle');
+        } elseif ($category === 'Growth Additives') {
+            $data['price_per_kilo'] = $request->input('price_per_liter');
+            $data['price_per_sack'] = $request->input('price_per_bottle');
+            $data['price_per_half_kilo'] = $request->input('price_per_sachet');
+            $data['selling_price'] = $request->input('price_per_liter');
+        }
+
+        return $data;
     }
 
     private function validateTransaction(Request $request): array

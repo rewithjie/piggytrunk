@@ -14,18 +14,23 @@ class RaiserController extends Controller
         $query = $request->string('q')->toString();
         
         // Fetch 3 Fattening and 2 Sow raisers for consistency with Dashboard
-        $fatteningRaisers = Raiser::where('pig_type', 'Fattening')->orderBy('name')->limit(3)->get();
-        $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
+        $fatteningRaisers = Raiser::whereHas('pigType', function ($q) {
+            $q->where('name', 'Fattening');
+        })->orderBy('name')->limit(3)->get();
+        $sowRaisers = Raiser::whereHas('pigType', function ($q) {
+            $q->where('name', 'Sow');
+        })->orderBy('name')->limit(2)->get();
         $raisers = $fatteningRaisers->concat($sowRaisers);
         
         // Apply search filter if needed
         if ($query !== '') {
             $raisers = $raisers->filter(function ($raiser) use ($query) {
+                $pigTypeName = $raiser->pigType ? $raiser->pigType->name : '';
                 return stripos($raiser->name, $query) !== false ||
                        stripos($raiser->code, $query) !== false ||
                        stripos($raiser->location, $query) !== false ||
                        stripos($raiser->batch, $query) !== false ||
-                       stripos($raiser->pig_type, $query) !== false ||
+                       stripos($pigTypeName, $query) !== false ||
                        stripos($raiser->status, $query) !== false;
             });
         }
@@ -48,7 +53,17 @@ class RaiserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $raiser = Raiser::create($this->validateRaiser($request));
+        $validated = $this->validateRaiser($request);
+        
+        // Add user_id - use authenticated user if available, otherwise use ID 1 (default admin user)
+        $validated['user_id'] = auth()->check() ? auth()->id() : 1;
+        
+        // Generate unique code
+        $nextId = Raiser::withTrashed()->count() + 1;
+        $namePrefix = strtoupper(substr($validated['name'], 0, 3));
+        $validated['code'] = 'RAI-' . $namePrefix . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+        
+        $raiser = Raiser::create($validated);
 
         return redirect()
             ->route('raisers.index')
@@ -94,9 +109,8 @@ class RaiserController extends Controller
                 $db->where(function ($inner) use ($query) {
                     $inner->where('name', 'like', "%{$query}%")
                         ->orWhere('code', 'like', "%{$query}%")
-                        ->orWhere('location', 'like', "%{$query}%")
-                        ->orWhere('batch', 'like', "%{$query}%")
-                        ->orWhere('pig_type', 'like', "%{$query}%")
+                        ->orWhere('address', 'like', "%{$query}%")
+                        ->orWhere('phone', 'like', "%{$query}%")
                         ->orWhere('status', 'like', "%{$query}%");
                 });
             })
@@ -105,20 +119,13 @@ class RaiserController extends Controller
 
     private function validateRaiser(Request $request, ?int $raiserId = null): array
     {
-        $emailRule = $raiserId ? "unique:raisers,email,{$raiserId}" : 'unique:raisers,email';
-        $codeRule = $raiserId ? "unique:raisers,code,{$raiserId}" : 'unique:raisers,code';
-
         return $request->validate([
-            'code' => ['required', 'string', 'max:255', $codeRule],
             'name' => ['required', 'string', 'max:255'],
-            'contact_person' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', $emailRule],
-            'location' => ['required', 'string', 'max:255'],
-            'batch' => ['required', 'string', 'max:255'],
-            'pig_type' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'pig_type_id' => ['required', 'exists:pig_types,id'],
+            'status' => ['required', 'string', 'in:Active,Inactive,Suspended'],
         ]);
     }
 

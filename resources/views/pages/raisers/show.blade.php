@@ -28,16 +28,13 @@
                 <div class="col-12 col-lg-8">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="card h-100"><div class="card-body"><div class="table-meta">Contact Person</div><div class="table-name">{{ $raiser->contact_person }}</div></div></div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="card h-100"><div class="card-body"><div class="table-meta">Phone</div><div class="table-name">{{ $raiser->phone }}</div></div></div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card h-100"><div class="card-body"><div class="table-meta">Email</div><div class="table-name">{{ $raiser->email }}</div></div></div>
+                            <div class="card h-100"><div class="card-body"><div class="table-meta">Email</div><div class="table-name">{{ $raiser->email ?? 'N/A' }}</div></div></div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card h-100"><div class="card-body"><div class="table-meta">Type of Pig</div><div class="table-name">{{ $raiser->pig_type }}</div></div></div>
+                        <div class="col-12">
+                            <div class="card h-100"><div class="card-body"><div class="table-meta">Type of Pig</div><div class="table-name">{{ $raiser->pigType?->name ?? 'N/A' }}</div></div></div>
                         </div>
                         <div class="col-12">
                             <div class="card h-100"><div class="card-body"><div class="table-meta">Address</div><div class="table-name">{{ $raiser->address }}</div></div></div>

@@ -64,7 +64,7 @@
                                 <div class="raiser-info">
                                     <h4 class="raiser-card-title">{{ $raiserData['name'] }}</h4>
                                     @php
-                                        $categoryName = $raisers->find($raiserId)?->pig_type ?? 'Fattening';
+                                        $categoryName = $raisers->find($raiserId)?->pigType?->name ?? 'Fattening';
                                     @endphp
                                     <div class="raiser-pig-type">{{ strtoupper($categoryName) }}</div>
                                 </div>

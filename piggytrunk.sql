@@ -29,7 +29,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `batches` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `code` varchar(255) NOT NULL,
   `raiser_id` bigint(20) UNSIGNED NOT NULL,
   `pig_type_id` bigint(20) UNSIGNED NOT NULL,
   `initial_quantity` int(11) NOT NULL,
@@ -48,10 +47,6 @@ CREATE TABLE `batches` (
 --
 -- Dumping data for table `batches`
 --
-
-INSERT INTO `batches` (`id`, `code`, `raiser_id`, `pig_type_id`, `initial_quantity`, `current_quantity`, `start_date`, `end_date`, `status`, `total_investment`, `expected_profit`, `remarks`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'BATCH-0001', 2, 3, 1, 1, '2026-04-16', NULL, 'Active', 10000.00, 0.00, NULL, NULL, '2026-04-15 15:43:08', '2026-04-15 15:43:08'),
-(2, 'BATCH-0002', 1, 2, 1, 1, '2026-04-16', NULL, 'Active', 5000.00, 0.00, NULL, NULL, '2026-04-15 15:57:50', '2026-04-15 15:57:50');
 
 -- --------------------------------------------------------
 
@@ -200,10 +195,6 @@ CREATE TABLE `investments` (
 --
 -- Dumping data for table `investments`
 --
-
-INSERT INTO `investments` (`id`, `code`, `batch_id`, `total_amount`, `current_value`, `expected_profit`, `actual_profit`, `investment_date`, `expected_return_date`, `actual_return_date`, `status`, `roi_percentage`, `remarks`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'INV-0001', 1, 10000.00, 10000.00, 0.00, 0.00, '2026-04-16', NULL, NULL, 'Active', 0.00, NULL, '2026-04-15 15:43:08', '2026-04-15 15:43:08', NULL),
-(2, 'INV-0002', 2, 5000.00, 5000.00, 0.00, 0.00, '2026-04-16', NULL, NULL, 'Active', 0.00, NULL, '2026-04-15 15:57:50', '2026-04-15 15:57:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -828,7 +819,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `batches`
 --
 ALTER TABLE `batches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `batch_lifecycle_stages`
@@ -864,7 +855,7 @@ ALTER TABLE `inventory_movements`
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `investment_investors`

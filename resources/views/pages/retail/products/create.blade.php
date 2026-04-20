@@ -27,133 +27,403 @@
                             <form method="POST" action="{{ route('retail.products.store') }}" enctype="multipart/form-data" class="product-form">
                 @csrf
 
-                <div class="form-grid">
-                    <!-- Image Upload Section -->
-                    <div class="form-section form-section-full">
-                        <label class="form-label-main">Product Photo</label>
-                        <div class="image-upload-wrapper">
-                            <input type="file" id="imageInput" name="image" class="image-input" accept="image/*">
-                            <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
-                                <div class="upload-icon">
-                                    <i class="bi bi-cloud-arrow-up"></i>
+                <div class="form-container">
+                    <div class="row">
+                        <!-- Image Upload Section (Left Column) -->
+                        <div class="col-12 col-md-4">
+                            <div class="form-section">
+                                <label class="form-label-main">Product Photo</label>
+                                <div class="image-upload-wrapper">
+                                    <input type="file" id="imageInput" name="image" class="image-input" accept="image/*">
+                                    <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                                        <div class="upload-icon">
+                                            <i class="bi bi-cloud-arrow-up"></i>
+                                        </div>
+                                        <div class="upload-text">
+                                            <p class="upload-main-text">Click to upload</p>
+                                            <p class="upload-sub-text">PNG, JPG, WebP</p>
+                                        </div>
+                                    </div>
+                                    <div class="image-preview-wrapper" id="imagePreviewWrapper" style="display: none;">
+                                        <img id="imagePreview" class="image-preview" alt="Preview">
+                                        <button type="button" class="btn-remove-image" onclick="removeImage(event)">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="upload-text">
-                                    <p class="upload-main-text">Click to upload or drag and drop</p>
-                                    <p class="upload-sub-text">PNG, JPG, WebP up to 5MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Fields (Right Column) -->
+                        <div class="col-12 col-md-8">
+                            <!-- Row 1: Product Name & Category -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Name *</label>
+                                        <input 
+                                            type="text" 
+                                            name="name" 
+                                            class="form-control @error('name') is-invalid @enderror" 
+                                            value="{{ old('name') }}" 
+                                            placeholder="e.g., Premium Hog Feed"
+                                            required
+                                        >
+                                        @error('name')
+                                            <span class="error-message">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-                            <div class="image-preview-wrapper" id="imagePreviewWrapper" style="display: none;">
-                                <img id="imagePreview" class="image-preview" alt="Preview">
-                                <button type="button" class="btn-remove-image" onclick="removeImage(event)">
-                                    <i class="bi bi-x-circle-fill"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Product Information Grid -->
-                    <div class="form-section form-section-full">
-                        <label class="form-label-main">Product Information</label>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Product Name *</label>
-                                <input 
-                                    type="text" 
-                                    name="name" 
-                                    class="form-control @error('name') is-invalid @enderror" 
-                                    value="{{ old('name') }}" 
-                                    placeholder="e.g., Premium Hog Feed"
-                                    required
-                                >
-                                @error('name')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Category *</label>
-                                <div class="custom-select-wrapper">
-                                    <select name="category" class="form-select custom-select @error('category') is-invalid @enderror" required>
-                                        <option value="">Select a category</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
-                                        @endforeach
-                                    </select>
-                                    <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
+                            <!-- Row 2: Category & Price & Stock -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Category *</label>
+                                        <div class="custom-select-wrapper">
+                                            <select name="category" class="form-select custom-select @error('category') is-invalid @enderror" required>
+                                                <option value="">Select category</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                                                @endforeach
+                                            </select>
+                                            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </div>
+                                        @error('category')
+                                            <span class="error-message">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
-                                @error('category')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Price (₱) *</label>
-                                <input 
-                                    type="number" 
-                                    step="0.01" 
-                                    min="0" 
-                                    name="price" 
-                                    class="form-control @error('price') is-invalid @enderror" 
-                                    value="{{ old('price') }}"
-                                    placeholder="0.00"
-                                    required
-                                >
-                                @error('price')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Stock *</label>
+                                        <input 
+                                            type="number" 
+                                            min="0" 
+                                            name="stock" 
+                                            class="form-control @error('stock') is-invalid @enderror" 
+                                            placeholder="0"
+                                            required
+                                        >
+                                        @error('stock')
+                                            <span class="error-message">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Stock *</label>
-                                <input 
-                                    type="number" 
-                                    min="0" 
-                                    name="stock" 
-                                    class="form-control @error('stock') is-invalid @enderror" 
-                                    value="{{ old('stock', 0) }}"
-                                    placeholder="0"
-                                    required
-                                >
-                                @error('stock')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
+                            <!-- Row 3: Pricing Tiers Header -->
+                            <div class="row g-3 mb-2">
+                                <div class="col-12">
+                                    <label class="form-label" style="margin-bottom: 0.5rem;">Pricing Tiers</label>
+                                </div>
+                            </div>
+
+                            <!-- FEEDS PRICING (shown by default or when Feeds selected) -->
+                            <div id="feeds-pricing" class="pricing-section" style="display: none;">
+                                <!-- Row 4: Price Per Sack -->
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Sack (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_sack" 
+                                                class="form-control @error('price_per_sack') is-invalid @enderror" 
+                                                value="{{ old('price_per_sack') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_sack')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per 1 Kilo (₱) *</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_kilo" 
+                                                class="form-control feeds-required @error('price_per_kilo') is-invalid @enderror" 
+                                                value="{{ old('price_per_kilo') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_kilo')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Row 5: Price Per 1/2 and 1/4 Kilo -->
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per 1/2 Kilo (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_half_kilo" 
+                                                class="form-control @error('price_per_half_kilo') is-invalid @enderror" 
+                                                value="{{ old('price_per_half_kilo') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_half_kilo')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per 1/4 Kilo (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_quarter_kilo" 
+                                                class="form-control @error('price_per_quarter_kilo') is-invalid @enderror" 
+                                                value="{{ old('price_per_quarter_kilo') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_quarter_kilo')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- VITAMINS PRICING -->
+                            <div id="vitamins-pricing" class="pricing-section" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Bottle (₱) *</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_bottle" 
+                                                class="form-control vitamins-required @error('price_per_bottle') is-invalid @enderror" 
+                                                value="{{ old('price_per_bottle') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_bottle')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Tablet (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_tablet" 
+                                                class="form-control @error('price_per_tablet') is-invalid @enderror" 
+                                                value="{{ old('price_per_tablet') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_tablet')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Vial (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_vial" 
+                                                class="form-control @error('price_per_vial') is-invalid @enderror" 
+                                                value="{{ old('price_per_vial') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_vial')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MEDICINES PRICING -->
+                            <div id="medicines-pricing" class="pricing-section" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Bottle (₱) *</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_bottle" 
+                                                class="form-control medicines-required @error('price_per_bottle') is-invalid @enderror" 
+                                                value="{{ old('price_per_bottle') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_bottle')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Tablet (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_tablet" 
+                                                class="form-control @error('price_per_tablet') is-invalid @enderror" 
+                                                value="{{ old('price_per_tablet') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_tablet')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Injection (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_injection" 
+                                                class="form-control @error('price_per_injection') is-invalid @enderror" 
+                                                value="{{ old('price_per_injection') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_injection')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- GROWTH ADDITIVES PRICING -->
+                            <div id="additives-pricing" class="pricing-section" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Liter (₱) *</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_liter" 
+                                                class="form-control additives-required @error('price_per_liter') is-invalid @enderror" 
+                                                value="{{ old('price_per_liter') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_liter')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Bottle (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_bottle" 
+                                                class="form-control @error('price_per_bottle') is-invalid @enderror" 
+                                                value="{{ old('price_per_bottle') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_bottle')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per Sachet (₱)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01" 
+                                                min="0" 
+                                                name="price_per_sachet" 
+                                                class="form-control @error('price_per_sachet') is-invalid @enderror" 
+                                                value="{{ old('price_per_sachet') }}"
+                                                placeholder="0.00"
+                                            >
+                                            @error('price_per_sachet')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 6: Description -->
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Description</label>
+                                        <textarea 
+                                            name="description" 
+                                            class="form-control form-textarea @error('description') is-invalid @enderror"
+                                            placeholder="Add product details, usage instructions, or benefits..."
+                                            rows="3"
+                                        >{{ old('description') }}</textarea>
+                                        <div class="character-count">
+                                            <span id="charCount">0</span>/1000
+                                        </div>
+                                        @error('description')
+                                            <span class="error-message">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Description Section -->
-                    <div class="form-section form-section-full">
-                        <label class="form-label-main">Description</label>
-                        <textarea 
-                            name="description" 
-                            class="form-control form-textarea @error('description') is-invalid @enderror"
-                            placeholder="Add product details, usage instructions, or benefits..."
-                            rows="4"
-                        >{{ old('description') }}</textarea>
-                        <div class="character-count">
-                            <span id="charCount">0</span>/1000
-                        </div>
-                        @error('description')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="form-section form-section-full">
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-lg me-2"></i>Add Product
-                            </button>
-                            <a href="{{ route('retail.index') }}" class="btn btn-secondary">
-                                <i class="bi bi-x-lg me-2"></i>Cancel
-                            </a>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-2"></i>Add Product
+                                </button>
+                                <a href="{{ route('retail.index') }}" class="btn btn-secondary">
+                                    <i class="bi bi-x-lg me-2"></i>Cancel
+                                </a>
+                            </div>
                         </div>
                     </div>
+                </div>
                             </form>
                         </div>
                     </div>
@@ -478,6 +748,12 @@
             margin-bottom: 1.5rem;
         }
 
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
         .form-group {
             display: flex;
             flex-direction: column;
@@ -486,7 +762,6 @@
         .form-section {
             display: flex;
             flex-direction: column;
-            margin-bottom: 1.5rem;
         }
 
         .form-section-full {
@@ -499,6 +774,19 @@
             color: var(--pt-text);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .row > [class*="col-"] {
+                margin-bottom: 1rem;
+            }
+        }
             margin-bottom: 1rem;
             display: block;
         }
@@ -569,21 +857,25 @@
         /* Custom Select Wrapper */
         .custom-select-wrapper {
             position: relative;
+            display: flex;
+            align-items: center;
         }
 
         .custom-select {
             appearance: none;
+            padding-right: 2.5rem !important;
         }
 
         .select-arrow {
             position: absolute;
-            right: 1rem;
+            right: 0.75rem;
             top: 50%;
             transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            color: var(--pt-text);
+            width: 20px;
+            height: 20px;
+            color: var(--pt-muted);
             pointer-events: none;
+            flex-shrink: 0;
         }
 
         input[type="number"]::-webkit-outer-spin-button,
@@ -791,6 +1083,49 @@
             imagePreviewWrapper.style.display = 'none';
             imageUploadArea.style.display = 'block';
         }
+
+        // Handle category-specific pricing fields
+        const categorySelect = document.querySelector('select[name="category"]');
+        const pricingSections = {
+            'Feeds': 'feeds-pricing',
+            'Vitamins': 'vitamins-pricing',
+            'Medicines': 'medicines-pricing',
+            'Growth Additives': 'additives-pricing'
+        };
+
+        function updatePricingFields() {
+            const selectedCategory = categorySelect.value;
+            
+            // Hide all pricing sections
+            document.querySelectorAll('.pricing-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Remove required attribute from all pricing inputs
+            document.querySelectorAll('.feeds-required, .vitamins-required, .medicines-required, .additives-required').forEach(input => {
+                input.removeAttribute('required');
+            });
+
+            // Show selected category pricing and set required
+            if (selectedCategory && pricingSections[selectedCategory]) {
+                const sectionId = pricingSections[selectedCategory];
+                document.getElementById(sectionId).style.display = 'block';
+                
+                // Add required to main price field for this category
+                const requiredInputs = document.querySelectorAll(`#${sectionId} .${selectedCategory.toLowerCase().replace(/\s+/g, '-')}-required`);
+                requiredInputs.forEach(input => {
+                    input.setAttribute('required', 'required');
+                });
+            }
+        }
+
+        // Listen for category changes
+        categorySelect.addEventListener('change', updatePricingFields);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePricingFields();
+        });
     </script>
 @endsection
 

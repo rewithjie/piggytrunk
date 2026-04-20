@@ -12,37 +12,38 @@
                 @csrf
                 @method('PUT')
 
-            <div class="col-12">
+                <div class="col-12">
                     <label class="form-label">Raiser Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name', $raiser->name) }}">
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $raiser->name) }}" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Phone</label>
-                    <input type="text" name="phone" class="form-control" value="{{ old('phone', $raiser->phone) }}">
+                    <input type="text" name="phone" class="form-control" value="{{ old('phone', $raiser->phone) }}" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email', $raiser->email) }}">
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $raiser->email) }}" required>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Location</label>
-                    <input type="text" name="location" class="form-control" value="{{ old('location', $raiser->location) }}">
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label class="form-label">Type of Pig</label>
-                    <input type="text" name="pig_type" class="form-control" value="{{ old('pig_type', $raiser->pig_type) }}">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Status</label>
-                    <select name="status" class="form-select">
-                        @foreach (['Active', 'Inactive'] as $status)
-                            <option value="{{ $status }}" @selected(old('status', $raiser->status) === $status)>{{ $status }}</option>
+                    <select name="pig_type_id" class="form-control" required>
+                        <option value="">Select Pig Type</option>
+                        @foreach (\App\Models\PigType::all() as $pigType)
+                            <option value="{{ $pigType->id }}" {{ $raiser->pig_type_id == $pigType->id ? 'selected' : '' }}>{{ $pigType->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-12">
                     <label class="form-label">Address</label>
-                    <input type="text" name="address" class="form-control" value="{{ old('address', $raiser->address) }}">
+                    <input type="text" name="address" class="form-control" value="{{ old('address', $raiser->address) }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="Active" @selected(old('status', $raiser->status) === 'Active')>Active</option>
+                        <option value="Inactive" @selected(old('status', $raiser->status) === 'Inactive')>Inactive</option>
+                        <option value="Suspended" @selected(old('status', $raiser->status) === 'Suspended')>Suspended</option>
+                    </select>
                 </div>
 
                 <div class="col-12 d-flex gap-2">

@@ -1,10 +1,7 @@
 @php
     $navItems = [
-        ['label' => 'Dashboard', 'icon' => 'bi-grid', 'route' => 'dashboard'],
-        ['label' => 'Hog Raiser', 'icon' => 'bi-person', 'route' => 'raisers.index'],
-        ['label' => 'Investment', 'icon' => 'bi-journal-text', 'route' => 'investments.index'],
-        ['label' => 'Inventory', 'icon' => 'bi-bag', 'route' => 'inventory.index'],
-        ['label' => 'POS', 'icon' => 'bi-clipboard-check', 'route' => 'retail.index'],
+        ['label' => 'Retail', 'icon' => 'bi-clipboard-check', 'route' => 'cashier.retail'],
+        ['label' => 'Inventory', 'icon' => 'bi-bag', 'route' => 'cashier.inventory'],
     ];
 @endphp
 
@@ -33,12 +30,7 @@
                 <span class="sidebar-label">Theme</span>
             </button>
 
-            <a href="{{ route('settings.index') }}" class="sidebar-link text-decoration-none {{ request()->routeIs('settings.index') ? 'active' : '' }}" title="Settings">
-                <i class="bi bi-gear"></i>
-                <span class="sidebar-label">Settings</span>
-            </a>
-
-            <form method="POST" action="{{ route('admin.logout') }}">
+            <form method="POST" action="{{ route('cashier.logout') }}">
                 @csrf
                 <button class="sidebar-link sidebar-logout-button" type="submit" title="Sign out">
                     <i class="bi bi-box-arrow-right"></i>

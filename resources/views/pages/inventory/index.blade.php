@@ -410,7 +410,7 @@
                                         <strong>{{ $item['price'] ?? '₱0.00' }}</strong>
                                     </td>
                                     <td>
-                                        {{ $item['raiser'] ?? 'Unknown' }}
+                                        {{ $item['supplier'] ?? 'Unknown' }}
                                     </td>
                                     <td>
                                         @php
@@ -423,7 +423,13 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="#" class="stock-entry-btn" data-product-id="{{ $item['id'] ?? $index }}" data-product-name="{{ $item['name'] ?? 'Unknown' }}" onclick="openStockModal(event)">Stock Entry</a>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <input type="number" class="form-control" style="width: 60px; height: 36px; padding: 0.25rem 0.5rem; font-size: 0.85rem;" data-item-id="{{ $item['id'] ?? $index }}" data-item-name="{{ $item['name'] ?? 'Unknown' }}" data-item-price="{{ $item['price'] ?? '0' }}" placeholder="0" min="1">
+                                            <button class="btn btn-sm btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" onclick="addInventoryToQuickSale(this)" title="Add to Quick Sale">
+                                                <i class="bi bi-cart-plus"></i>
+                                            </button>
+                                            <a href="#" class="stock-entry-btn" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" data-product-id="{{ $item['id'] ?? $index }}" data-product-name="{{ $item['name'] ?? 'Unknown' }}" onclick="openStockModal(event)">Stock</a>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -737,11 +743,6 @@
                     <input type="number" id="quantity" name="quantity" min="1" class="stock-form-input" required>
                 </div>
 
-                <div class="stock-form-group">
-                    <label class="stock-form-label">Notes (Optional)</label>
-                    <textarea id="notes" name="notes" class="stock-form-textarea"></textarea>
-                </div>
-
                 <div class="stock-form-buttons">
                     <button type="submit" class="stock-btn stock-btn-submit">Submit</button>
                     <button type="button" class="stock-btn stock-btn-cancel" onclick="closeStockModal()">Cancel</button>
@@ -774,6 +775,48 @@
             document.getElementById('stockEntryModal').style.display = 'none';
         }
 
+        async function addInventoryToQuickSale(button) {
+            const row = button.closest('tr');
+            const input = row.querySelector('input[type="number"]');
+            const quantity = parseInt(input.value) || 0;
+            const itemId = input.getAttribute('data-item-id');
+            const itemName = input.getAttribute('data-item-name');
+            const itemPrice = input.getAttribute('data-item-price');
+
+            if (quantity < 1) {
+                alert('Please enter a quantity');
+                input.focus();
+                return;
+            }
+
+            try {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                const response = await fetch('/api/quick-sale/add-item', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                    },
+                    body: JSON.stringify({
+                        product_id: itemId,
+                        quantity: quantity,
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    input.value = '';
+                    alert(itemName + ' added to quick sale');
+                } else {
+                    alert(data.error || 'Error adding to quick sale');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding to quick sale: ' + error.message);
+            }
+        }
+
         function toggleRaiserField() {
             const movementType = document.getElementById('movementType').value;
             const raiserField = document.getElementById('raiserField');
@@ -792,7 +835,6 @@
             const movementType = document.getElementById('movementType').value;
             const quantity = document.getElementById('quantity').value;
             const raiserId = document.getElementById('raiserId').value;
-            const notes = document.getElementById('notes').value;
 
             if (!movementType || !quantity) {
                 alert('Please fill in all required fields');
@@ -811,7 +853,6 @@
                         movement_type: movementType,
                         quantity: parseInt(quantity),
                         raiser_id: raiserId || null,
-                        notes: notes || null,
                     }),
                 });
 

@@ -16,16 +16,15 @@ class Raiser extends Model
         'name',
         'code',
         'phone',
+        'email',
         'address',
         'pig_type_id',
         'capacity',
         'status',
-        'remarks',
-        'total_investment',
         'location',
-        'batch',
         'contact_person',
-        'email',
+        'total_capacity',
+        'total_investment',
     ];
 
     protected $casts = [

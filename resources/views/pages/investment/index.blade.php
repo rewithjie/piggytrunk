@@ -29,38 +29,47 @@
                                             <th>TOTAL HOG</th>
                                             <th>INVESTMENT DATE</th>
                                             <th class="text-center">STAGE</th>
+                                            <th class="text-center">ACTIONS</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($batchAllocations as $batch)
+                                        @forelse ($investments as $index => $investment)
                                             @php
-                                                $capitalDisplay = preg_replace('/\s+/', ' ', trim((string) $batch['capital']));
+                                                $batch = $investment->batch;
+                                                $raiser = $batch?->raiser;
+                                                $pigType = $batch?->pigType;
+                                                $capitalDisplay = '₱ ' . number_format($investment->total_amount, 0);
                                             @endphp
                                             <tr>
                                                 <td>
-                                                    <div class="investment-raiser-name">{{ $batch['raiser'] }}</div>
+                                                    <div class="investment-raiser-name">{{ $raiser?->name ?? 'Unknown' }}</div>
                                                 </td>
                                                 <td>
                                                     <span class="investment-capital">{{ $capitalDisplay }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="investment-type">{{ $batch['hog_type'] ?? 'Piglet' }}</span>
+                                                    <span class="investment-type">{{ $pigType?->name ?? 'Unknown' }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="investment-count">{{ $batch['hog_count'] }}</span>
+                                                    <span class="investment-count">{{ $batch?->current_quantity ?? 0 }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="investment-date">05/13/2026</span>
+                                                    <span class="investment-date">{{ $investment->investment_date ? $investment->investment_date->format('m/d/Y') : 'N/A' }}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <span class="badge badge-stage stage-{{ strtolower($batch['stage']) }}">
-                                                        {{ strtoupper($batch['stage']) }}
+                                                    <span class="badge badge-stage stage-{{ strtolower($investment->status) }}">
+                                                        {{ strtoupper($investment->status) }}
                                                     </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="{{ route('investments.show', ['raiser' => $raiser?->id ?? '#']) }}" class="btn-action-icon" title="View Investment">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center py-5 text-muted">No investments found.</td>
+                                                <td colspan="7" class="text-center py-5 text-muted">No investments found. <br><a href="{{ route('investments.create') }}" class="btn btn-sm btn-primary mt-3">Create First Investment</a></td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -349,6 +358,32 @@
             font-weight: 700;
             color: var(--pt-text);
             margin-bottom: 1.5rem;
+        }
+
+        .btn-action-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--pt-text);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-action-icon:hover {
+            background: rgba(91, 141, 239, 0.15);
+            border-color: #5b8def;
+            color: #5b8def;
+        }
+
+        .btn-action-icon i {
+            line-height: 1;
         }
     </style>
 

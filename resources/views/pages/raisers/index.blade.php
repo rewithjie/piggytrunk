@@ -40,7 +40,7 @@
                                     <th>HOG RAISER</th>
                                     <th>ADDRESS</th>
                                     <th>PHONE NUMBER</th>
-                                    <th>EMAIL</th>
+                                    <th>PIG TYPE</th>
                                     <th>STATUS</th>
                                     <th class="text-end">ACTIONS</th>
                                 </tr>
@@ -52,17 +52,17 @@
                                             <div class="table-name">{{ $raiser->name }}</div>
                                         </td>
                                         <td>
-                                            <div class="table-copy">{{ $raiser->location }}</div>
+                                            <div class="table-copy">{{ $raiser->address }}</div>
                                         </td>
                                         <td>
                                             <div class="table-copy">{{ $raiser->phone ?? 'N/A' }}</div>
                                         </td>
                                         <td>
-                                            <div class="table-copy">{{ $raiser->email ?? 'N/A' }}</div>
+                                            <div class="table-copy">{{ $raiser->pigType?->name ?? 'N/A' }}</div>
                                         </td>
                                         <td>
                                             <span class="badge rounded-pill status-badge {{ strtolower($raiser->status) === 'active' ? 'status-badge-active' : 'status-badge-inactive' }}">
-                                                {{ strtoupper($raiser->status) }}
+                                                {{ ucfirst($raiser->status) }}
                                             </span>
                                         </td>
                                         <td>

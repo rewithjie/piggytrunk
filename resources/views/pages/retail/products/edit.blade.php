@@ -34,9 +34,9 @@
                         <div class="image-upload-wrapper">
                             <input type="file" id="imageInput" name="image" class="image-input" accept="image/*">
                             
-                            @if ($product->image)
+                            @if ($product->image_path)
                                 <div class="image-preview-wrapper" id="imagePreviewWrapper">
-                                    <img id="imagePreview" class="image-preview" src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                                    <img id="imagePreview" class="image-preview" src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}">
                                     <button type="button" class="btn-remove-image" onclick="removeImage(event)">
                                         <i class="bi bi-x-circle-fill"></i>
                                     </button>
@@ -111,23 +111,6 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label">Price (₱) *</label>
-                                <input 
-                                    type="number" 
-                                    step="0.01" 
-                                    min="0" 
-                                    name="price" 
-                                    class="form-control @error('price') is-invalid @enderror" 
-                                    value="{{ old('price', $product->price) }}"
-                                    placeholder="0.00"
-                                    required
-                                >
-                                @error('price')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
                                 <label class="form-label">Stock *</label>
                                 <input 
                                     type="number" 
@@ -139,6 +122,75 @@
                                     required
                                 >
                                 @error('stock')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Price Per Sack (₱)</label>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    min="0" 
+                                    name="price_per_sack" 
+                                    class="form-control @error('price_per_sack') is-invalid @enderror" 
+                                    value="{{ old('price_per_sack', $product->price_per_sack) }}"
+                                    placeholder="0.00"
+                                >
+                                @error('price_per_sack')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Price Per 1 Kilo (₱) *</label>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    min="0" 
+                                    name="price_per_kilo" 
+                                    class="form-control @error('price_per_kilo') is-invalid @enderror" 
+                                    value="{{ old('price_per_kilo', $product->price_per_kilo) }}"
+                                    placeholder="0.00"
+                                    required
+                                >
+                                @error('price_per_kilo')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Price Per 1/2 Kilo (₱)</label>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    min="0" 
+                                    name="price_per_half_kilo" 
+                                    class="form-control @error('price_per_half_kilo') is-invalid @enderror" 
+                                    value="{{ old('price_per_half_kilo', $product->price_per_half_kilo) }}"
+                                    placeholder="0.00"
+                                >
+                                @error('price_per_half_kilo')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Price Per 1/4 Kilo (₱)</label>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    min="0" 
+                                    name="price_per_quarter_kilo" 
+                                    class="form-control @error('price_per_quarter_kilo') is-invalid @enderror" 
+                                    value="{{ old('price_per_quarter_kilo', $product->price_per_quarter_kilo) }}"
+                                    placeholder="0.00"
+                                >
+                                @error('price_per_quarter_kilo')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
                             </div>

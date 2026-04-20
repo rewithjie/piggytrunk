@@ -33,20 +33,29 @@ class InventoryController extends Controller
             'cost' => ['required', 'numeric', 'min:0'],
             'supplier' => ['required', 'string', 'max:120'],
             'stock' => ['required', 'integer', 'min:0'],
-            'status' => ['required', 'in:instock,low_stock,critical'],
         ]);
 
         $items = $this->items();
         $nextId = empty($items) ? 1 : (max(array_column($items, 'id')) + 1);
 
+        // Determine stock status
+        $stockStatus = 'in-stock';
+        if ($validated['stock'] <= 50) {
+            $stockStatus = 'restock';
+        } elseif ($validated['stock'] <= 100) {
+            $stockStatus = 'low-stock';
+        }
+
         $items[] = [
             'id' => $nextId,
             'name' => trim($validated['name']),
             'category' => strtoupper(trim($validated['category'])),
+            'price' => '₱' . number_format((float) $validated['cost'], 2),
             'cost' => (float) $validated['cost'],
             'supplier' => trim($validated['supplier']),
             'stock' => (int) $validated['stock'],
-            'status' => $validated['status'],
+            'unit' => 'units',
+            'status' => $stockStatus,
         ];
 
         $request->session()->put('inventory_items', $items);

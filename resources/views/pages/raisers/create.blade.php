@@ -13,17 +13,6 @@
                         <div class="card-body p-5">
                             <h1 class="page-title mb-5">Create New Raiser</h1>
 
-                            @if ($errors->any())
-                                <div class="alert alert-danger mb-4">
-                                    <strong>Please fix the following errors:</strong>
-                                    <ul class="mb-0 mt-2">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
                             <form method="POST" action="{{ route('raisers.store') }}" class="raiser-form">
                                 @csrf
 
@@ -45,7 +34,7 @@
                                         <label for="phone" class="form-label">
                                             <i class="bi bi-telephone-fill me-2"></i>PHONE
                                         </label>
-                                        <input type="text" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="+63 XXX XXX XXXX">
+                                        <input type="text" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="+63 XXX XXX XXXX" required>
                                         @error('phone')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
@@ -56,7 +45,7 @@
                                         <label for="email" class="form-label">
                                             <i class="bi bi-envelope-fill me-2"></i>EMAIL
                                         </label>
-                                        <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="official@raiser-domain.com">
+                                        <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="official@raiser-domain.com" required>
                                         @error('email')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
@@ -68,7 +57,7 @@
                                     <label for="address" class="form-label">
                                         <i class="bi bi-geo-alt-fill me-2"></i>ADDRESS
                                     </label>
-                                    <input type="text" id="address" name="address" class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}" placeholder="e.g., Malasiqui, San Carlos">
+                                    <input type="text" id="address" name="address" class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}" placeholder="e.g., Malasiqui, San Carlos" required>
                                     @error('address')
                                         <div class="text-danger small mt-2">{{ $message }}</div>
                                     @enderror
@@ -78,15 +67,16 @@
                                 <div class="row">
                                     <!-- PIG TYPE -->
                                     <div class="col-12 col-md-6 mb-4">
-                                        <label for="pig_type" class="form-label">
+                                        <label for="pig_type_id" class="form-label">
                                             <i class="bi bi-dice-4-fill me-2"></i>SELECT PIG
                                         </label>
-                                        <select id="pig_type" name="pig_type" class="form-select @error('pig_type') is-invalid @enderror" required>
+                                        <select id="pig_type_id" name="pig_type_id" class="form-select @error('pig_type_id') is-invalid @enderror" required>
                                             <option value="">Select breed type</option>
-                                            <option value="Sow" @selected(old('pig_type') === 'Sow')>Sow</option>
-                                            <option value="Fattening" @selected(old('pig_type') === 'Fattening')>Fattening</option>
+                                            @foreach(\App\Models\PigType::all() as $pigType)
+                                                <option value="{{ $pigType->id }}" @selected(old('pig_type_id') == $pigType->id)>{{ $pigType->name }}</option>
+                                            @endforeach
                                         </select>
-                                        @error('pig_type')
+                                        @error('pig_type_id')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -99,6 +89,7 @@
                                         <select id="status" name="status" class="form-select @error('status') is-invalid @enderror" required>
                                             <option value="Active" @selected(old('status', 'Active') === 'Active')>Active</option>
                                             <option value="Inactive" @selected(old('status') === 'Inactive')>Inactive</option>
+                                            <option value="Suspended" @selected(old('status') === 'Suspended')>Suspended</option>
                                         </select>
                                         @error('status')
                                             <div class="text-danger small mt-2">{{ $message }}</div>

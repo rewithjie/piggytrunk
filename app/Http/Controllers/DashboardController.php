@@ -13,32 +13,60 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         // Fetch 3 Fattening and 2 Sow raisers for dashboard lifecycle
-        $fatteningRaisers = Raiser::where('pig_type', 'Fattening')->orderBy('name')->limit(3)->get();
-        $sowRaisers = Raiser::where('pig_type', 'Sow')->orderBy('name')->limit(2)->get();
+        $fatteningRaisers = Raiser::whereHas('pigType', function ($query) {
+            $query->where('name', 'Fattening');
+        })->orderBy('name')->limit(3)->get();
+        
+        $sowRaisers = Raiser::whereHas('pigType', function ($query) {
+            $query->where('name', 'Sow');
+        })->orderBy('name')->limit(2)->get();
+        
         $raisers = $fatteningRaisers->concat($sowRaisers);
 
-        // Investment Summary Data - Fetch from database (or default to 0 if no data)
+        // Investment Summary Data - Fetch from database
+        $allInvestments = Investment::with('batch.pigType')->get();
+        $totalActive = $allInvestments->where('status', 'Active')->count();
         $batchCount = Batch::count();
         
-        // Since database was cleaned, all values are 0
+        // Calculate allocation by pig type
+        $allocationFattening = 0;
+        $allocationSow = 0;
+        $totalCapital = 0;
+        $expectedProfit = 0;
+        
+        foreach ($allInvestments as $investment) {
+            $pigType = $investment->batch?->pigType?->name;
+            $amount = (float) $investment->total_amount;
+            
+            $totalCapital += $amount;
+            $expectedProfit += (float) ($investment->expected_profit ?? 0);
+            
+            if ($pigType === 'Fattening') {
+                $allocationFattening += $amount;
+            } elseif ($pigType === 'Sow') {
+                $allocationSow += $amount;
+            }
+        }
+        
         $investmentSummary = [
-            'totalActive' => 0,
+            'totalActive' => $totalActive,
             'batchCount' => $batchCount,
             'allocation' => [
-                'fattening' => 0,
-                'sow' => 0,
+                'fattening' => $allocationFattening,
+                'sow' => $allocationSow,
             ],
-            'totalCapital' => 0,
-            'expectedProfit' => 0,
+            'totalCapital' => $totalCapital,
+            'expectedProfit' => $expectedProfit,
         ];
 
         // Raiser Lifecycle Data
         $raiserLifecycles = [];
         foreach ($raisers as $raiser) {
+            $pigTypeName = $raiser->pigType ? $raiser->pigType->name : 'Fattening';
             $raiserLifecycles[$raiser->id] = [
                 'name' => $raiser->name,
                 'status' => $raiser->status,
-                'categories' => $this->getLifecycleCategories($raiser->pig_type),
+                'categories' => $this->getLifecycleCategories($pigTypeName),
             ];
         }
 
