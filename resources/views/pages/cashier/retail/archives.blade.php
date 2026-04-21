@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.cashier')
 
 @php
     $hideTopbarTitle = true;
@@ -12,7 +12,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h1 class="page-title mb-0">Archived Products</h1>
-            <a href="{{ route('inventory.index') }}" class="btn btn-dark">
+            <a href="{{ route('cashier.inventory') }}" class="btn btn-dark">
                 <i class="bi bi-arrow-left"></i> Back to Inventory
             </a>
         </div>
@@ -54,7 +54,7 @@
                                     <span class="detail-value">{{ $product['archivedAt'] }}</span>
                                 </div>
 
-                                <form method="POST" action="{{ route('retail.products.restore', $product['id']) }}">
+                                <form method="POST" action="{{ route('cashier.retail.products.restore', $product['id']) }}">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-success w-100" onclick="return confirm('Restore this product?')">
@@ -70,8 +70,8 @@
             <div class="empty-page">
                 <div class="empty-icon"><i class="bi bi-archive"></i></div>
                 <h3>No Archived Products</h3>
-                <p class="text-muted mb-3">All your products are currently active.</p>
-                <a href="{{ route('inventory.index') }}" class="btn btn-dark">Back to Inventory</a>
+                <p class="text-muted mb-3">All products are currently active.</p>
+                <a href="{{ route('cashier.inventory') }}" class="btn btn-dark">Back to Inventory</a>
             </div>
         @endif
     </section>
@@ -190,6 +190,18 @@
         .detail-value {
             color: var(--pt-text);
             font-weight: 700;
+        }
+
+        :root[data-theme="dark"] .product-card,
+        :root[data-theme="dark"] .product-card-body,
+        :root[data-theme="dark"] .product-name,
+        :root[data-theme="dark"] .detail-value {
+            color: #eaf1ff;
+        }
+
+        :root[data-theme="dark"] .product-description,
+        :root[data-theme="dark"] .detail-label {
+            color: #b8c8e0;
         }
 
         .empty-page {

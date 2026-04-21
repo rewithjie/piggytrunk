@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Raiser;
+use App\Services\InventoryCatalogService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class InventoryController extends Controller
 {
+    public function __construct(private readonly InventoryCatalogService $inventoryCatalog)
+    {
+    }
+
     public function index(): View
     {
         return view('pages.inventory.index', [
             'pageTitle' => 'Inventory',
             'items' => $this->items(),
+            'catalog' => $this->inventoryCatalog->getCatalog(),
+            'raisers' => Raiser::query()->orderBy('name')->get(),
             'user' => $this->user(),
         ]);
     }

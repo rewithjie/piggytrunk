@@ -1,7 +1,7 @@
 @php
     $navItems = [
-        ['label' => 'Retail', 'icon' => 'bi-clipboard-check', 'route' => 'cashier.retail'],
         ['label' => 'Inventory', 'icon' => 'bi-bag', 'route' => 'cashier.inventory'],
+        ['label' => 'POS', 'icon' => 'bi-clipboard-check', 'route' => 'cashier.retail'],
     ];
 @endphp
 

@@ -159,32 +159,9 @@ class InvestmentController extends Controller
             'current_value' => '₱ 780,000',
         ];
 
-        // Get investor list for this investment
-        $investmentInvestors = [
-            [
-                'name' => 'Alicia Ramos',
-                'tier' => 'Gold Partner',
-                'amount_invested' => '₱ 300,000',
-                'status' => 'Active',
-            ],
-            [
-                'name' => 'Benjamin Cruz',
-                'tier' => 'Silver Partner',
-                'amount_invested' => '₱ 150,000',
-                'status' => 'Active',
-            ],
-            [
-                'name' => 'Catherine Lim',
-                'tier' => 'Growth Partner',
-                'amount_invested' => '₱ 220,000',
-                'status' => 'Pending Release',
-            ],
-        ];
-
         return view('pages.investment.show', [
             'hideTopbarTitle' => true,
             'investment' => $investmentDetails,
-            'investors' => $investmentInvestors,
             'lifecycleStages' => $lifecycleStages,
             'pageTitle' => 'Investment Details',
             'user' => $this->user(),
@@ -282,3 +259,5 @@ class InvestmentController extends Controller
         return $lifecycles[$pigType] ?? $lifecycles['Fattening'];
     }
 }
+
+

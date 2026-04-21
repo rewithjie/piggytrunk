@@ -88,19 +88,24 @@ Route::middleware('cashier.auth')->group(function () {
 
     Route::get('/cashier/retail', [CashierController::class, 'retailIndex'])->name('cashier.retail');
     Route::get('/cashier/inventory', [CashierController::class, 'inventoryIndex'])->name('cashier.inventory');
+    Route::get('/cashier/retail/archives', [CashierController::class, 'archiveIndex'])->name('cashier.retail.archives');
+    Route::put('/cashier/retail/products/{product}/restore', [CashierController::class, 'restoreProduct'])->name('cashier.retail.products.restore');
+    Route::get('/cashier/retail/products/create', [CashierController::class, 'createProduct'])->name('cashier.retail.products.create');
+    Route::post('/cashier/retail/products', [CashierController::class, 'storeProduct'])->name('cashier.retail.products.store');
+    Route::delete('/cashier/retail/products/{product}', [CashierController::class, 'destroyProduct'])->name('cashier.retail.products.destroy');
     
     // Cashier API Routes for Real-time Product Updates
     Route::get('/api/cashier/retail-products', [CashierController::class, 'getRetailProducts'])->name('cashier.api.retail-products');
     Route::get('/api/cashier/inventory-items', [CashierController::class, 'getInventoryItems'])->name('cashier.api.inventory-items');
     
     // Quick Sale API Routes for Cashiers
-    Route::get('/api/quick-sale/session', [QuickSaleController::class, 'getSession'])->name('quick-sale.session');
-    Route::post('/api/quick-sale/add-item', [QuickSaleController::class, 'addItem'])->name('quick-sale.add-item');
-    Route::put('/api/quick-sale/item/{item}', [QuickSaleController::class, 'updateItem'])->name('quick-sale.update-item');
-    Route::delete('/api/quick-sale/item/{item}', [QuickSaleController::class, 'removeItem'])->name('quick-sale.remove-item');
-    Route::put('/api/quick-sale/item/{item}/discount', [QuickSaleController::class, 'updateDiscount'])->name('quick-sale.update-discount');
-    Route::put('/api/quick-sale/session', [QuickSaleController::class, 'updateSession'])->name('quick-sale.update-session');
-    Route::post('/api/quick-sale/confirm', [QuickSaleController::class, 'confirm'])->name('quick-sale.confirm');
-    Route::post('/api/quick-sale/cancel', [QuickSaleController::class, 'cancel'])->name('quick-sale.cancel');
-    Route::post('/api/quick-sale/clear', [QuickSaleController::class, 'clear'])->name('quick-sale.clear');
+    Route::get('/api/cashier/quick-sale/session', [QuickSaleController::class, 'getSession'])->name('cashier.quick-sale.session');
+    Route::post('/api/cashier/quick-sale/add-item', [QuickSaleController::class, 'addItem'])->name('cashier.quick-sale.add-item');
+    Route::put('/api/cashier/quick-sale/item/{item}', [QuickSaleController::class, 'updateItem'])->name('cashier.quick-sale.update-item');
+    Route::delete('/api/cashier/quick-sale/item/{item}', [QuickSaleController::class, 'removeItem'])->name('cashier.quick-sale.remove-item');
+    Route::put('/api/cashier/quick-sale/item/{item}/discount', [QuickSaleController::class, 'updateDiscount'])->name('cashier.quick-sale.update-discount');
+    Route::put('/api/cashier/quick-sale/session', [QuickSaleController::class, 'updateSession'])->name('cashier.quick-sale.update-session');
+    Route::post('/api/cashier/quick-sale/confirm', [QuickSaleController::class, 'confirm'])->name('cashier.quick-sale.confirm');
+    Route::post('/api/cashier/quick-sale/cancel', [QuickSaleController::class, 'cancel'])->name('cashier.quick-sale.cancel');
+    Route::post('/api/cashier/quick-sale/clear', [QuickSaleController::class, 'clear'])->name('cashier.quick-sale.clear');
 });

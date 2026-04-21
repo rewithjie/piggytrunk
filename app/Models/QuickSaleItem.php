@@ -27,7 +27,7 @@ class QuickSaleItem extends Model
 
     public function session(): BelongsTo
     {
-        return $this->belongsTo(QuickSaleSession::class);
+        return $this->belongsTo(QuickSaleSession::class, 'quick_sale_session_id');
     }
 
     public function product(): BelongsTo

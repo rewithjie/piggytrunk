@@ -357,93 +357,324 @@
         :root[data-theme="dark"] .empty-state {
             color: #94a3b8;
         }
+
+        .transfer-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .transfer-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .retail-category-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            margin: 0;
+        }
+
+        .product-card {
+            background: var(--pt-surface);
+            border: 1px solid var(--pt-border);
+            border-radius: 0.75rem;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-image-wrapper {
+            width: 100%;
+            height: 150px;
+            background: var(--pt-surface-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pt-muted);
+            border-bottom: none;
+        }
+
+        @media (max-width: 575.98px) {
+            .product-image-wrapper {
+                height: 130px;
+            }
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-image-wrapper i {
+            font-size: 3rem;
+        }
+
+        .product-card-body {
+            padding: 0.8rem;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .product-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            margin-bottom: 0;
+        }
+
+        .product-inline {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .product-name {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            line-height: 1.25;
+        }
+
+        .stock-badge-transfer {
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.24rem 0.58rem;
+            background: var(--pt-surface-soft);
+            color: var(--pt-text);
+        }
+
+        .product-description {
+            margin: 0 0 0.6rem 0;
+            color: var(--pt-muted);
+            font-size: 0.84rem;
+            line-height: 1.35;
+        }
+
+        .price-selector-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .price-selector {
+            width: 100%;
+            border: 1px solid var(--pt-border);
+            border-radius: 0.45rem;
+            background: var(--pt-surface-soft);
+            color: var(--pt-text);
+            min-height: 38px;
+            padding: 0.35rem 0.55rem;
+            margin-bottom: 0.55rem;
+            font-size: 0.82rem;
+        }
+
+        .price-display-container {
+            border: 1px solid var(--pt-border);
+            background: var(--pt-surface-soft);
+            border-radius: 0.65rem;
+            padding: 0.55rem 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .price-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            letter-spacing: 0.06em;
+        }
+
+        .price-value {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--pt-text);
+            line-height: 1;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pt-border);
+            padding-bottom: 0.6rem;
+            margin-bottom: 0.6rem;
+            color: var(--pt-muted);
+            font-size: 0.82rem;
+        }
+
+        .detail-value {
+            color: var(--pt-text);
+            font-weight: 700;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+
+        .product-actions > a,
+        .product-actions > form {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        .product-actions form {
+            display: flex;
+        }
+
+        .btn-product-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            min-height: 38px;
+            padding: 0.42rem 0.55rem;
+            border: 1px solid var(--pt-border);
+            border-radius: 0.45rem;
+            text-decoration: none;
+            color: var(--pt-text);
+            background: var(--pt-surface-soft);
+            font-weight: 600;
+            font-size: 0.82rem;
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+        }
     </style>
 
     <h1 class="page-title mb-5">Inventory</h1>
     <section class="inventory-page">
-        <!-- Controls -->
-        <div class="inventory-controls">
-                <div class="inventory-search-box">                    <svg class="inventory-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>                    <input type="text" id="inventorySearch" placeholder="Search" class="form-control">
-                    <button type="button" class="inventory-search-btn">Search</button>
-                </div>
-                <a href="{{ route('inventory.create') }}" class="add-item-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    <span>Add New Item</span>
+        <div class="transfer-header">
+            <div class="transfer-actions">
+                <a href="{{ route('retail.archives') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-archive"></i> Archives
+                </a>
+                <a href="{{ route('retail.products.create') }}" class="btn btn-dark">
+                    <i class="bi bi-plus-lg"></i> Add Product
                 </a>
             </div>
         </div>
 
-        <!-- Inventory List -->
-        <div class="inventory-card">
-            <div class="inventory-card-body">
-                <div class="inventory-table-container">
-                    <table class="inventory-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 5%;">#</th>
-                                <th style="width: 20%;">ITEM NAME</th>
-                                <th style="width: 15%;">CATEGORY</th>
-                                <th style="width: 12%;">PRICE</th>
-                                <th style="width: 18%;">SUPPLIER</th>
-                                <th style="width: 15%;">CURRENT STOCK</th>
-                                <th style="width: 15%;">ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($items ?? [] as $index => $item)
-                                <tr>
-                                    <td>
-                                        <span class="inventory-row-number">{{ $index + 1 }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="item-name">{{ $item['name'] ?? 'N/A' }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">{{ $item['category'] ?? 'N/A' }}</span>
-                                    </td>
-                                    <td>
-                                        <strong>{{ $item['price'] ?? '₱0.00' }}</strong>
-                                    </td>
-                                    <td>
-                                        {{ $item['supplier'] ?? 'Unknown' }}
-                                    </td>
-                                    <td>
-                                        @php
-                                            $stock = $item['stock'] ?? 0;
-                                            $unit = $item['unit'] ?? 'units';
-                                            $stockClass = $stock > 100 ? 'in-stock' : ($stock > 50 ? 'low-stock' : 'restock');
-                                        @endphp
-                                        <span class="stock-badge {{ $stockClass }}">
-                                            {{ $stock }}{{ strtoupper(substr($unit, 0, 1)) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <input type="number" class="form-control" style="width: 60px; height: 36px; padding: 0.25rem 0.5rem; font-size: 0.85rem;" data-item-id="{{ $item['id'] ?? $index }}" data-item-name="{{ $item['name'] ?? 'Unknown' }}" data-item-price="{{ $item['price'] ?? '0' }}" placeholder="0" min="1">
-                                            <button class="btn btn-sm btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" onclick="addInventoryToQuickSale(this)" title="Add to Quick Sale">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </button>
-                                            <a href="#" class="stock-entry-btn" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" data-product-id="{{ $item['id'] ?? $index }}" data-product-name="{{ $item['name'] ?? 'Unknown' }}" onclick="openStockModal(event)">Stock</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="empty-state">
-                                        <p>No inventory items found</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+        @php
+            $categoriesTransfer = [
+                'Feeds' => 'Feeds',
+                'Vitamins' => 'Vitamins',
+                'Medicines' => 'Medicines',
+                'Others' => 'Others',
+            ];
+
+            $productsByCategoryTransfer = [];
+            foreach (($catalog ?? []) as $item) {
+                $cat = $item['category'] ?? 'Feeds';
+                if (!isset($productsByCategoryTransfer[$cat])) {
+                    $productsByCategoryTransfer[$cat] = [];
+                }
+                $productsByCategoryTransfer[$cat][] = $item;
+            }
+        @endphp
+
+        @foreach ($categoriesTransfer as $categoryName => $categoryKey)
+            @php
+                $products = $productsByCategoryTransfer[$categoryKey] ?? [];
+            @endphp
+
+            <div class="retail-category-section">
+                <div class="category-header mb-3">
+                    <h3 class="category-title">{{ $categoryName }}</h3>
                 </div>
+
+                @if (count($products) > 0)
+                    <div class="row g-3 mb-3">
+                        @foreach ($products as $product)
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="product-card">
+                                    @if ($product['image'])
+                                        <div class="product-image-wrapper">
+                                            <img src="{{ Storage::url($product['image']) }}" alt="{{ $product['name'] }}">
+                                        </div>
+                                    @else
+                                        <div class="product-image-wrapper">
+                                            <i class="bi bi-box"></i>
+                                        </div>
+                                    @endif
+
+                                    <div class="product-card-body">
+                                        <div class="product-header">
+                                            <div class="product-inline">
+                                                <span class="product-label">Product Name:</span>
+                                                <h5 class="product-name">{{ $product['name'] }}</h5>
+                                            </div>
+                                            <span class="stock-badge-transfer">{{ $product['stock'] }} units</span>
+                                        </div>
+
+                                        <div class="product-inline">
+                                            <span class="product-label">Description:</span>
+                                            <p class="product-description">{{ \Illuminate\Support\Str::limit($product['description'] ?: 'No description available.', 80) }}</p>
+                                        </div>
+
+                                        <div class="price-display-container">
+                                            <div class="price-label">Price:</div>
+                                            <div class="price-value" id="price_{{ $product['id'] }}">P {{ number_format($product['rawPrice'], 2) }}</div>
+                                        </div>
+
+                                        <div class="detail-row">
+                                            <span class="detail-label">Sold:</span>
+                                            <span class="detail-value">{{ $product['sales'] }}</span>
+                                        </div>
+
+                                        <div class="product-actions">
+                                            <a href="{{ route('retail.products.edit', $product['id']) }}" class="btn-product-action">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </a>
+                                            <form method="POST" action="{{ route('retail.products.destroy', $product['id']) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-product-action" onclick="return confirm('Archive this product?')">
+                                                    <i class="bi bi-archive"></i> Archive
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="empty-state py-3 text-start">
+                        No available products.
+                    </div>
+                @endif
             </div>
-        </div>
+        @endforeach
     </section>
 
     <!-- Stock Entry Modal -->
@@ -733,7 +964,9 @@
                     <select id="raiserId" name="raiser_id" class="stock-form-input">
                         <option value="">-- Select Raiser --</option>
                         @foreach ($raisers ?? [] as $raiser)
-                            <option value="{{ $raiser['id'] ?? $loop->index }}">{{ $raiser['name'] ?? 'Unknown' }}</option>
+                            <option value="{{ is_array($raiser) ? ($raiser['id'] ?? $loop->index) : $raiser->id }}">
+                                {{ is_array($raiser) ? ($raiser['name'] ?? 'Unknown') : $raiser->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -817,6 +1050,18 @@
             }
         }
 
+        function updatePrice(productId, priceValue) {
+            const price = parseFloat(priceValue);
+            if (isNaN(price) || price < 0) {
+                return;
+            }
+
+            const priceDisplay = document.getElementById('price_' + productId);
+            if (priceDisplay) {
+                priceDisplay.textContent = 'P ' + price.toFixed(2);
+            }
+        }
+
         function toggleRaiserField() {
             const movementType = document.getElementById('movementType').value;
             const raiserField = document.getElementById('raiserField');
@@ -878,63 +1123,7 @@
             }
         });
     </script>
-
-    <script>
-        // Search functionality
-        function performSearch() {
-            const searchTerm = document.getElementById('inventorySearch').value.toLowerCase();
-            const tableRows = document.querySelectorAll('.inventory-table tbody tr');
-            let visibleCount = 0;
-
-            tableRows.forEach(row => {
-                // Skip the empty state row
-                if (row.querySelector('.empty-state')) {
-                    return;
-                }
-                
-                const text = row.textContent.toLowerCase();
-                const isVisible = text.includes(searchTerm);
-                row.style.display = isVisible ? '' : 'none';
-                if (isVisible) visibleCount++;
-            });
-
-            // Show/hide empty state message
-            const emptyStateRow = document.querySelector('.inventory-table tbody tr .empty-state')?.closest('tr');
-            if (emptyStateRow) {
-                emptyStateRow.style.display = visibleCount === 0 ? '' : 'none';
-            } else if (visibleCount === 0) {
-                // Create empty state if it doesn't exist
-                const tbody = document.querySelector('.inventory-table tbody');
-                const existingEmpty = tbody.querySelector('.inventory-table tbody tr:last-child');
-                
-                if (!existingEmpty || !existingEmpty.querySelector('.empty-state')) {
-                    const emptyRow = document.createElement('tr');
-                    emptyRow.innerHTML = '<td colspan="7" class="empty-state"><p>No items found</p></td>';
-                    tbody.appendChild(emptyRow);
-                }
-            }
-        }
-
-        document.querySelector('.inventory-search-btn').addEventListener('click', performSearch);
-
-        // Reset to main content when search input is cleared
-        document.getElementById('inventorySearch').addEventListener('input', function(e) {
-            if (e.target.value === '') {
-                const tableRows = document.querySelectorAll('.inventory-table tbody tr');
-                tableRows.forEach(row => {
-                    row.style.display = '';
-                });
-            }
-        });
-
-        // Dark mode support
-        function initDarkMode() {
-            const theme = localStorage.getItem('theme') || 'light';
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        }
-
-        initDarkMode();
-    </script>
 @endsection
+
+
+

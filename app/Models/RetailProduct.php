@@ -14,6 +14,9 @@ class RetailProduct extends Model
         'code',
         'name',
         'category',
+        'price',
+        'stock',
+        'image',
         'description',
         'cost_price',
         'selling_price',
@@ -31,6 +34,8 @@ class RetailProduct extends Model
     ];
 
     protected $casts = [
+        'price' => 'decimal:2',
+        'stock' => 'integer',
         'cost_price' => 'decimal:2',
         'selling_price' => 'decimal:2',
         'price_per_sack' => 'decimal:2',
@@ -48,7 +53,11 @@ class RetailProduct extends Model
 
     public function setPriceAttribute($value)
     {
-        $this->selling_price = $value;
+        $this->attributes['price'] = $value;
+        $this->attributes['selling_price'] = $value;
+        if (!array_key_exists('cost_price', $this->attributes) || $this->attributes['cost_price'] === null) {
+            $this->attributes['cost_price'] = $value;
+        }
     }
 
     public function getStockAttribute()
@@ -58,7 +67,8 @@ class RetailProduct extends Model
 
     public function setStockAttribute($value)
     {
-        $this->quantity_in_stock = $value;
+        $this->attributes['stock'] = $value;
+        $this->attributes['quantity_in_stock'] = $value;
     }
 
     public function getImageAttribute()
@@ -68,7 +78,8 @@ class RetailProduct extends Model
 
     public function setImageAttribute($value)
     {
-        $this->image_path = $value;
+        $this->attributes['image'] = $value;
+        $this->attributes['image_path'] = $value;
     }
 
     public function transactions(): HasMany
@@ -119,4 +130,3 @@ class RetailProduct extends Model
         ]);
     }
 }
-

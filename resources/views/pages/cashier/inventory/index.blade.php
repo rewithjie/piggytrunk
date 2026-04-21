@@ -10,365 +10,308 @@
             padding: 1.5rem 0;
         }
 
-        .inventory-controls {
+        .retail-category-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .transfer-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
 
-        .inventory-search-box {
-            flex: 1;
-            min-width: 250px;
-            position: relative;
+        .transfer-actions {
             display: flex;
-            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
-        .inventory-search-box input {
-            width: 100%;
-            padding: 0.6rem 1rem 0.6rem 2.5rem;
-            border: 1px solid;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        /* Light mode */
-        .inventory-search-box input {
-            background-color: #f3f4f6;
-            border-color: #e5e7eb;
-            color: #1f2937;
-        }
-
-        .inventory-search-box input::placeholder {
-            color: #9ca3af;
-        }
-
-        .inventory-search-box input:focus {
-            outline: none;
-            background-color: #ffffff;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Dark mode */
-        :root[data-theme="dark"] .inventory-search-box input {
-            background-color: #1f2937;
-            border-color: #374151;
-            color: #f3f4f6;
-        }
-
-        :root[data-theme="dark"] .inventory-search-box input::placeholder {
-            color: #6b7280;
-        }
-
-        :root[data-theme="dark"] .inventory-search-box input:focus {
-            background-color: #111827;
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-        }
-
-        .inventory-search-icon {
-            position: absolute;
-            left: 0.75rem;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #9ca3af;
-        }
-
-        :root[data-theme="dark"] .inventory-search-icon {
-            color: #6b7280;
-        }
-
-        .inventory-search-btn {
-            padding: 0.6rem 1.5rem;
-            margin-left: 0.5rem;
-            border: none;
-            border-radius: 0.375rem;
-            background-color: #000000;
-            color: #ffffff;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .inventory-search-btn:hover {
-            background-color: #1f2937;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
-
-        :root[data-theme="dark"] .inventory-search-btn {
-            background-color: #000000;
-            color: #ffffff;
-        }
-
-        :root[data-theme="dark"] .inventory-search-btn:hover {
-            background-color: #1f2937;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .inventory-card {
-            background: transparent;
-        }
-
-        .inventory-card-body {
-            background: transparent;
-        }
-
-        .inventory-table-container {
-            border-radius: 0.5rem;
-            overflow: hidden;
-            border: 1px solid;
-        }
-
-        /* Light mode */
-        .inventory-table-container {
-            border-color: #e5e7eb;
-            background: #ffffff;
-        }
-
-        /* Dark mode */
-        :root[data-theme="dark"] .inventory-table-container {
-            border-color: #1e293b;
-            background: var(--pt-surface);
-        }
-
-        .inventory-table {
-            width: 100%;
-            border-collapse: collapse;
+        .category-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--pt-text);
             margin: 0;
         }
 
-        .inventory-table thead {
-            background-color: #0f172a;
-            border-bottom: 1px solid #e5e7eb;
+        .product-card {
+            background: var(--pt-surface);
+            border: 1px solid var(--pt-border);
+            border-radius: 0.75rem;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        :root[data-theme="dark"] .inventory-table thead {
-            background-color: #0f172a;
-            border-bottom: 1px solid #1e293b;
+        .product-image-wrapper {
+            width: 100%;
+            height: 150px;
+            background: var(--pt-surface-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pt-muted);
         }
 
-        .inventory-table thead th {
-            padding: 1rem 1.5rem;
-            text-align: left;
-            font-size: 0.75rem;
+        @media (max-width: 575.98px) {
+            .product-image-wrapper {
+                height: 130px;
+            }
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-image-wrapper i {
+            font-size: 3rem;
+        }
+
+        .product-card-body {
+            padding: 0.8rem;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .product-label {
+            font-size: 0.72rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #64748b;
-        }
-
-        :root[data-theme="dark"] .inventory-table thead th {
-            color: #94a3b8;
-        }
-
-        .inventory-table tbody tr {
-            border-bottom: 1px solid #e5e7eb;
-            transition: background-color 0.2s ease;
-        }
-
-        :root[data-theme="dark"] .inventory-table tbody tr {
-            border-bottom: 1px solid #1e293b;
-        }
-
-        .inventory-table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        :root[data-theme="dark"] .inventory-table tbody tr:hover {
-            background-color: #1e293b;
-        }
-
-        .inventory-table tbody td {
-            padding: 1.25rem 1.5rem;
-            color: #1f2937;
-            font-size: 0.9rem;
-        }
-
-        :root[data-theme="dark"] .inventory-table tbody td {
-            color: #e2e8f0;
-        }
-
-        .inventory-row-number {
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        :root[data-theme="dark"] .inventory-row-number {
-            color: #64748b;
-        }
-
-        .item-name {
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        :root[data-theme="dark"] .item-name {
-            color: #f1f5f9;
-        }
-
-        .category-badge {
-            display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 0.05em;
-            background-color: #f1f5f9;
-            color: #334155;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            margin-bottom: 0;
         }
 
-        :root[data-theme="dark"] .category-badge {
-            background-color: #1e293b;
-            color: #cbd5e0;
+        .product-inline {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.35rem;
         }
 
-        .stock-badge {
-            display: inline-block;
-            padding: 0.4rem 0.85rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
+        .product-name {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--pt-text);
+            line-height: 1.25;
+        }
+
+        .stock-badge-transfer {
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.24rem 0.58rem;
+            background: var(--pt-surface-soft);
+            color: var(--pt-text);
+        }
+
+        .product-description {
+            margin: 0 0 0.6rem 0;
+            color: var(--pt-muted);
+            font-size: 0.84rem;
+            line-height: 1.35;
+        }
+
+        .price-display-container {
+            border: 1px solid var(--pt-border);
+            background: var(--pt-surface-soft);
+            border-radius: 0.65rem;
+            padding: 0.55rem 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .price-label {
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
+            color: var(--pt-muted);
             letter-spacing: 0.06em;
         }
 
-        .stock-badge.in-stock {
-            background-color: #d1fae5;
-            color: #065f46;
+        .price-value {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--pt-text);
+            line-height: 1;
         }
 
-        .stock-badge.low-stock {
-            background-color: #fef3c7;
-            color: #854d0e;
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pt-border);
+            padding-bottom: 0.6rem;
+            margin-bottom: 0.6rem;
+            color: var(--pt-muted);
+            font-size: 0.82rem;
         }
 
-        .stock-badge.restock {
-            background-color: #fee2e2;
-            color: #991b1b;
+        .detail-value {
+            color: var(--pt-text);
+            font-weight: 700;
         }
 
-        :root[data-theme="dark"] .stock-badge.in-stock {
-            background-color: #10b981;
-            color: #d1fae5;
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
         }
 
-        :root[data-theme="dark"] .stock-badge.low-stock {
-            background-color: #f59e0b;
-            color: #fef3c7;
+        .quick-sale-input-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            width: 100%;
         }
 
-        :root[data-theme="dark"] .stock-badge.restock {
-            background-color: #ef4444;
-            color: #fee2e2;
+        .quick-sale-input {
+            flex: 1;
+            min-height: 38px;
+            border: 1px solid var(--pt-border);
+            border-radius: 0.45rem;
+            background: var(--pt-surface-soft);
+            color: var(--pt-text);
+            padding: 0.42rem 0.55rem;
+            font-size: 0.82rem;
+        }
+
+        .btn-product-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            min-height: 38px;
+            padding: 0.42rem 0.75rem;
+            border: 1px solid var(--pt-border);
+            border-radius: 0.45rem;
+            text-decoration: none;
+            color: var(--pt-text);
+            background: var(--pt-surface-soft);
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        :root[data-theme="dark"] .empty-state {
-            color: #94a3b8;
+            text-align: left;
+            padding: 0.75rem 0.25rem;
+            color: var(--pt-muted);
         }
     </style>
 
     <h1 class="page-title mb-5">Inventory</h1>
     <section class="inventory-page">
-        <!-- Controls -->
-        <div class="inventory-controls">
-            <div class="inventory-search-box">
-                <svg class="inventory-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                </svg>
-                <input type="text" id="inventorySearch" placeholder="Search" class="form-control">
-                <button type="button" class="inventory-search-btn">Search</button>
+        <div class="transfer-header">
+            <div class="transfer-actions">
+                <a href="{{ route('cashier.retail.archives') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-archive"></i> Archives
+                </a>
+                <a href="{{ route('cashier.retail.products.create') }}" class="btn btn-dark">
+                    <i class="bi bi-plus-lg"></i> Add Product
+                </a>
             </div>
         </div>
 
-        <!-- Inventory List -->
-        <div class="inventory-card">
-            <div class="inventory-card-body">
-                <div class="inventory-table-container">
-                    <table class="inventory-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 5%;">#</th>
-                                <th style="width: 25%;">ITEM NAME</th>
-                                <th style="width: 20%;">CATEGORY</th>
-                                <th style="width: 15%;">QUANTITY</th>
-                                <th style="width: 20%;">DESCRIPTION</th>
-                                <th style="width: 15%;">STATUS</th>
-                                <th style="width: 15%;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($itemsByCategory->flatten() as $index => $item)
-                                <tr>
-                                    <td>
-                                        <span class="inventory-row-number">{{ $index + 1 }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="item-name">{{ $item['name'] ?? 'N/A' }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">{{ $item['category'] ?? 'N/A' }}</span>
-                                    </td>
-                                    <td>
-                                        <strong>{{ $item['quantity'] ?? 0 }} {{ $item['unit'] ?? 'units' }}</strong>
-                                    </td>
-                                    <td>
-                                        {{ Str::limit($item['description'] ?? 'N/A', 40) }}
-                                    </td>
-                                    <td>
-                                        @php
-                                            $quantity = $item['quantity'] ?? 0;
-                                            $stockClass = $quantity > 50 ? 'in-stock' : ($quantity > 20 ? 'low-stock' : 'restock');
-                                        @endphp
-                                        <span class="stock-badge {{ $stockClass }}">
-                                            {{ $quantity > 50 ? 'In Stock' : ($quantity > 20 ? 'Low Stock' : 'Critical') }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <input type="number" class="form-control" style="width: 60px; height: 36px; padding: 0.25rem 0.5rem; font-size: 0.85rem;" data-item-id="{{ $item['id'] ?? $index }}" data-item-name="{{ $item['name'] ?? 'Unknown' }}" placeholder="0" min="1">
-                                            <button class="btn btn-sm btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" onclick="addInventoryToQuickSale(this)" title="Add to Quick Sale">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="empty-state">
-                                        <p>No inventory items found</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+        @php
+            $categoriesTransfer = [
+                'Feeds' => 'Feeds',
+                'Vitamins' => 'Vitamins',
+                'Medicines' => 'Medicines',
+                'Others' => 'Others',
+            ];
+        @endphp
+
+        @foreach ($categoriesTransfer as $categoryName => $categoryKey)
+            @php
+                $products = $productsByCategory[$categoryKey] ?? collect();
+            @endphp
+
+            <div class="retail-category-section">
+                <div class="category-header mb-3">
+                    <h3 class="category-title">{{ $categoryName }}</h3>
                 </div>
+
+                @if (count($products) > 0)
+                    <div class="row g-3 mb-3">
+                        @foreach ($products as $product)
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="product-card">
+                                    @if ($product['image'])
+                                        <div class="product-image-wrapper">
+                                            <img src="{{ Storage::url($product['image']) }}" alt="{{ $product['name'] }}">
+                                        </div>
+                                    @else
+                                        <div class="product-image-wrapper">
+                                            <i class="bi bi-box"></i>
+                                        </div>
+                                    @endif
+
+                                    <div class="product-card-body">
+                                        <div class="product-header">
+                                            <div class="product-inline">
+                                                <span class="product-label">Product Name:</span>
+                                                <h5 class="product-name">{{ $product['name'] }}</h5>
+                                            </div>
+                                            <span class="stock-badge-transfer">{{ $product['stock'] }} units</span>
+                                        </div>
+
+                                        <div class="product-inline">
+                                            <span class="product-label">Description:</span>
+                                            <p class="product-description">{{ \Illuminate\Support\Str::limit($product['description'] ?: 'No description available.', 80) }}</p>
+                                        </div>
+
+                                        <div class="price-display-container">
+                                            <div class="price-label">Price:</div>
+                                            <div class="price-value">P {{ number_format($product['rawPrice'], 2) }}</div>
+                                        </div>
+
+                                        <div class="detail-row">
+                                            <span class="detail-label">Sold:</span>
+                                            <span class="detail-value">{{ $product['sales'] }} units</span>
+                                        </div>
+
+                                        <div class="product-actions">
+                                            <div class="quick-sale-input-group">
+                                                <input type="number" class="quick-sale-input" data-product-id="{{ $product['id'] }}" data-product-name="{{ $product['name'] }}" placeholder="Qty" min="1">
+                                                <button type="button" class="btn-product-action" onclick="addInventoryToQuickSale(this)">
+                                                    <i class="bi bi-cart-plus"></i> Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="empty-state">No available products.</div>
+                @endif
             </div>
-        </div>
+        @endforeach
     </section>
 
     <script>
         async function addInventoryToQuickSale(button) {
-            const row = button.closest('tr');
-            const input = row.querySelector('input[type="number"]');
-            const quantity = parseInt(input.value) || 0;
-            const itemId = input.getAttribute('data-item-id');
-            const itemName = input.getAttribute('data-item-name');
+            const group = button.closest('.quick-sale-input-group');
+            const input = group.querySelector('.quick-sale-input');
+            const quantity = parseInt(input.value, 10) || 0;
+            const productId = input.getAttribute('data-product-id');
+            const productName = input.getAttribute('data-product-name');
 
             if (quantity < 1) {
                 alert('Please enter a quantity');
@@ -378,29 +321,28 @@
 
             try {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-                const response = await fetch('/api/quick-sale/add-item', {
+                const response = await fetch('/api/cashier/quick-sale/add-item', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken || '',
                     },
                     body: JSON.stringify({
-                        product_id: itemId,
-                        quantity: quantity,
+                        product_id: productId,
+                        quantity,
                     }),
                 });
 
                 const data = await response.json();
-                
                 if (data.success) {
                     input.value = '';
-                    alert(itemName + ' added to quick sale');
+                    alert(productName + ' added to quick sale');
                 } else {
                     alert(data.error || 'Error adding to quick sale');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error adding to quick sale: ' + error.message);
+                alert('Error adding to quick sale');
             }
         }
     </script>

@@ -84,10 +84,20 @@
                                         <label for="investment_date" class="form-label">
                                             <i class="bi bi-calendar-event me-2"></i>INVESTMENT DATE
                                         </label>
-                                        <div class="date-input-wrapper">
-                                            <input type="text" id="investment_date" name="investment_date" class="form-control date-input" placeholder="mm/dd/yyyy" required>
-                                            <input type="date" id="hiddenDatePicker" style="display: none;">
-                                        </div>
+                                        @php
+                                            $oldInvestmentDate = old('investment_date');
+                                            if ($oldInvestmentDate && preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $oldInvestmentDate, $matches)) {
+                                                $oldInvestmentDate = $matches[3] . '-' . str_pad($matches[1], 2, '0', STR_PAD_LEFT) . '-' . str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+                                            }
+                                        @endphp
+                                        <input
+                                            type="date"
+                                            id="investment_date"
+                                            name="investment_date"
+                                            class="form-control date-input"
+                                            value="{{ $oldInvestmentDate ?: now()->toDateString() }}"
+                                            required
+                                        >
                                         @error('investment_date')
                                             <div class="text-danger small mt-2">{{ $message }}</div>
                                         @enderror
@@ -392,6 +402,19 @@
         .date-input {
             flex: 1;
             padding-right: 2.5rem !important;
+        }
+
+        .investment-form input[type="date"].date-input {
+            cursor: pointer;
+        }
+
+        .investment-form input[type="date"].date-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+
+        :root[data-theme="dark"] .investment-form input[type="date"].date-input::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(1.2);
+            opacity: 0.95;
         }
 
         .date-picker-btn {

@@ -122,12 +122,13 @@ class QuickSaleController extends Controller
 
         $item = QuickSaleItem::findOrFail($itemId);
         $item->updateQuantity($validated['quantity']);
+        $session = $item->session;
 
         return response()->json([
             'success' => true,
             'message' => 'Item quantity updated',
-            'items' => $item->session->items()->with('product')->get(),
-            'session' => $item->session,
+            'items' => $session?->items()->with('product')->get() ?? [],
+            'session' => $session,
         ]);
     }
 
@@ -138,6 +139,16 @@ class QuickSaleController extends Controller
     {
         $item = QuickSaleItem::findOrFail($itemId);
         $session = $item->session;
+        if (!$session) {
+            $item->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item removed from quick sale',
+                'items' => [],
+                'session' => null,
+            ]);
+        }
         
         $item->delete();
         $session->calculateTotals();
@@ -161,12 +172,13 @@ class QuickSaleController extends Controller
 
         $item = QuickSaleItem::findOrFail($itemId);
         $item->updateDiscount($validated['discount_amount']);
+        $session = $item->session;
 
         return response()->json([
             'success' => true,
             'message' => 'Discount updated',
-            'items' => $item->session->items()->with('product')->get(),
-            'session' => $item->session,
+            'items' => $session?->items()->with('product')->get() ?? [],
+            'session' => $session,
         ]);
     }
 

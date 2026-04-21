@@ -72,7 +72,7 @@
                                         </label>
                                         <select id="pig_type_id" name="pig_type_id" class="form-select @error('pig_type_id') is-invalid @enderror" required>
                                             <option value="">Select breed type</option>
-                                            @foreach(\App\Models\PigType::all() as $pigType)
+                                            @foreach(($pigTypes ?? collect()) as $pigType)
                                                 <option value="{{ $pigType->id }}" @selected(old('pig_type_id') == $pigType->id)>{{ $pigType->name }}</option>
                                             @endforeach
                                         </select>

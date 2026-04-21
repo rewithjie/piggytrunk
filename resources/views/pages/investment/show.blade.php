@@ -101,19 +101,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card h-100">
                         <div class="card-body">
                             <div class="table-meta">Email</div>
                             <div class="table-name">{{ $investment['raiser_email'] ?? 'N/A' }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="table-meta">Capacity</div>
-                            <div class="table-name">{{ $investment['total_capacity'] }}</div>
                         </div>
                     </div>
                 </div>
@@ -127,107 +119,6 @@
                 </div>
             </div>
 
-            <!-- Investment Performance Section -->
-            <div class="row g-4 mb-5">
-                <div class="col-12">
-                    <h5 class="mb-3" style="font-weight: 600; font-size: 1.1rem;">Investment Performance</h5>
-                </div>
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="table-meta">Current Stage</div>
-                            <div class="table-name">{{ $investment['stage'] }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="table-meta">ROI Percentage</div>
-                            <div class="table-name">{{ $investment['roi_percentage'] }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="table-meta">Expected Profit</div>
-                            <div class="table-name">{{ $investment['expected_profit'] }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Investors Section -->
-            <div class="row g-4 mb-5">
-                <div class="col-12">
-                    <h5 class="mb-3" style="font-weight: 600; font-size: 1.1rem;">Investment Investors</h5>
-                </div>
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>INVESTOR NAME</th>
-                                    <th>TIER</th>
-                                    <th>AMOUNT INVESTED</th>
-                                    <th class="text-center">STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($investors as $investor)
-                                    <tr>
-                                        <td>
-                                            <div style="font-weight: 600;">{{ $investor['name'] }}</div>
-                                        </td>
-                                        <td>{{ $investor['tier'] }}</td>
-                                        <td>{{ $investor['amount_invested'] }}</td>
-                                        <td class="text-center">
-                                            <span class="badge rounded-pill" style="background-color: {{ $investor['status'] === 'Active' ? '#43cb89' : '#ffc400' }}; color: white;">
-                                                {{ $investor['status'] }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">No investors found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lifecycle Stages Section -->
-            <div class="row g-4">
-                <div class="col-12">
-                    <h5 class="mb-3" style="font-weight: 600; font-size: 1.1rem;">Lifecycle Progress ({{ $investment['hog_type'] }})</h5>
-                </div>
-                <div class="col-12">
-                    <div class="timeline-list">
-                        @foreach ($lifecycleStages as $stage)
-                            <div class="timeline-item">
-                                <div class="timeline-marker">
-                                    <div class="timeline-dot" style="background-color: {{ 
-                                        $stage['status'] === 'completed' ? '#43cb89' : 
-                                        ($stage['status'] === 'in-progress' ? '#5b8def' : '#ccc')
-                                    }};"></div>
-                                </div>
-                                <div class="timeline-content">
-                                    <div class="timeline-title" style="font-weight: 600; color: var(--pt-text); margin-bottom: 0.25rem;">{{ $stage['label'] }}</div>
-                                    <div class="timeline-date">{{ $stage['duration'] }}</div>
-                                    <div style="margin-top: 0.5rem;">
-                                        <span class="badge badge-stage stage-{{ strtolower($stage['status']) }}" style="padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                                            {{ ucfirst($stage['status']) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

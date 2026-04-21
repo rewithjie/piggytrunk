@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PigType;
 use App\Models\Raiser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class RaiserController extends Controller
@@ -45,8 +47,11 @@ class RaiserController extends Controller
 
     public function create(): View
     {
+        $pigTypes = $this->ensureDefaultPigTypes();
+
         return view('pages.raisers.create', [
             'pageTitle' => 'Create New Raiser',
+            'pigTypes' => $pigTypes,
             'user' => $this->user(),
         ]);
     }
@@ -54,6 +59,10 @@ class RaiserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $this->validateRaiser($request);
+
+        // Keep legacy/new schemas aligned: some databases use "address", others use "location".
+        $validated['location'] = $validated['location'] ?? $validated['address'];
+        $validated['address'] = $validated['address'] ?? $validated['location'];
         
         // Add user_id - use authenticated user if available, otherwise use ID 1 (default admin user)
         $validated['user_id'] = auth()->check() ? auth()->id() : 1;
@@ -62,8 +71,14 @@ class RaiserController extends Controller
         $nextId = Raiser::withTrashed()->count() + 1;
         $namePrefix = strtoupper(substr($validated['name'], 0, 3));
         $validated['code'] = 'RAI-' . $namePrefix . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+        $validated['batch'] = $validated['batch'] ?? ('BATCH-' . str_pad($nextId, 4, '0', STR_PAD_LEFT));
+        $validated['contact_person'] = $validated['contact_person'] ?? $validated['name'];
+
+        if (!isset($validated['pig_type'])) {
+            $validated['pig_type'] = PigType::query()->whereKey($validated['pig_type_id'])->value('name') ?? 'Unknown';
+        }
         
-        $raiser = Raiser::create($validated);
+        $raiser = Raiser::create($this->filterRaiserColumns($validated));
 
         return redirect()
             ->route('raisers.index')
@@ -95,7 +110,17 @@ class RaiserController extends Controller
     public function update(Request $request, int $raiser): RedirectResponse
     {
         $record = Raiser::findOrFail($raiser);
-        $record->update($this->validateRaiser($request, $record->id));
+        $validated = $this->validateRaiser($request, $record->id);
+        $validated['location'] = $validated['location'] ?? $validated['address'];
+        $validated['address'] = $validated['address'] ?? $validated['location'];
+        $validated['batch'] = $validated['batch'] ?? ($record->batch ?? 'BATCH-' . str_pad($record->id, 4, '0', STR_PAD_LEFT));
+        $validated['contact_person'] = $validated['contact_person'] ?? ($record->contact_person ?? $validated['name']);
+
+        if (!isset($validated['pig_type'])) {
+            $validated['pig_type'] = PigType::query()->whereKey($validated['pig_type_id'])->value('name') ?? ($record->pig_type ?? 'Unknown');
+        }
+
+        $record->update($this->filterRaiserColumns($validated));
 
         return redirect()
             ->route('raisers.edit', $record)
@@ -136,5 +161,31 @@ class RaiserController extends Controller
             'role' => 'System Administrator',
             'initials' => 'DL',
         ];
+    }
+
+    private function ensureDefaultPigTypes()
+    {
+        PigType::firstOrCreate(
+            ['name' => 'Fattening'],
+            ['description' => 'For grower-finisher production', 'code' => 'FAT']
+        );
+
+        PigType::firstOrCreate(
+            ['name' => 'Sow'],
+            ['description' => 'For breeder sow production', 'code' => 'SOW']
+        );
+
+        return PigType::query()->orderBy('name')->get();
+    }
+
+    private function filterRaiserColumns(array $data): array
+    {
+        if (!Schema::hasTable('raisers')) {
+            return $data;
+        }
+
+        $availableColumns = array_flip(Schema::getColumnListing('raisers'));
+
+        return array_intersect_key($data, $availableColumns);
     }
 }

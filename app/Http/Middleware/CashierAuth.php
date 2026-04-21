@@ -16,6 +16,13 @@ class CashierAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->session()->get('is_cashier')) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Unauthenticated cashier session.',
+                ], 401);
+            }
+
             return redirect()->route('cashier.login.form');
         }
 

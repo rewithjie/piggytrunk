@@ -115,274 +115,24 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Row 3: Pricing Tiers Header -->
-                            <div class="row g-3 mb-2">
-                                <div class="col-12">
-                                    <label class="form-label" style="margin-bottom: 0.5rem;">Pricing Tiers</label>
-                                </div>
-                            </div>
-
-                            <!-- FEEDS PRICING (shown by default or when Feeds selected) -->
-                            <div id="feeds-pricing" class="pricing-section" style="display: none;">
-                                <!-- Row 4: Price Per Sack -->
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Sack (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_sack" 
-                                                class="form-control @error('price_per_sack') is-invalid @enderror" 
-                                                value="{{ old('price_per_sack') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_sack')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per 1 Kilo (₱) *</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_kilo" 
-                                                class="form-control feeds-required @error('price_per_kilo') is-invalid @enderror" 
-                                                value="{{ old('price_per_kilo') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_kilo')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Row 5: Price Per 1/2 and 1/4 Kilo -->
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per 1/2 Kilo (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_half_kilo" 
-                                                class="form-control @error('price_per_half_kilo') is-invalid @enderror" 
-                                                value="{{ old('price_per_half_kilo') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_half_kilo')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per 1/4 Kilo (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_quarter_kilo" 
-                                                class="form-control @error('price_per_quarter_kilo') is-invalid @enderror" 
-                                                value="{{ old('price_per_quarter_kilo') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_quarter_kilo')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- VITAMINS PRICING -->
-                            <div id="vitamins-pricing" class="pricing-section" style="display: none;">
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Bottle (₱) *</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_bottle" 
-                                                class="form-control vitamins-required @error('price_per_bottle') is-invalid @enderror" 
-                                                value="{{ old('price_per_bottle') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_bottle')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Tablet (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_tablet" 
-                                                class="form-control @error('price_per_tablet') is-invalid @enderror" 
-                                                value="{{ old('price_per_tablet') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_tablet')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Vial (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_vial" 
-                                                class="form-control @error('price_per_vial') is-invalid @enderror" 
-                                                value="{{ old('price_per_vial') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_vial')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- MEDICINES PRICING -->
-                            <div id="medicines-pricing" class="pricing-section" style="display: none;">
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Bottle (₱) *</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_bottle" 
-                                                class="form-control medicines-required @error('price_per_bottle') is-invalid @enderror" 
-                                                value="{{ old('price_per_bottle') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_bottle')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Tablet (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_tablet" 
-                                                class="form-control @error('price_per_tablet') is-invalid @enderror" 
-                                                value="{{ old('price_per_tablet') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_tablet')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Injection (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_injection" 
-                                                class="form-control @error('price_per_injection') is-invalid @enderror" 
-                                                value="{{ old('price_per_injection') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_injection')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- GROWTH ADDITIVES PRICING -->
-                            <div id="additives-pricing" class="pricing-section" style="display: none;">
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Liter (₱) *</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_liter" 
-                                                class="form-control additives-required @error('price_per_liter') is-invalid @enderror" 
-                                                value="{{ old('price_per_liter') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_liter')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Bottle (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_bottle" 
-                                                class="form-control @error('price_per_bottle') is-invalid @enderror" 
-                                                value="{{ old('price_per_bottle') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_bottle')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label class="form-label">Price Per Sachet (₱)</label>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0" 
-                                                name="price_per_sachet" 
-                                                class="form-control @error('price_per_sachet') is-invalid @enderror" 
-                                                value="{{ old('price_per_sachet') }}"
-                                                placeholder="0.00"
-                                            >
-                                            @error('price_per_sachet')
-                                                <span class="error-message">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                            <!-- Row 3: Price -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Price (PHP) *</label>
+                                        <input 
+                                            type="number" 
+                                            step="0.01" 
+                                            min="0" 
+                                            name="price" 
+                                            class="form-control @error('price') is-invalid @enderror" 
+                                            value="{{ old('price') }}"
+                                            placeholder="0.00"
+                                            required
+                                        >
+                                        @error('price')
+                                            <span class="error-message">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -1084,48 +834,9 @@
             imageUploadArea.style.display = 'block';
         }
 
-        // Handle category-specific pricing fields
-        const categorySelect = document.querySelector('select[name="category"]');
-        const pricingSections = {
-            'Feeds': 'feeds-pricing',
-            'Vitamins': 'vitamins-pricing',
-            'Medicines': 'medicines-pricing',
-            'Growth Additives': 'additives-pricing'
-        };
-
-        function updatePricingFields() {
-            const selectedCategory = categorySelect.value;
-            
-            // Hide all pricing sections
-            document.querySelectorAll('.pricing-section').forEach(section => {
-                section.style.display = 'none';
-            });
-
-            // Remove required attribute from all pricing inputs
-            document.querySelectorAll('.feeds-required, .vitamins-required, .medicines-required, .additives-required').forEach(input => {
-                input.removeAttribute('required');
-            });
-
-            // Show selected category pricing and set required
-            if (selectedCategory && pricingSections[selectedCategory]) {
-                const sectionId = pricingSections[selectedCategory];
-                document.getElementById(sectionId).style.display = 'block';
-                
-                // Add required to main price field for this category
-                const requiredInputs = document.querySelectorAll(`#${sectionId} .${selectedCategory.toLowerCase().replace(/\s+/g, '-')}-required`);
-                requiredInputs.forEach(input => {
-                    input.setAttribute('required', 'required');
-                });
-            }
-        }
-
-        // Listen for category changes
-        categorySelect.addEventListener('change', updatePricingFields);
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updatePricingFields();
-        });
+        // Single-price mode: category-specific pricing sections removed.
     </script>
 @endsection
+
+
 
